@@ -15,14 +15,6 @@ const createWindow = () => {
 }
 
 app.whenReady().then(() => {
-    // Windows / Linux experience: if all the
-    // windows are closed, then close the app.
-    // macOS: Do not close the app. It will
-    // become inactive.
-    app.on('window-all-closed', () => {
-        if (process.platform !== 'darwin') app.quit();
-    })
-
     // Create a window on launching the app.
     createWindow();
 
@@ -36,3 +28,10 @@ app.whenReady().then(() => {
     });
 });
 
+// Windows / Linux experience: if all the
+// windows are closed, then close the app.
+// macOS: Do not close the app. It will
+// become inactive.
+app.on('window-all-closed', () => {
+    if (process.platform !== 'darwin') app.quit();
+})
