@@ -2,10 +2,12 @@
   "name": "dragonshark-ui",
   "version": "1.0.0",
   "description": "The UI application for DragonShark",
-  "main": "src/main.js",
+  "main": "main.js",
   "scripts": {
-    "start": "electron src/main.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "npx electron-forge start",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "package": "npx electron-forge package",
+    "make": "npx electron-forge make"
   },
   "repository": {
     "type": "git",
@@ -23,6 +25,17 @@
   },
   "homepage": "https://github.com/HawaTechnologies/dragonshark-ui#readme",
   "devDependencies": {
+    "@electron-forge/cli": "^7.4.0",
+    "@electron-forge/maker-deb": "^7.4.0",
+    "@electron-forge/maker-rpm": "^7.4.0",
+    "@electron-forge/maker-squirrel": "^7.4.0",
+    "@electron-forge/maker-zip": "^7.4.0",
+    "@electron-forge/plugin-auto-unpack-natives": "^7.4.0",
+    "@electron-forge/plugin-fuses": "^7.4.0",
+    "@electron/fuses": "^1.8.0",
     "electron": "^31.3.1"
+  },
+  "dependencies": {
+    "electron-squirrel-startup": "^1.0.1"
   }
 }
