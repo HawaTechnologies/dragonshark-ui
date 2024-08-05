@@ -7,7 +7,8 @@
     "start": "npx electron-forge start",
     "test": "echo \"Error: no test specified\" && exit 1",
     "package": "npx electron-forge package",
-    "make": "npx electron-forge make"
+    "make": "npx electron-forge make",
+    "publish": "electron-forge publish"
   },
   "repository": {
     "type": "git",
@@ -32,6 +33,7 @@
     "@electron-forge/maker-zip": "^7.4.0",
     "@electron-forge/plugin-auto-unpack-natives": "^7.4.0",
     "@electron-forge/plugin-fuses": "^7.4.0",
+    "@electron-forge/publisher-github": "^7.4.0",
     "@electron/fuses": "^1.8.0",
     "electron": "^31.3.1"
   },
