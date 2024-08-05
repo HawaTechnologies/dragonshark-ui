@@ -1,4 +1,4 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('node:path');
 
 const createWindow = () => {
@@ -15,6 +15,12 @@ const createWindow = () => {
 }
 
 app.whenReady().then(() => {
+    // ipcMain.handle('someCommand', async () => {
+    //     ...
+    //     return ...
+    // });
+    // // It can include arguments.
+
     // Create a window on launching the app.
     createWindow();
 
