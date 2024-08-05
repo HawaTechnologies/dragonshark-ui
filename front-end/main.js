@@ -7,11 +7,11 @@ const createWindow = () => {
         width: 800,
         height: 600,
         webPreferences: {
-            preload: path.join(__dirname, 'preload', 'main.js')
+            preload: path.join(__dirname, 'renderer', 'preload.js')
         }
     });
 
-    win.loadFile('browser/index.html');
+    win.loadFile('renderer/browser/index.html');
 }
 
 app.whenReady().then(() => {
