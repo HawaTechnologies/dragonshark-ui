@@ -7,9 +7,9 @@ const createWindow = () => {
         width: 800,
         height: 600,
         webPreferences: {
-            preload: path.join(__dirname, 'browser', 'preload.js')
+            preload: path.join(__dirname, 'preload', 'main.js')
         }
-    })
+    });
 
     win.loadFile('browser/index.html');
 }
@@ -24,7 +24,7 @@ app.whenReady().then(() => {
     // regarding experience: apps are not always
     // closed in the same way as Windows / Linux).
     app.on('activate', () => {
-        if (BrowserWindow.getAllWindows().length === 0) createWindow()
+        if (BrowserWindow.getAllWindows().length === 0) createWindow();
     });
 });
 
