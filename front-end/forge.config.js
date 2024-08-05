@@ -13,15 +13,27 @@ module.exports = {
     },
     {
       name: '@electron-forge/maker-zip',
-      platforms: ['darwin'],
+      config: {
+        options: {
+          arch: ["arm64", "x64"]
+        }
+      }
     },
     {
       name: '@electron-forge/maker-deb',
-      config: {},
+      config: {
+        options: {
+          arch: ["arm64", "x64"]
+        }
+      }
     },
     {
       name: '@electron-forge/maker-rpm',
-      config: {},
+      config: {
+        options: {
+          arch: ["arm64", "x64"]
+        }
+      }
     },
   ],
   plugins: [
