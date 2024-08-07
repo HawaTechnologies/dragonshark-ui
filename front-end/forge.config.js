@@ -27,14 +27,6 @@ module.exports = {
         }
       }
     },
-    {
-      name: '@electron-forge/maker-rpm',
-      config: {
-        options: {
-          arch: ["arm64", "x64"]
-        }
-      }
-    },
   ],
   plugins: [
     {

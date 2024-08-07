@@ -3,7 +3,7 @@ import full from "../../images/full.png";
 
 export default function Logo() {
     return <img src={full} alt="Logo" style={{
-        position: "absolute", left: "50%", top: "5%",
+        position: "absolute", left: "50%", top: "0",
         transform: "translate(-50%, 0)"
     }} />
 }
