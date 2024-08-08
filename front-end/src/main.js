@@ -12,9 +12,9 @@ const createWindow = () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     width, height,
-    // fullscreen: true,
-    // resizable: false,
-    // frame: false, // No titlebar or border
+    fullscreen: true,
+    resizable: false,
+    frame: false, // No titlebar or border
     autoHideMenuBar: true, // Hides the menu bar
     webPreferences: {
       preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
