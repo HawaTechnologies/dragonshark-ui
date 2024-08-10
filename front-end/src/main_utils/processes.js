@@ -1,4 +1,3 @@
-const util = require('node:util');
 const { exec: exec_ } = require('node:child_process');
 
 /**
@@ -16,4 +15,8 @@ function exec(command) {
             reject(e);
         }
     })
+}
+
+module.exports = {
+    exec
 }
