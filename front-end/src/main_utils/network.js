@@ -2,7 +2,7 @@ const { exec } = require("./processes");
 
 /**
  * Lists the available IPv4 interfaces.
- * @returns {Promise<{interfaces: (Array[]), code: any}>} The list of [address, type, wireless?] triples (async function).
+ * @returns {Promise<{interfaces: (Array[]), code: number}>} The list of [address, type, wireless?] triples (async function).
  */
 async function listIPv4Interfaces() {
     // Run the process.
@@ -20,7 +20,7 @@ async function listIPv4Interfaces() {
 
 /**
  * Lists the available wireless network interfaces.
- * @returns {Promise<{interfaces: (string[]), code: any}>} The list of wireless network interface names.
+ * @returns {Promise<{interfaces: (string[]), code: number}>} The list of wireless network interface names.
  */
 async function listWLANInterfaces() {
     // Run the process.
@@ -33,6 +33,24 @@ async function listWLANInterfaces() {
     return {code, interfaces: code ? [] : stdout.trim().split("\n")};
 }
 
+/**
+ * Lists the available wireless networks.
+ * @returns {Promise<{interfaces: (Array[]), code: number}>} The list of [active, ssid, signal] triples (async function).
+ */
+async function listWirelessNetworks() {
+    // Run the process.
+    const {stdout, stderr, result} = await exec("dragonshark-network-list-wireless-networks");
+
+    // Get the code.
+    const code = result?.code || 0;
+
+    // Parse the results.
+    return {code, interfaces: code ? [] : stdout.trim().split("\n").map(e => {
+        const [active, ssid, signal] = e.split(":");
+        return [active === "*", ssid, parseInt(signal)];
+    }).filter(e => e[1])};
+}
+
 module.exports = {
-    listIPv4Interfaces, listWLANInterfaces
+    listIPv4Interfaces, listWLANInterfaces, listWirelessNetworks
 }
