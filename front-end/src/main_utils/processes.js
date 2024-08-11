@@ -1,5 +1,9 @@
 const { exec: exec_ } = require('node:child_process');
 
+function escapeShellArg(command) {
+    return `'${command.replace(/'/g, `'\\''`)}'`;
+}
+
 /**
  * Executes a child process.
  * @param command The command to execute.
@@ -8,7 +12,8 @@ const { exec: exec_ } = require('node:child_process');
 function exec(command) {
     return new Promise((resolve, reject) => {
         try {
-            exec_(command, (error, stdout, stderr) => {
+            const embeddedCommand = `bash -i -c "source ~/.bashrc && ${escapeShellArg(command)}"`;
+            exec_(embeddedCommand, (error, stdout, stderr) => {
                 resolve({stdout, stderr, result: error});
             });
         } catch(e) {
