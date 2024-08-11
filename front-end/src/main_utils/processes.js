@@ -12,7 +12,7 @@ function escapeShellArg(command) {
 function exec(command) {
     return new Promise((resolve, reject) => {
         try {
-            const embeddedCommand = `bash -i -c "source ~/.bashrc && ${escapeShellArg(command)}"`;
+            const embeddedCommand = `bash -i -c "source ~/.bashrc && ${command}"`;
             exec_(embeddedCommand, (error, stdout, stderr) => {
                 resolve({stdout, stderr, result: error});
             });
@@ -23,5 +23,5 @@ function exec(command) {
 }
 
 module.exports = {
-    exec
+    exec, escapeShellArg
 }
