@@ -46,6 +46,21 @@ async function getRomsDir() {
     return {code, dir: stdout.trim()};
 }
 
+/**
+ * Initializes the save directories.
+ * @returns {Promise<{code: number, stdout: string, stderr: string}>}
+ */
+async function setupSavesDirs() {
+    // Run the process.
+    const {stdout, stderr, result} = await exec("dragonshark-games-saves-setup");
+
+    // Get the code.
+    const code = result?.code || 0;
+
+    // Parse the results.
+    return {code, stdout, stderr};
+}
+
 module.exports = {
-    listExternalDeviceDirs, setRomsDir, getRomsDir
+    listExternalDeviceDirs, setRomsDir, getRomsDir, setupSavesDirs
 }
