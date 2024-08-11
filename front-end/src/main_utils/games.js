@@ -1,4 +1,4 @@
-const { exec } = require("./processes");
+const { exec, escapeShellArg} = require("./processes");
 
 /**
  * Lists the available external devices' directories.
@@ -15,6 +15,37 @@ async function listExternalDeviceDirs() {
     return {code, dirs: code ? [] : stdout.trim().split("\n")};
 }
 
+/**
+ * Sets the new ROMs dir. It must belong to an external device.
+ * @param dir The new directory.
+ * @returns {Promise<{code: number, stdout: string, stderr: string}>} The {code, stdout, stderr} with the result of the operation (async function).
+ */
+async function setRomsDir(dir) {
+    // Run the process.
+    const {stdout, stderr, result} = await exec(`dragonshark-games-set-roms-dir ${escapeShellArg(dir)}`);
+
+    // Get the code.
+    const code = result?.code || 0;
+
+    // Parse the results.
+    return {code, stdout, stderr};
+}
+
+/**
+ * Gets the current ROMs dir.
+ * @returns {Promise<{code: number, dir: string} The process code and current directory (async function).
+ */
+async function getRomsDir() {
+    // Run the process.
+    const {stdout, result} = await exec("dragonshark-games-get-roms-dir");
+
+    // Get the code.
+    const code = result?.code || 0;
+
+    // Parse the results.
+    return {code, dir: stdout.trim()};
+}
+
 module.exports = {
-    listExternalDeviceDirs
+    listExternalDeviceDirs, setRomsDir, getRomsDir
 }

@@ -75,7 +75,7 @@ async function connectToNetwork(ssid, password, interfaceName) {
 /**
  * Attempts a disconnection from a wireless network.
  * @param interfaceName The name of the wireless interface to disconnect.
- * @returns {Promise<{code: number, stderr: string, stdout: string}>} Nothing (async function).
+ * @returns {Promise<{code: number, stderr: string, stdout: string}>} The {code, stdout, stderr} with the result of the operation (async function).
  */
 async function disconnectFromNetwork(interfaceName) {
 
