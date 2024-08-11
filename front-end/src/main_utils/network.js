@@ -8,13 +8,11 @@ async function listIPv4Interfaces() {
     const {stdout, stderr, result} = await exec("dragonshark-network-list-ipv4-interfaces");
 
     // Get the code.
-    const code = result?.code;
-    if (code) {
-        return {code, interfaces: stdout.trim().split("\n").map(e => {
-            // TODO actually split/parse everything for each line.
-            return e.trim();
-        })}
-    }
+    const code = result?.code || null;
+    return {code, interfaces: code ? [] : stdout.trim().split("\n").map(e => {
+        const [address, type, wireless] = e.trim().split(",");
+        return [address, type, wireless === "yes"];
+    }).filter(e => e[1] !== "unknown")};
 }
 
 module.exports = {
