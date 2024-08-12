@@ -18,4 +18,12 @@ contextBridge.exposeInMainWorld('dragonSharkAPI', {
     restoreSavesDirs: (dir) => ipcRenderer.invoke("restoreSavesDirs", dir),
     launchGame: (manifest) => ipcRenderer.invoke("launchGame", manifest),
     launchEmulationStation: () => ipcRenderer.invoke("launchEmulationStation"),
+    virtualpad: {
+        startServer: () => ipcRenderer.invoke("virtualpad.startServer"),
+        stopServer: () => ipcRenderer.invoke("virtualpad.stopServer"),
+        checkServer: () => ipcRenderer.invoke("virtualpad.checkServer"),
+        clearPad: (pad) => ipcRenderer.invoke("virtualpad.clearPad", pad),
+        status: () => ipcRenderer.invoke("virtualpad.status"),
+        resetPasswords: (pads) => ipcRenderer.invoke("virtualpad.resetPasswords", pads),
+    }
 });
