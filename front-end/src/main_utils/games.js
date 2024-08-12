@@ -113,12 +113,11 @@ async function restoreSavesDirs(dir) {
 async function launchGame(manifest) {
     // Run the process.
     const {stdout, stderr, result} = await exec(`launch-game ${escapeShellArg(manifest)}`);
-    const output = stdout.trim();
+    const output = (stdout || "").trim();
 
     // Get the code.
     const code = result?.code || 0;
 
-    let jsonResult = null;
     if (code) {
         return {
             code, status: "error", hint: "unknown", dump: stderr
