@@ -1,7 +1,7 @@
 const { app, BrowserWindow, screen, ipcMain } = require('electron');
 const path = require('node:path');
 const {listIPv4Interfaces, listWLANInterfaces, listWirelessNetworks, connectToNetwork, disconnectFromNetwork} = require("./main_utils/network");
-const {listExternalDeviceDirs, setRomsDir, getRomsDir, setupSavesDirs, restoreSavesDirs, backupSavesDirs} = require("./main_utils/games");
+const {listExternalDeviceDirs, setRomsDir, getRomsDir, setupSavesDirs, restoreSavesDirs, backupSavesDirs, launchGame} = require("./main_utils/games");
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -53,6 +53,7 @@ app.whenReady().then(() => {
   ipcMain.handle("setupSavesDirs", setupSavesDirs);
   ipcMain.handle("backupSavesDirs", backupSavesDirs);
   ipcMain.handle("restoreSavesDirs", restoreSavesDirs);
+  ipcMain.handle("launchGame", launchGame);
 
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
