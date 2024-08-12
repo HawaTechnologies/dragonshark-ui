@@ -1,4 +1,4 @@
-const { exec: exec_ } = require('node:child_process');
+const { exec: exec_, spawn } = require('node:child_process');
 
 function escapeShellArg(command) {
     return `'${command.replace(/'/g, `'\\''`)}'`;
@@ -23,5 +23,5 @@ function exec(command) {
 }
 
 module.exports = {
-    exec, escapeShellArg
+    exec, spawn, escapeShellArg
 }

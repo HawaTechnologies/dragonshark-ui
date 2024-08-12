@@ -1,4 +1,4 @@
-const { exec, escapeShellArg} = require("./processes");
+const { exec, spawn, escapeShellArg } = require("./processes");
 
 /**
  * Lists the available external devices' directories.
@@ -123,19 +123,25 @@ async function launchGame(manifest) {
             code, status: "error", hint: "unknown", dump: stderr
         }
     } else {
-        // Known error dumps:
-        // {"status": "error", "hint": "request:format"}
-        // {"status": "error", "hint": "directory:invalid"}
-        // {"status": "error", "hint": "command:invalid"}
-        // {"status": "error", "hint": "command:invalid-format"}
-        // {"status": "error", "hint": "command:game-already-running"}
-        // {"status": "error", "hint": "unknown", "type": type(e).__name__, "traceback": traceback.format_exc()}
         return {
             code, ...(output ? JSON.parse(output) : {status: "ok", hint: "command:success"})
         }
     }
 }
 
+/**
+ * Launches emulationstation.
+ * @returns {Promise<number>} The process id (async function).
+ */
+async function launchEmulationStation() {
+    const child = spawn(
+        'emulationstation', [], { detached: true, stdio: [ 'ignore', 'ignore', 'ignore' ] }
+    );
+    child.unref();
+    return child.pid;
+}
+
 module.exports = {
-    listExternalDeviceDirs, setRomsDir, getRomsDir, setupSavesDirs, backupSavesDirs, restoreSavesDirs, launchGame
+    listExternalDeviceDirs, setRomsDir, getRomsDir, setupSavesDirs, backupSavesDirs, restoreSavesDirs,
+    launchGame, launchEmulationStation
 }
