@@ -6,5 +6,5 @@ const virtualpad = require("./virtualpad");
 module.exports = {
     ...network,
     ...games,
-    ...virtualpad
+    virtualpad
 }
