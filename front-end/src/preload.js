@@ -17,4 +17,5 @@ contextBridge.exposeInMainWorld('dragonsharkAPI', {
     backupSavesDirs: (dir) => ipcRenderer.invoke("backupSavesDirs", dir),
     restoreSavesDirs: (dir) => ipcRenderer.invoke("restoreSavesDirs", dir),
     launchGame: (manifest) => ipcRenderer.invoke("launchGame", manifest),
+    launchEmulationStation: () => ipcRenderer.invoke("launchEmulationStation"),
 });
