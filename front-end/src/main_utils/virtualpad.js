@@ -2,22 +2,33 @@ const { exec, escapeShellArg } = require("./processes");
 
 async function startServer() {
     // TODO
+    // {"type": "response", "code": "server:ok", "status": [["empty", ""], ["empty", ""], ["empty", ""], ["empty", ""], ["empty", ""], ["empty", ""], ["empty", ""], ["empty", ""]]}
+    // {"type": "response", "code": "server:already-running"}
 }
 
 async function stopServer() {
     // TODO
+    // {"type": "response", "code": "server:ok"}
+    // {"type": "response", "code": "server:not-running"}
 }
 
 async function checkServer() {
     // TODO
+    // {"type": "response", "code": "server:is-running", "value": true|false})
 }
 
 async function clearPad(pad) {
     // TODO (pad is a number or "all")
+    // Index (clear):
+    //   {"type": "response", "code": "pad:ok", "index": pad}
+    //   {"type": "response", "code": "pad:invalid-index", "index": pad}
+    // 'all' (clear-all):
+    //   {"type": "response", "code": "pad:ok"}
 }
 
 async function status() {
     // TODO
+    // {"type": "response", "code": "pad:status", "value": {"pads": [["empty", ""], ["empty", ""], ["empty", ""], ["empty", ""], ["empty", ""], ["empty", ""], ["empty", ""], ["empty", ""]], "passwords": ["xyku", "xoap", "lwdq", "lbjz", "uxvn", "rpjf", "uklm", "vyfa"]}}
 }
 
 const _pads = [
@@ -32,6 +43,7 @@ async function resetPasswords(pads) {
 
     pads = pads.join(" ");
     // TODO
+    // {"type": "response", "code": "ok", "value": {"passwords": ["xyku", "bxyw", "lwdq", "lbjz", "uxvn", "rpjf", "uklm", "vyfa"]}}
 }
 
 module.exports = {
