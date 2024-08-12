@@ -64,6 +64,11 @@ app.whenReady().then(() => {
   ipcMain.handle("virtualpad.clearPad", virtualpad.clearPad);
   ipcMain.handle("virtualpad.status", virtualpad.status);
   ipcMain.handle("virtualpad.resetPasswords", virtualpad.resetPasswords);
+  // TODO The broadcast server (127.0.0.1:2358) should always
+  // TODO be considered as active. So this app should connect
+  // TODO to it and listen for all their messages and then
+  // TODO send messages from this (main.js) file to the front
+  // TODO end (preload.js).
 
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
