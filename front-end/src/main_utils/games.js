@@ -57,7 +57,7 @@ async function setupSavesDirs() {
     // Get the code.
     const code = result?.code || 0;
 
-    // Parse the results.
+    // Return the results.
     return {code, stdout, stderr};
 }
 
@@ -73,7 +73,7 @@ async function backupSavesDirs(dir) {
     // Get the code.
     const code = result?.code || 0;
 
-    // Parse the results.
+    // Return the results.
     return {code, stdout, stderr};
 }
 
@@ -92,10 +92,51 @@ async function restoreSavesDirs(dir) {
     // Get the code.
     const code = result?.code || 0;
 
-    // Parse the results.
+    // Return the results.
     return {code, stdout, stderr};
 }
 
+/**
+ * Executes a DragonShark game. Possible results are:
+ * 1. {code != 0, status: "error", hint: "unknown", dump: stderr}
+ * 2. {code: 0, status: "error", hint: "request:format"}
+ * 3. {code: 0, status: "error", hint: "directory:invalid"}
+ * 4. {code: 0, status: "error", hint: "command:invalid"}
+ * 5. {code: 0, status: "error", hint: "command:invalid-format"}
+ * 6. {code: 0, status: "error", hint: "command:game-already-running"}
+ * 7. {code: 0, status: "error", hint: "unknown", "type": "SomeException", "traceback": "..."}
+ * 8. {code: 0, status: "ok", hint: "command:success"}
+ * @param manifest The path to the game's XML manifest.
+ * @returns {Promise<{code: number, hint: string, status: string, type?: string, traceback?: string}>}
+ * The execution result (async function).
+ */
+async function launchGame(manifest) {
+    // Run the process.
+    const {stdout, stderr, result} = await exec(`launch-game ${escapeShellArg(manifest)}`);
+    const output = stdout.trim();
+
+    // Get the code.
+    const code = result?.code || 0;
+
+    let jsonResult = null;
+    if (code) {
+        return {
+            code, status: "error", hint: "unknown", dump: stderr
+        }
+    } else {
+        // Known error dumps:
+        // {"status": "error", "hint": "request:format"}
+        // {"status": "error", "hint": "directory:invalid"}
+        // {"status": "error", "hint": "command:invalid"}
+        // {"status": "error", "hint": "command:invalid-format"}
+        // {"status": "error", "hint": "command:game-already-running"}
+        // {"status": "error", "hint": "unknown", "type": type(e).__name__, "traceback": traceback.format_exc()}
+        return {
+            code, ...(output ? JSON.parse(output) : {status: "ok", hint: "command:success"})
+        }
+    }
+}
+
 module.exports = {
-    listExternalDeviceDirs, setRomsDir, getRomsDir, setupSavesDirs, backupSavesDirs, restoreSavesDirs
+    listExternalDeviceDirs, setRomsDir, getRomsDir, setupSavesDirs, backupSavesDirs, restoreSavesDirs, launchGame
 }
