@@ -1,6 +1,6 @@
-const { contextBridge, ipcRenderer } = require('electron')
+const { contextBridge, ipcRenderer } = require('electron');
 
-contextBridge.exposeInMainWorld('dragonsharkAPI', {
+contextBridge.exposeInMainWorld('dragonSharkAPI', {
     listIPv4Interfaces: () => ipcRenderer.invoke("listIPv4Interfaces"),
     listWLANInterfaces: () => ipcRenderer.invoke("listWLANInterfaces"),
     listWirelessNetworks: () => ipcRenderer.invoke("listWirelessNetworks"),
