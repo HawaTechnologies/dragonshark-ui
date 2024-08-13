@@ -1,4 +1,4 @@
-const {exec} = require("./processes");
+const {exec, escapeShellArg} = require("./processes");
 
 /**
  * Lists the known timezones.
@@ -15,6 +15,25 @@ async function listTimezones() {
     return {code, timezones: code ? [] : stdout.trim().split("\n")};
 }
 
+/**
+ * Sets the new timezone.
+ * @param tz The new timezone.
+ * @returns {Promise<{code: number, stderr: string, stdout: string}>} The {code, stdout, stderr} with the result of the operation (async function).
+ */
+async function setTimezone(tz) {
+    // Create the command.
+    const command = `timedatectl set-timezone ${escapeShellArg(tz)}`;
+
+    // Run the process.
+    const {stdout, stderr, result} = await exec(command);
+
+    // Get the code.
+    const code = result?.code || 0;
+
+    // Get the result.
+    return {code, stdout, stderr};
+}
+
 module.exports = {
-    listTimezones
+    listTimezones, setTimezone
 }
