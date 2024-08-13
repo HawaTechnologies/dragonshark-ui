@@ -13,21 +13,59 @@ function jsonParse(value) {
     }
 }
 
+/**
+ * Starts the VirtualPad server. Possible successful values in the `details`:
+ * - {"type": "response", "code": "server:ok", "status": [
+ *     ["empty", ""], ["empty", ""], ["empty", ""], ["empty", ""],
+ *     ["empty", ""], ["empty", ""], ["empty", ""], ["empty", ""]
+ * ]}
+ * - {"type": "response", "code": "server:already-running"}
+ * @returns {Promise<{details: ({satus: string, hint: string, dump: *}|*), code: number}>}
+ * The success/error result (async function).
+ */
 async function startServer() {
-    // TODO
-    // {"type": "response", "code": "server:ok", "status": [["empty", ""], ["empty", ""], ["empty", ""], ["empty", ""], ["empty", ""], ["empty", ""], ["empty", ""], ["empty", ""]]}
-    // {"type": "response", "code": "server:already-running"}
+    // Run the process.
+    const {stdout, stderr, result} = await exec("virtualpad-admin server start");
+
+    // Get the code.
+    const code = result?.code || 0;
+
+    // Parse the results.
+    return {code, details: code ? {satus: "error", hint: "unknown", dump: stderr} : jsonParse(stdout)};
 }
 
+/**
+ * Stops the VirtualPad server. Possible successful values in the `details`:
+ * - {"type": "response", "code": "server:ok"}
+ * - {"type": "response", "code": "server:not-running"}
+ * @returns {Promise<{details: ({satus: string, hint: string, dump: *}|*), code: number}>}
+ * The success/error result (async function).
+ */
 async function stopServer() {
-    // TODO
-    // {"type": "response", "code": "server:ok"}
-    // {"type": "response", "code": "server:not-running"}
+    // Run the process.
+    const {stdout, stderr, result} = await exec("virtualpad-admin server stop");
+
+    // Get the code.
+    const code = result?.code || 0;
+
+    // Parse the results.
+    return {code, details: code ? {satus: "error", hint: "unknown", dump: stderr} : jsonParse(stdout)};
 }
 
+/**
+ * Checks the VirtualPad server. Possible successful values in the `details`:
+ * - {"type": "response", "code": "server:is-running", "value": boolean})
+ * @returns {Promise<{interfaces: ({satus: string, hint: string, dump: *}|*), code: number}>}
+ */
 async function checkServer() {
-    // TODO
-    // {"type": "response", "code": "server:is-running", "value": true|false})
+    // Run the process.
+    const {stdout, stderr, result} = await exec("virtualpad-admin server check");
+
+    // Get the code.
+    const code = result?.code || 0;
+
+    // Parse the results.
+    return {code, details: code ? {satus: "error", hint: "unknown", dump: stderr} : jsonParse(stdout)};
 }
 
 async function clearPad(pad) {
