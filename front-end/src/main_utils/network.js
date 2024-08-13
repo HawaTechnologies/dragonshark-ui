@@ -78,7 +78,6 @@ async function connectToNetwork(ssid, password, interfaceName) {
  * @returns {Promise<{code: number, stderr: string, stdout: string}>} The {code, stdout, stderr} with the result of the operation (async function).
  */
 async function disconnectFromNetwork(interfaceName) {
-
     // Create the command.
     const command = `dragonshark-network-disconnect ${escapeShellArg(interfaceName)}`;
 
