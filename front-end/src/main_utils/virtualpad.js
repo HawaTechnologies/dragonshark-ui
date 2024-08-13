@@ -77,9 +77,26 @@ async function clearPad(pad) {
     //   {"type": "response", "code": "pad:ok"}
 }
 
+/**
+ * Gets the VirtualPad pads status. Possible successful values in the `details`:
+ * - {"type": "response", "code": "pad:status", "value": {
+ *       "pads": [
+ *           ["empty", ""], ["empty", ""], ["empty", ""], ["empty", ""],
+ *           ["empty", ""], ["empty", ""], ["empty", ""], ["empty", ""]
+ *       ],
+ *       "passwords": ["xyku", "xoap", "lwdq", "lbjz", "uxvn", "rpjf", "uklm", "vyfa"]
+ *   }}
+ * @returns {Promise<{details: ({satus: string, hint: string, dump: *}|*), code: number}>}
+ */
 async function status() {
-    // TODO
-    // {"type": "response", "code": "pad:status", "value": {"pads": [["empty", ""], ["empty", ""], ["empty", ""], ["empty", ""], ["empty", ""], ["empty", ""], ["empty", ""], ["empty", ""]], "passwords": ["xyku", "xoap", "lwdq", "lbjz", "uxvn", "rpjf", "uklm", "vyfa"]}}
+    // Run the process.
+    const {stdout, stderr, result} = await exec("virtualpad-admin pad status");
+
+    // Get the code.
+    const code = result?.code || 0;
+
+    // Parse the results.
+    return {code, details: code ? {satus: "error", hint: "unknown", dump: stderr} : jsonParse(stdout)};
 }
 
 const _pads = new Set([
