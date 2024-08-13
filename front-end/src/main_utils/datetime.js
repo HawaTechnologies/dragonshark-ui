@@ -53,6 +53,33 @@ async function setNTPActive(active) {
     return {code, stdout, stderr};
 }
 
+async function getTimeData() {
+    // Run the process.
+    const {stdout, result} = await exec("timedatectl show");
+
+    // Get the code.
+    const code = result?.code || 0;
+
+    // Parse the results.
+    return {code, data: code ? null : (() => {
+        const lines = stdout.trim().split("\n");
+        const obj_ = {};
+        lines.forEach((l) => {
+            const [key, value] = l.trim().split("=");
+            obj_[key] = value;
+        });
+        return {
+            timezone: obj_.Timezone,
+            localRTC: obj_.LocalRTC === "yes",
+            canNTP: obj_.CanNTP === "yes",
+            ntp: obj_.NTP === "yes",
+            ntpSynchronized: obj_.NTPSynchronized === "yes",
+            time: obj_.TimeUSec || "unknown",
+            rtcTime: obj_.RTCTimeUSec || "unknown"
+        };
+    })()};
+}
+
 module.exports = {
-    listTimezones, setTimezone, setNTPActive
+    listTimezones, setTimezone, setNTPActive, getTimeData
 }
