@@ -1,5 +1,18 @@
 const { exec, escapeShellArg } = require("./processes");
 
+/**
+ * Parses a JSON value. On error, returns {type: "error", dump: value, hint: "unknown"}.
+ * @param value The value to parse.
+ * @returns {any} The parsed value.
+ */
+function jsonParse(value) {
+    try {
+        return JSON.parse(value);
+    } catch {
+        return {status: "error", hint: "unknown", dump: value}
+    }
+}
+
 async function startServer() {
     // TODO
     // {"type": "response", "code": "server:ok", "status": [["empty", ""], ["empty", ""], ["empty", ""], ["empty", ""], ["empty", ""], ["empty", ""], ["empty", ""], ["empty", ""]]}
@@ -31,14 +44,14 @@ async function status() {
     // {"type": "response", "code": "pad:status", "value": {"pads": [["empty", ""], ["empty", ""], ["empty", ""], ["empty", ""], ["empty", ""], ["empty", ""], ["empty", ""], ["empty", ""]], "passwords": ["xyku", "xoap", "lwdq", "lbjz", "uxvn", "rpjf", "uklm", "vyfa"]}}
 }
 
-const _pads = [
+const _pads = new Set([
     0, 1, 2, 3, 4, 5, 6, 7, "0", "1", "2", "3", "4", "5", "6", "7"
-]
+]);
 
 async function resetPasswords(pads) {
     pads ||= [];
     if (pads === "all") pads = [0, 1, 2, 3, 4, 5, 6, 7];
-    pads = pads.filter(e => _pads.findIndex(pe => pe === e) >= 0);
+    pads = pads.filter(e => _pads.has(e));
     if (pads.length === 0) return {code: 0};
 
     pads = pads.join(" ");
