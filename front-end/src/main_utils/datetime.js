@@ -34,6 +34,25 @@ async function setTimezone(tz) {
     return {code, stdout, stderr};
 }
 
+/**
+ * Activates or deactivates the NTP service.
+ * @param active Whether to activate the NTP or not.
+ * @returns {Promise<{code: (*|number), stdout: *, stderr: *}>} The {code, stdout, stderr} with the result of the operation (async function).
+ */
+async function setNTPActive(active) {
+    // Create the command.
+    const command = `timedatectl set-ntp ${escapeShellArg(active.toString())}`;
+
+    // Run the process.
+    const {stdout, stderr, result} = await exec(command);
+
+    // Get the code.
+    const code = result?.code || 0;
+
+    // Get the result.
+    return {code, stdout, stderr};
+}
+
 module.exports = {
-    listTimezones, setTimezone
+    listTimezones, setTimezone, setNTPActive
 }
