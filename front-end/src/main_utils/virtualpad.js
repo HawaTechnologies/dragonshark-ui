@@ -127,15 +127,28 @@ async function status() {
     return {code, details: code ? {satus: "error", hint: "unknown", dump: stderr} : jsonParse(stdout)};
 }
 
+/**
+ * Resets the passwords for the chosen pads
+ * @param pads An array of 0..7 integers, or the "all" string.
+ * @returns {Promise<{code: (*|number), details: ({satus: string, hint: string, dump: *}|*)}|{code: number}>}
+ * The result of the operation (async function).
+ */
 async function resetPasswords(pads) {
+    // Normalize the pads values.
     pads ||= [];
     if (pads === "all") pads = [0, 1, 2, 3, 4, 5, 6, 7];
     pads = pads.filter(e => _pads.has(e));
     if (pads.length === 0) return {code: 0};
-
     pads = pads.join(" ");
-    // TODO
-    // {"type": "response", "code": "ok", "value": {"passwords": ["xyku", "bxyw", "lwdq", "lbjz", "uxvn", "rpjf", "uklm", "vyfa"]}}
+
+    // Run the process.
+    const {stdout, stderr, result} = await exec("virtualpad-admin pad reset-passwords " + pads);
+
+    // Get the code.
+    const code = result?.code || 0;
+
+    // Parse the results.
+    return {code, details: code ? {satus: "error", hint: "unknown", dump: stderr} : jsonParse(stdout)};
 }
 
 module.exports = {
