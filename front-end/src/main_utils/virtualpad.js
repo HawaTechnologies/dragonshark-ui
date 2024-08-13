@@ -54,7 +54,7 @@ async function stopServer() {
 
 /**
  * Checks the VirtualPad server. Possible successful values in the `details`:
- * - {"type": "response", "code": "server:is-running", "value": boolean})
+ * - {"type": "response", "code": "server:is-running", "value": boolean}
  * @returns {Promise<{interfaces: ({satus: string, hint: string, dump: *}|*), code: number}>}
  */
 async function checkServer() {
@@ -68,13 +68,41 @@ async function checkServer() {
     return {code, details: code ? {satus: "error", hint: "unknown", dump: stderr} : jsonParse(stdout)};
 }
 
+const _pads = new Set([
+    0, 1, 2, 3, 4, 5, 6, 7, "0", "1", "2", "3", "4", "5", "6", "7"
+]);
+
+/**
+ * Clears one pad or all of them. Possible process values in the `details`:
+ * - {"type": "response", "code": "pad:ok", "index": pad} (when using index)
+ * - {"type": "response", "code": "pad:invalid-index", "index": pad}
+ * - {"type": "response", "code": "pad:ok"}
+ * @param pad The pad index (0 to 7) or "all".
+ * @returns {Promise<{code: number, details: {satus: string, hint: string, index}}|{code: number, details: ({satus: string, hint: string, dump: *}|{type: string, status: string})}|{code: number, details: ({satus: string, hint: string, dump: *}|*)}>}
+ * The result of the process.
+ */
 async function clearPad(pad) {
-    // TODO (pad is a number or "all")
-    // Index (clear):
-    //   {"type": "response", "code": "pad:ok", "index": pad}
-    //   {"type": "response", "code": "pad:invalid-index", "index": pad}
-    // 'all' (clear-all):
-    //   {"type": "response", "code": "pad:ok"}
+    if (pad === "all") {
+        // Run the process.
+        const {stdout, stderr, result} = await exec(`virtualpad-admin pad clear-all`);
+
+        // Get the code.
+        const code = result?.code || 0;
+
+        // Parse the results.
+        return {code, details: code ? {satus: "error", hint: "unknown", dump: stderr} : {type: "response", status: "pad:ok"}};
+    } else if (_pads.has(pad)) {
+        // Run the process.
+        const {stdout, stderr, result} = await exec(`virtualpad-admin pad clear ${pad}`);
+
+        // Get the code.
+        const code = result?.code || 0;
+
+        // Parse the results.
+        return {code, details: code ? {satus: "error", hint: "unknown", dump: stderr} : jsonParse(stdout)};
+    } else {
+        return {code: 1, details: {satus: "error", hint: "pad:invalid-index", index: pad}};
+    }
 }
 
 /**
@@ -98,10 +126,6 @@ async function status() {
     // Parse the results.
     return {code, details: code ? {satus: "error", hint: "unknown", dump: stderr} : jsonParse(stdout)};
 }
-
-const _pads = new Set([
-    0, 1, 2, 3, 4, 5, 6, 7, "0", "1", "2", "3", "4", "5", "6", "7"
-]);
 
 async function resetPasswords(pads) {
     pads ||= [];
