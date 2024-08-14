@@ -1,9 +1,7 @@
 const { app, BrowserWindow, screen, ipcMain } = require('electron');
 const path = require('node:path');
 const {
-  listIPv4Interfaces, listWLANInterfaces, listWirelessNetworks, connectToNetwork, disconnectFromNetwork,
-  listExternalDeviceDirs, setRomsDir, getRomsDir, setupSavesDirs, restoreSavesDirs, backupSavesDirs,
-  launchGame, launchEmulationStation, virtualpad
+  virtualpad, games, network, datetime
 } = require("./main_utils");
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -45,19 +43,19 @@ const createWindow = () => {
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
   createWindow();
-  ipcMain.handle("listIPv4Interfaces", listIPv4Interfaces);
-  ipcMain.handle("listWLANInterfaces", listWLANInterfaces);
-  ipcMain.handle("listWirelessNetworks", listWirelessNetworks);
-  ipcMain.handle("connectToNetwork", connectToNetwork);
-  ipcMain.handle("disconnectFromNetwork", disconnectFromNetwork);
-  ipcMain.handle("listExternalDeviceDirs", listExternalDeviceDirs);
-  ipcMain.handle("setRomsDir", setRomsDir);
-  ipcMain.handle("getRomsDir", getRomsDir);
-  ipcMain.handle("setupSavesDirs", setupSavesDirs);
-  ipcMain.handle("backupSavesDirs", backupSavesDirs);
-  ipcMain.handle("restoreSavesDirs", restoreSavesDirs);
-  ipcMain.handle("launchGame", launchGame);
-  ipcMain.handle("launchEmulationStation", launchEmulationStation);
+  ipcMain.handle("network.listIPv4Interfaces", network.listIPv4Interfaces);
+  ipcMain.handle("network.listWLANInterfaces", network.listWLANInterfaces);
+  ipcMain.handle("network.listWirelessNetworks", network.listWirelessNetworks);
+  ipcMain.handle("network.connectToNetwork", network.connectToNetwork);
+  ipcMain.handle("network.disconnectFromNetwork", network.disconnectFromNetwork);
+  ipcMain.handle("games.listExternalDeviceDirs", games.listExternalDeviceDirs);
+  ipcMain.handle("games.setRomsDir", games.setRomsDir);
+  ipcMain.handle("games.getRomsDir", games.getRomsDir);
+  ipcMain.handle("games.setupSavesDirs", games.setupSavesDirs);
+  ipcMain.handle("games.backupSavesDirs", games.backupSavesDirs);
+  ipcMain.handle("games.restoreSavesDirs", games.restoreSavesDirs);
+  ipcMain.handle("games.launchGame", games.launchGame);
+  ipcMain.handle("games.launchEmulationStation", games.launchEmulationStation);
   ipcMain.handle("virtualpad.startServer", virtualpad.startServer);
   ipcMain.handle("virtualpad.stopServer", virtualpad.stopServer);
   ipcMain.handle("virtualpad.checkServer", virtualpad.checkServer);

@@ -1,23 +1,27 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('dragonSharkAPI', {
-    listIPv4Interfaces: () => ipcRenderer.invoke("listIPv4Interfaces"),
-    listWLANInterfaces: () => ipcRenderer.invoke("listWLANInterfaces"),
-    listWirelessNetworks: () => ipcRenderer.invoke("listWirelessNetworks"),
-    connectToNetwork: (ssid, password, interfaceName) => ipcRenderer.invoke(
-        "connectToNetwork", ssid, password, interfaceName
-    ),
-    disconnectFromNetwork: (interfaceName) => ipcRenderer.invoke(
-        "disconnectFromNetwork", interfaceName
-    ),
-    listExternalDeviceDirs: () => ipcRenderer.invoke("listExternalDeviceDirs"),
-    setRomsDir: (dir) => ipcRenderer.invoke("setRomsDir", dir),
-    getRomsDir: () => ipcRenderer.invoke("getRomsDir"),
-    setupSavesDirs: () => ipcRenderer.invoke("setupSavesDirs"),
-    backupSavesDirs: (dir) => ipcRenderer.invoke("backupSavesDirs", dir),
-    restoreSavesDirs: (dir) => ipcRenderer.invoke("restoreSavesDirs", dir),
-    launchGame: (manifest) => ipcRenderer.invoke("launchGame", manifest),
-    launchEmulationStation: () => ipcRenderer.invoke("launchEmulationStation"),
+    network: {
+        listIPv4Interfaces: () => ipcRenderer.invoke("games.listIPv4Interfaces"),
+        listWLANInterfaces: () => ipcRenderer.invoke("games.listWLANInterfaces"),
+        listWirelessNetworks: () => ipcRenderer.invoke("games.listWirelessNetworks"),
+        connectToNetwork: (ssid, password, interfaceName) => ipcRenderer.invoke(
+            "games.connectToNetwork", ssid, password, interfaceName
+        ),
+        disconnectFromNetwork: (interfaceName) => ipcRenderer.invoke(
+            "games.disconnectFromNetwork", interfaceName
+        ),
+    },
+    games: {
+        listExternalDeviceDirs: () => ipcRenderer.invoke("games.listExternalDeviceDirs"),
+        setRomsDir: (dir) => ipcRenderer.invoke("games.setRomsDir", dir),
+        getRomsDir: () => ipcRenderer.invoke("games.getRomsDir"),
+        setupSavesDirs: () => ipcRenderer.invoke("games.setupSavesDirs"),
+        backupSavesDirs: (dir) => ipcRenderer.invoke("games.backupSavesDirs", dir),
+        restoreSavesDirs: (dir) => ipcRenderer.invoke("games.restoreSavesDirs", dir),
+        launchGame: (manifest) => ipcRenderer.invoke("games.launchGame", manifest),
+        launchEmulationStation: () => ipcRenderer.invoke("games.launchEmulationStation"),
+    },
     virtualpad: {
         startServer: () => ipcRenderer.invoke("virtualpad.startServer"),
         stopServer: () => ipcRenderer.invoke("virtualpad.stopServer"),
