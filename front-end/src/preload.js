@@ -29,5 +29,11 @@ contextBridge.exposeInMainWorld('dragonSharkAPI', {
         clearPad: (pad) => ipcRenderer.invoke("virtualpad.clearPad", pad),
         status: () => ipcRenderer.invoke("virtualpad.status"),
         resetPasswords: (pads) => ipcRenderer.invoke("virtualpad.resetPasswords", pads),
+    },
+    datetime: {
+        getTimeData: () => ipcRenderer.invoke("datetime.getTimeData"),
+        listTimezones: () => ipcRenderer.invoke("datetime.listTimezones"),
+        setNTPActive: (active) => ipcRenderer.invoke("datetime.setNTPActive", active),
+        setTimezone: (tz) => ipcRenderer.invoke("datetime.setTimezone", tz),
     }
 });

@@ -62,6 +62,10 @@ app.whenReady().then(() => {
   ipcMain.handle("virtualpad.clearPad", virtualpad.clearPad);
   ipcMain.handle("virtualpad.status", virtualpad.status);
   ipcMain.handle("virtualpad.resetPasswords", virtualpad.resetPasswords);
+  ipcMain.handle("datetime.getTimeData", datetime.getTimeData);
+  ipcMain.handle("datetime.listTimezones", datetime.listTimezones);
+  ipcMain.handle("datetime.setNTPActive", datetime.setNTPActive);
+  ipcMain.handle("datetime.setTimezone", datetime.setTimezone);
   // TODO The broadcast server (127.0.0.1:2358) should always
   // TODO be considered as active. So this app should connect
   // TODO to it and listen for all their messages and then
