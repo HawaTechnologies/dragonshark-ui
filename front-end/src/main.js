@@ -34,6 +34,14 @@ const createWindow = () => {
     });
   });
 
+  mainWindow.on("focus", () => {
+    mainWindow.webContents.send('app-focus');
+  });
+
+  mainWindow.on("blur", () => {
+    mainWindow.webContents.send('app-blur');
+  });
+
   // Open the DevTools.
   // mainWindow.webContents.openDevTools();
 };

@@ -1,6 +1,11 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
+// Access window.dragonSharkAPI to use these features.
 contextBridge.exposeInMainWorld('dragonSharkAPI', {
+    events: {
+        onFocus: (callback) => ipcRenderer.on("app-focus", callback),
+        onBlur: (callback) => ipcRenderer.on("app-blur", callback)
+    },
     network: {
         listIPv4Interfaces: () => ipcRenderer.invoke("games.listIPv4Interfaces"),
         listWLANInterfaces: () => ipcRenderer.invoke("games.listWLANInterfaces"),
