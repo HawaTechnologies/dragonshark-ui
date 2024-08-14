@@ -32,3 +32,13 @@ body {
 .big {
   font-size: 20px;
 }
+
+.pad-button {
+  display: inline-block;
+  border: gray;
+  text-align: center;
+  min-width: 1em;
+  padding: 0 0.05em;
+  background-color: #333333;
+  border-radius: 0.5em;
+}

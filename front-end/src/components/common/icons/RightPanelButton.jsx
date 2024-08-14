@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-export default function BPad({ type, style }) {
+export default function RightPanelButton({ type, style }) {
     style ||= {};
     switch(type) {
         case "up":
