@@ -27,7 +27,7 @@ function getDateTime(d) {
     ][d.getMonth()];
     const year = d.getFullYear();
     const hh = d.getHours().toString().padStart(2, "0");
-    const mm = d.getHours().toString().padStart(2, "0");
+    const mm = d.getMinutes().toString().padStart(2, "0");
     return `${weekDay} ${day}/${month}/${year} ${hh}:${mm}`;
 }
 
@@ -76,6 +76,7 @@ export default function Clock({ style }) {
 
     // TODO.
     return <Panel style={style}>
-
+        <div className={"big text-blue text-right"}>{dateTime}</div>
+        <div className={"text-blue text-right"}>{timezone} ({offset})</div>
     </Panel>;
 }

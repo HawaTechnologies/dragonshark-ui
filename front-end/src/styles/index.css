@@ -16,3 +16,19 @@ body {
   width: 1920px;
   transform-origin: left top;
 }
+
+.text-red {
+  color: darkred;
+}
+
+.text-blue {
+  color: darkblue;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.big {
+  font-size: 20px;
+}
