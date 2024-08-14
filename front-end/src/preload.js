@@ -4,7 +4,9 @@ const { contextBridge, ipcRenderer } = require('electron');
 contextBridge.exposeInMainWorld('dragonSharkAPI', {
     events: {
         onFocus: (callback) => ipcRenderer.on("app-focus", callback),
-        onBlur: (callback) => ipcRenderer.on("app-blur", callback)
+        offFocus: (callback) => ipcRenderer.off("app-focus", callback),
+        onBlur: (callback) => ipcRenderer.on("app-blur", callback),
+        offBlur: (callback) => ipcRenderer.off("app-blur", callback)
     },
     network: {
         listIPv4Interfaces: () => ipcRenderer.invoke("games.listIPv4Interfaces"),
