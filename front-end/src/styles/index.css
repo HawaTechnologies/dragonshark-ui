@@ -38,6 +38,7 @@ body {
   border: gray;
   text-align: center;
   min-width: 1em;
+  margin: 0 0.25em;
   padding: 0 0.05em;
   background-color: #333333;
   border-radius: 0.5em;

@@ -1,27 +1,24 @@
 import * as React from 'react';
 
-export default function RightPanelButton({ type, style }) {
+function RightPanelButton({ style, color, caption }) {
     style ||= {};
-    switch(type) {
-        case "up":
-            return <div className="pad-button" style={{
-                color: "darkgreen",
-                ...style
-            }}>1</div>; //①
-        case "right":
-            return <div className="pad-button" style={{
-                color: "#733f00",
-                ...style
-            }}>2</div>; //②
-        case "down":
-            return <div className="pad-button" style={{
-                color: "#3535fd",
-                ...style
-            }}>3</div>; //③
-        case "left":
-            return <div className="pad-button" style={{
-                color: "mediumpurple",
-                ...style
-            }}>4</div>; //④
-    }
+    return <div className="pad-button" style={{
+        color, ...style
+    }}>{caption}</div>;
+}
+
+export function BUp({ style }) {
+    return <RightPanelButton style={style} color="darkgreen" caption="1" />;
+}
+
+export function BRight({ style }) {
+    return <RightPanelButton style={style} color="#733f00" caption="2" />;
+}
+
+export function BDown({ style }) {
+    return <RightPanelButton style={style} color="#3535fd" caption="3" />;
+}
+
+export function BLeft({ style }) {
+    return <RightPanelButton style={style} color="mediumpurple" caption="4" />;
 }
