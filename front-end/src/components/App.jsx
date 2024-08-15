@@ -24,5 +24,6 @@ export default function App() {
                 <div className="text-red">Press <L2 /> to go back to the main menu</div>
             </Panel>
         </div>
+
     </>;
 }
