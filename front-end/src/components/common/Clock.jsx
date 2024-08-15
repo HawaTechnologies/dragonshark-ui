@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {useEffect, useMemo, useState} from "react";
 import Panel from "./Panel.jsx";
+import {BLeft} from "./icons/RightPanelButton.jsx";
 
 /**
  * Gets the offset in format like "+03:00" or "-04:00".
@@ -74,9 +75,9 @@ export default function Clock({ style }) {
         }
     })
 
-    // TODO.
     return <Panel style={style}>
         <div className={"big text-blue text-right"}>{dateTime}</div>
         <div className={"text-blue text-right"}>{timezone} ({offset})</div>
+        <div className={"text-blue text-right"}>Press <BLeft/> to configure the date & time</div>
     </Panel>;
 }
