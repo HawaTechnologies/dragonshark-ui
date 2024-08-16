@@ -9,14 +9,14 @@ contextBridge.exposeInMainWorld('dragonSharkAPI', {
         offBlur: (callback) => ipcRenderer.off("app-blur", callback)
     },
     network: {
-        listIPv4Interfaces: () => ipcRenderer.invoke("games.listIPv4Interfaces"),
-        listWLANInterfaces: () => ipcRenderer.invoke("games.listWLANInterfaces"),
-        listWirelessNetworks: () => ipcRenderer.invoke("games.listWirelessNetworks"),
+        listIPv4Interfaces: () => ipcRenderer.invoke("network.listIPv4Interfaces"),
+        listWLANInterfaces: () => ipcRenderer.invoke("network.listWLANInterfaces"),
+        listWirelessNetworks: () => ipcRenderer.invoke("network.listWirelessNetworks"),
         connectToNetwork: (ssid, password, interfaceName) => ipcRenderer.invoke(
-            "games.connectToNetwork", ssid, password, interfaceName
+            "network.connectToNetwork", ssid, password, interfaceName
         ),
         disconnectFromNetwork: (interfaceName) => ipcRenderer.invoke(
-            "games.disconnectFromNetwork", interfaceName
+            "network.disconnectFromNetwork", interfaceName
         ),
     },
     games: {
