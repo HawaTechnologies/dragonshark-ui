@@ -73,7 +73,7 @@ export default function Clock({ style }) {
         return () => {
             clearInterval(interval);
         }
-    })
+    }, []);
 
     return <Panel style={style}>
         <div className={"big text-blue text-right"}>{dateTime}</div>
