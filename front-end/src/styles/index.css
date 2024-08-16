@@ -25,6 +25,10 @@ body {
   color: darkblue;
 }
 
+.text-soft {
+  color: dimgray;
+}
+
 .text-right {
   text-align: right;
 }

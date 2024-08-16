@@ -104,7 +104,7 @@ export default function VirtualPadPreview({ style }) {
                 <div className="text-blue">
                     Connected: {connected ? "Yes" : "No"} {connected ? `- Address(es): ${wirelessInterfaces.join(", ")}`: null}
                 </div>
-                <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-around'}}>
+                <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-around'}} className="text-soft">
                     {pads && pads.map((e, index) => {
                         return <div style={{textAlign: 'center', display: 'inline-block'}}>
                             <div>Status: {e[0]}</div>
@@ -115,7 +115,7 @@ export default function VirtualPadPreview({ style }) {
                 </div>
             </Panel>;
         default:
-            return <Panel style={{...style, textAlign: 'center'}}>
+            return <Panel style={{...style, textAlign: 'center'}} className="text-soft">
                 Retrieving VirtualPad status...
             </Panel>;
     }
