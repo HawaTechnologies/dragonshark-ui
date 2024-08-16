@@ -12,8 +12,8 @@ function escapeShellArg(command) {
 function exec(command) {
     return new Promise((resolve, reject) => {
         try {
-            const embeddedCommand = `bash -i -c "source ~/.bashrc && ${command}"`;
-            exec_(embeddedCommand, (error, stdout, stderr) => {
+            const embeddedCommand = `bash -c "source ~/.bashrc && ${command}"`;
+            exec_(embeddedCommand, { maxBuffer: 1024 * 1024 }, (error, stdout, stderr) => {
                 resolve({stdout, stderr, result: error});
             });
         } catch(e) {
