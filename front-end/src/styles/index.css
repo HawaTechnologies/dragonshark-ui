@@ -60,3 +60,15 @@ body {
   background-color: rgba(255, 255, 255, 0.75);
   padding: 16px;
 }
+
+.option {
+  border-radius: 16px;
+  border-width: 2px;
+  border-style: solid;
+  border-top-color: red;
+  border-left-color: red;
+  border-right-color: blue;
+  border-bottom-color: blue;
+  width: 300px;
+  height: 300px;
+}
