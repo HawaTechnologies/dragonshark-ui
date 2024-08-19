@@ -65,8 +65,9 @@ async function getVirtualPadStatus() {
 }
 
 function ellipsis(nickname) {
+    nickname = nickname.trim();
     const length = nickname.length || 0;
-    return nickname.length > 10 ? nickname.substring(0, 8) + "..." : nickname;
+    return length > 10 ? nickname.substring(0, 8) + "..." : nickname;
 }
 
 /**
@@ -106,7 +107,7 @@ export default function VirtualPadPreview({ style }) {
                 </div>
                 <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-around'}} className="text-soft">
                     {pads && pads.map((e, index) => {
-                        return <div style={{textAlign: 'center', display: 'inline-block'}}>
+                        return <div style={{textAlign: 'center', display: 'inline-block'}} key={index}>
                             <div>Status: {e[0]}</div>
                             <div>Player: {ellipsis(e[1]) || <i>none</i>}</div>
                             <div>Password: {passwords[index]}</div>
