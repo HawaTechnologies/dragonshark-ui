@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
  * Gets the input from the first connected gamepad.
  * @returns {{RT: boolean, select: boolean, buttonX: boolean, buttonY: boolean, LT: boolean, start: boolean, joystick: number[], right: boolean, buttonA: boolean, down: boolean, joystickRight: number[], connected: boolean, RB: boolean, buttonB: boolean, left: boolean, LB: boolean, up: boolean}}
  */
-export const useGamepad = () => {
+export function useGamepad() {
     const [gamepadInfo, setGamepadInfo] = useState({ connected: false, buttonA: false, buttonB :false, buttonX: false, buttonY:false, joystick: [0, 0], joystickRight : [0,0], RB: false, LB: false, RT: false, LT: false, start: false, select: false, up: false, down: false, left: false, right: false});
 
     // Function to update gamepad state
@@ -67,4 +67,4 @@ export const useGamepad = () => {
     }, [gamepadInfo]);
 
     return gamepadInfo;
-};
+}
