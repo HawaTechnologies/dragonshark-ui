@@ -71,16 +71,36 @@ export function useGamepad() {
 }
 
 /**
- * Rounds an axis' value with a dead zone of 0.1 around the 0.
- * @param value The value to round.
- * @returns {number} -1, 0 or 1.
+ * Gets the state(s) of an axis. It tells whether it is pressed
+ * in either side.
+ * @param value The axis value (raw).
+ * @returns {{up: boolean, down: boolean}} The answer.
  */
-export function discretizeAxis(value) {
-    if (value > -0.1 && value < 0.1) {
-        return 0;
-    } else if (value <= -0.1) {
-        return -1;
-    } else {
-        return 1;
-    }
+export function getDiscreteAxisStates(value) {
+    return useMemo(() => ({down: value < -0.1, up: value > 0.1}), [value]);
+}
+
+/**
+ * This is an effect that performs a periodic action since a press
+ * was occurred.
+ * @param pressed The pressed state (true=pressed, false=released).
+ * @param interval The interval.
+ * @param callback The callback.
+ */
+export function usePressEffect(pressed, interval, callback) {
+    useEffect(() => {
+        if (pressed) {
+            // Trigger as immediately as possible.
+            setTimeout(callback, 0);
+            // Also trigger after the interval, each time.
+            const id = setInterval(callback, interval);
+            // Also, clear the state.
+            return () => {
+                clearInterval(id);
+            }
+        } else {
+            // Do nothing.
+            return () => {}
+        }
+    }, [pressed, interval]);
 }
