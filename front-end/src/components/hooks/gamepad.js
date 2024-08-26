@@ -71,56 +71,16 @@ export function useGamepad() {
 }
 
 /**
- * This is a hook telling whether a button was pressed or released.
- * If a combination of buttons (via OR) is used instead, it means
- * whether that combination was one-pressed vs. all-released.
- * @param current The current state.
- * @returns {{pressed: boolean, released: boolean}} The state change flags.
- */
-export function useButtonChanged(current) {
-    const previous = usePrevious(current);
-    return useMemo(() => {
-        return {
-            pressed: current && !previous,
-            released: !current && previous
-        }
-    }, [current, previous]);
-}
-
-/**
  * Rounds an axis' value with a dead zone of 0.1 around the 0.
  * @param value The value to round.
  * @returns {number} -1, 0 or 1.
  */
-export function useDiscreteAxis(value) {
-    return useMemo(() => {
-        if (value > -0.1 && value < 0.1) {
-            return 0;
-        } else if (value <= -0.1) {
-            return -1;
-        } else {
-            return 1;
-        }
-    }, [value]);
-}
-
-/**
- * This is a hook telling whether an axis has changed, and
- * it returns whether the change is to greater or to lower.
- * It rarely returns no change (i.e. 0).
- * @param current The current axis value.
- * @returns {number} The difference (1 if grew, -1 if lowered).
- */
-export function useAxisChanged(current) {
-    const previous = usePrevious(current);
-    return useMemo(() => {
-        const diff = current - previous;
-        if (current > previous) {
-            return 1;
-        } else if (current < previous) {
-            return -1;
-        } else {
-            return 0;
-        }
-    }, [current, previous]);
+export function discretizeAxis(value) {
+    if (value > -0.1 && value < 0.1) {
+        return 0;
+    } else if (value <= -0.1) {
+        return -1;
+    } else {
+        return 1;
+    }
 }
