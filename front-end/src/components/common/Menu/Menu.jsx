@@ -2,6 +2,7 @@ import React, { useState, useEffect, Children, cloneElement } from 'react';
 import Section from "./Section.jsx";
 import Option from "./Option.jsx";
 import Panel from "../Panel.jsx";
+import {getDiscreteAxisStates, useGamepad, usePressEffect} from "../../hooks/gamepad.js";
 
 /**
  * Counts the option components inside a section.
@@ -33,7 +34,7 @@ function getSectionsAndOptionCounts(children) {
  */
 function getCurrentSectionAndOptionIndex(globalIndex, sectionAndOptions) {
     if (globalIndex < 0 || globalIndex === 0 || sectionAndOptions.length === 0) {
-        return [-1, -1];
+        return [0, 0];
     }
 
     let previousOptions = 0;
@@ -82,8 +83,9 @@ function getFilteredSectionsAndIndex(globalIndex, children) {
     if (sectionIdx === -1) {
         // We force these values for pure convenience to force one of the
         // sections and there one of the options to be selected.
-        [sectionIdx, optionIdx] = [0, 0];
-        globalIndex = 0;
+        const lastSectionIndex = filteredSections.length - 1;
+        [sectionIdx, optionIdx] = [lastSectionIndex, filteredSections[lastSectionIndex][1] - 1];
+        globalIndex = filteredSections.map(([_, c]) => c).reduce((a, b) => a + b) - 1;
     }
     return [globalIndex, cleanAndSelectSectionAndOption(sectionIdx, optionIdx, filteredSections)];
 }
@@ -95,18 +97,44 @@ function getFilteredSectionsAndIndex(globalIndex, children) {
  * @param selectedIndex If set, an option that will be
  * selected by default. By default, this stands for the
  * first option of the first section.
+ * @param navigationInterval The interval of movement between
+ * each option when left/right is pressed.
  * @param children The children of this component.
  * @constructor
  */
-export default function Menu({ style, children, selectedIndex }) {
+export default function Menu({ style, children, selectedIndex, navigationInterval }) {
+    // 1. Define the new state to track the global index, and the
+    //    state to track the filtered children.
     const [globalIndex, setGlobalIndex] = useState(selectedIndex);
+    const [filteredChildren, setFilteredChildren] = useState(children);
+
+    // 2. If the selectedIndex change, update the global index.
     useEffect(() => {
         setGlobalIndex(selectedIndex);
     }, [selectedIndex]);
 
-    const [filteredGlobalIndex, filteredSections] = getFilteredSectionsAndIndex(globalIndex, children);
+    // 3. In a state, tell to fix the globalIndex based on it
+    //    being filtered.
+    useEffect(() => {
+        const [filteredGlobalIndex, filteredSections] = getFilteredSectionsAndIndex(globalIndex, children);
+        setFilteredChildren(filteredSections);
+
+        if (filteredGlobalIndex !== globalIndex) {
+            setGlobalIndex(filteredGlobalIndex);
+        }
+    }, [globalIndex, children]);
+
+    // 4. Enable left/right gamepad commands.
+    const {joystick: [leftRightAxis, _]} = useGamepad();
+    const {down: leftPressed, up: rightPressed} = getDiscreteAxisStates(leftRightAxis);
+    usePressEffect(leftPressed, navigationInterval, () => {
+        setGlobalIndex(globalIndex - 1);
+    });
+    usePressEffect(rightPressed, navigationInterval, () => {
+        setGlobalIndex(globalIndex + 1);
+    });
 
     return <Panel style={{...(style || {})}}>
-        {filteredSections}
+        {filteredChildren}
     </Panel>
 }
