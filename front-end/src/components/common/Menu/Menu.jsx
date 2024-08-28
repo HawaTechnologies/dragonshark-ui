@@ -41,7 +41,7 @@ function getCurrentSectionAndOptionIndex(globalIndex, sectionAndOptions) {
     let previousOptions = 0;
     for(let sectionIndex = 0; sectionIndex < sectionAndOptions.length; sectionIndex++) {
         const [_, count] = sectionAndOptions[sectionIndex];
-        if (previousOptions + count < globalIndex) {
+        if (previousOptions <= globalIndex && previousOptions + count > globalIndex) {
             return [sectionIndex, globalIndex - previousOptions];
         } else {
             previousOptions += count;
@@ -117,17 +117,14 @@ export default function Menu({ style, children, selectedIndex = 0, navigationInt
     const [menuCallback, setMenuCallback] = useState(null);
     const finalMenuCallback = useRef();
     finalMenuCallback.current = () => {
-        console.log("Invoking callback");
         if (menuCallback) menuCallback();
     };
     const navigateLeftCallback = useRef();
     navigateLeftCallback.current = () => {
-        console.log(`Moving left (attempting: ${globalIndex - 1})`);
         setGlobalIndex(Math.max(0, globalIndex - 1));
     };
     const navigateRightCallback = useRef();
     navigateRightCallback.current = () => {
-        console.log(`Moving left (attempting: ${globalIndex + 1})`);
         setGlobalIndex(globalIndex + 1);
     };
 
@@ -139,11 +136,9 @@ export default function Menu({ style, children, selectedIndex = 0, navigationInt
     // 3. In a state, tell to fix the globalIndex based on it
     //    being filtered.
     useEffect(() => {
-        console.log("Global index:", globalIndex);
         const [filteredGlobalIndex, filteredSections, callback] = getFilteredSectionsAndIndex(globalIndex, children);
         setFilteredChildren(filteredSections);
 
-        console.log("Filtered global index:", filteredGlobalIndex, "vs:", globalIndex);
         if (filteredGlobalIndex !== globalIndex) {
             setGlobalIndex(filteredGlobalIndex);
         }
