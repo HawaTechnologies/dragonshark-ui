@@ -8,5 +8,5 @@ import * as React from 'react';
  */
 export default function Section({ children, visible }) {
     if (!visible) return null;
-    return <>{children}</>;
+    return <div className="section">{children}</div>;
 }

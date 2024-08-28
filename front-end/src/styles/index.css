@@ -61,6 +61,19 @@ body {
   padding: 16px;
 }
 
+.section {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  padding: 0 144px;
+  display: flex;
+  flex-direction: row;
+  align-self: center;
+  justify-content: space-between;
+}
+
 .option {
   border-radius: 16px;
   border-width: 2px;

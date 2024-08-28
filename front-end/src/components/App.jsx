@@ -8,6 +8,7 @@ import VirtualPadPreview from "./common/VirtualPadPreview.jsx";
 // import {Up, Right, Down, Left} from "./common/icons/DirectionalPanelButton.jsx";
 import {/*L1, */L2/*, L3, R1, R2, R3, Start, Select*/} from "./common/icons/TextButton.jsx";
 import {MemoryRouter, Route, Routes} from "react-router-dom";
+import Main from "./sections/Main.jsx";
 
 export default function App() {
     return <>
@@ -27,6 +28,7 @@ export default function App() {
             </Panel>
             <MemoryRouter>
                 <Routes>
+                    <Route path="/" Component={Main} />
                     {/**
                          <Route path="/" element={<Main />} />
                          <Route path="/native-games" element={<NativeGames />} />
