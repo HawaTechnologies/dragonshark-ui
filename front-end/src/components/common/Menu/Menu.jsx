@@ -33,6 +33,7 @@ function getSectionsAndOptionCounts(children) {
  * @returns {[number, number]} The two indices.
  */
 function getCurrentSectionAndOptionIndex(globalIndex, sectionAndOptions) {
+    globalIndex ||= 0;
     if (globalIndex < 0 || globalIndex === 0 || sectionAndOptions.length === 0) {
         return [0, 0];
     }
