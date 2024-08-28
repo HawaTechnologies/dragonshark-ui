@@ -5,6 +5,7 @@ import Option from "../common/Menu/Option.jsx";
 // Images
 import connectivity from "../../images/options/connectivity.png";
 import play from "../../images/options/play.png";
+import userExperience from "../../images/options/userexperience.png";
 
 /**
  * The main section.
@@ -18,6 +19,9 @@ export default function Main() {
 
             {/* This is the "Connectivity" section. Intended to configure network and VirtualPad */}
             <Option caption="Connectivity" image={connectivity} />
+
+            {/* This is the "Connectivity" section. Intended to configure system volume, Date/Time and other things */}
+            <Option caption="User Experience" image={userExperience} />
         </Section>
     </Menu>;
 }

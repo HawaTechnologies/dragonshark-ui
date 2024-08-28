@@ -30,14 +30,13 @@ export default function App() {
                 <Routes>
                     <Route path="/" Component={Main} />
                     {/**
-                         <Route path="/" element={<Main />} />
                          <Route path="/native-games" element={<NativeGames />} />
                          <Route path="/native-games/app-store" element={<AppStore />} />
                          <Route path="/native-games/library" element={<Library />} />
                          <Route path="/date-time" element={<DateTime />} />
                          <Route path="/network" element={<Network />} />
                          <Route path="/virtualpad" element={<VirtualPad />} />
-                     */}
+                      */}
                 </Routes>
             </MemoryRouter>
             <VirtualPadPreview style={{position: 'absolute', bottom: '48px', left: '48px', right: '48px'}} />
