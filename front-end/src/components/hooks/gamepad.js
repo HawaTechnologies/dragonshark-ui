@@ -16,23 +16,23 @@ export function useGamepad() {
         if (gamepad) {
             const newGamepadInfo = {
                 connected: true,
-                buttonA: gamepad.buttons[0].pressed,
-                buttonB: gamepad.buttons[1].pressed,
-                buttonX: gamepad.buttons[2].pressed,
-                buttonY: gamepad.buttons[3].pressed,
-                joystickRight: [gamepad.axes[2], gamepad.axes[3]],
-                LT: gamepad.buttons[6].pressed,
-                RT: gamepad.buttons[7].pressed,
-                LB: gamepad.buttons[4].pressed,
-                RB: gamepad.buttons[5].pressed,
+                buttonA: gamepad.buttons[0]?.pressed || false,
+                buttonB: gamepad.buttons[1]?.pressed || false,
+                buttonX: gamepad.buttons[2]?.pressed || false,
+                buttonY: gamepad.buttons[3]?.pressed || false,
+                joystickRight: [gamepad.axes[2] || 0, gamepad.axes[3] || 0],
+                LT: gamepad.buttons[6]?.pressed || false,
+                RT: gamepad.buttons[7]?.pressed || false,
+                LB: gamepad.buttons[4]?.pressed || false,
+                RB: gamepad.buttons[5]?.pressed || false,
 
-                start: gamepad.buttons[9].pressed,
-                select: gamepad.buttons[8].pressed,
-                up: gamepad.buttons[12].pressed,
-                down: gamepad.buttons[13].pressed,
-                left: gamepad.buttons[14].pressed,
-                right: gamepad.buttons[15].pressed,
-                joystick: [gamepad.axes[0], gamepad.axes[1]]
+                start: gamepad.buttons[9]?.pressed || false,
+                select: gamepad.buttons[8]?.pressed || false,
+                up: gamepad.buttons[12]?.pressed || false,
+                down: gamepad.buttons[13]?.pressed || false,
+                left: gamepad.buttons[14]?.pressed || false,
+                right: gamepad.buttons[15]?.pressed || false,
+                joystick: [gamepad.axes[0] || 0, gamepad.axes[1] || 0]
             };
 
             // Update state only if there's a change
@@ -102,5 +102,5 @@ export function usePressEffect(pressed, interval, callback) {
             // Do nothing.
             return () => {}
         }
-    }, [pressed, interval]);
+    }, [pressed, interval, callback]);
 }
