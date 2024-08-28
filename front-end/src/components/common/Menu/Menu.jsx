@@ -109,7 +109,7 @@ function getFilteredSectionsAndIndex(globalIndex, children) {
  * @param children The children of this component.
  * @constructor
  */
-export default function Menu({ style, children, selectedIndex = 0, navigationInterval = 250}) {
+export default function Menu({ style, children, selectedIndex = 0, navigationInterval = 500}) {
     // 1. Define the new state to track the global index, and the
     //    state to track the filtered children.
     const [globalIndex, setGlobalIndex] = useState(selectedIndex);
