@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Children, cloneElement } from 'react';
+import React, {useState, useEffect, Children, cloneElement, useCallback} from 'react';
 import Section from "./Section.jsx";
 import Option from "./Option.jsx";
 import Panel from "../Panel.jsx";
@@ -56,18 +56,24 @@ function getCurrentSectionAndOptionIndex(globalIndex, sectionAndOptions) {
  * @param sectionIndex The index of the section to show.
  * @param optionIndex The index of the option to highlight.
  * @param sectionAndOptions The total existing sections.
+ * @returns {[any[], () => void]} The sections (including which section/option is selected) and the callback.
  */
 function cleanAndSelectSectionAndOption(sectionIndex, optionIndex, sectionAndOptions) {
-    return sectionAndOptions.map(([section, count], secIndex) => {
+    let callback = null;
+    return [sectionAndOptions.map(([section, count], secIndex) => {
         const options = Children.toArray(section.props.children).map((option, optIndex) => {
-            return cloneElement(option, {selected: optionIndex === optIndex});
+            const selected = optionIndex === optIndex;
+            if (selected) {
+                callback = option.props.callback;
+            }
+            return cloneElement(option, {selected});
         });
 
         return cloneElement(section, {
             visible: sectionIndex === secIndex,
             children: options
         });
-    });
+    }), callback];
 }
 
 /**
@@ -76,7 +82,7 @@ function cleanAndSelectSectionAndOption(sectionIndex, optionIndex, sectionAndOpt
  * filtered / re-rendered options.
  * @param globalIndex The selected index.
  * @param children The children to render.
- * @returns {[number, [React.ComponentElement,number][]]} The filtered global index and options.
+ * @returns {[number, React.ComponentElement[], () => void]} The filtered global index and options, and current callback.
  */
 function getFilteredSectionsAndIndex(globalIndex, children) {
     const filteredSections = getSectionsAndOptionCounts(children);
@@ -88,7 +94,7 @@ function getFilteredSectionsAndIndex(globalIndex, children) {
         [sectionIdx, optionIdx] = [lastSectionIndex, filteredSections[lastSectionIndex][1] - 1];
         globalIndex = filteredSections.map(([_, c]) => c).reduce((a, b) => a + b) - 1;
     }
-    return [globalIndex, cleanAndSelectSectionAndOption(sectionIdx, optionIdx, filteredSections)];
+    return [globalIndex, ...cleanAndSelectSectionAndOption(sectionIdx, optionIdx, filteredSections)];
 }
 
 /**
@@ -108,6 +114,16 @@ export default function Menu({ style, children, selectedIndex, navigationInterva
     //    state to track the filtered children.
     const [globalIndex, setGlobalIndex] = useState(selectedIndex);
     const [filteredChildren, setFilteredChildren] = useState(children);
+    const [menuCallback, setMenuCallback] = useState(null);
+    const finalMenuCallback = useCallback(() => {
+        if (menuCallback) menuCallback();
+    }, [menuCallback]);
+    const navigateLeftCallback = useCallback(() => {
+        setGlobalIndex(globalIndex - 1);
+    }, [globalIndex]);
+    const navigateRightCallback = useCallback(() => {
+        setGlobalIndex(globalIndex + 1);
+    }, [globalIndex]);
 
     // 2. If the selectedIndex change, update the global index.
     useEffect(() => {
@@ -117,23 +133,22 @@ export default function Menu({ style, children, selectedIndex, navigationInterva
     // 3. In a state, tell to fix the globalIndex based on it
     //    being filtered.
     useEffect(() => {
-        const [filteredGlobalIndex, filteredSections] = getFilteredSectionsAndIndex(globalIndex, children);
+        const [filteredGlobalIndex, filteredSections, callback] = getFilteredSectionsAndIndex(globalIndex, children);
         setFilteredChildren(filteredSections);
 
         if (filteredGlobalIndex !== globalIndex) {
             setGlobalIndex(filteredGlobalIndex);
         }
+
+        setMenuCallback(callback);
     }, [globalIndex, children]);
 
     // 4. Enable left/right gamepad commands.
-    const {joystick: [leftRightAxis, _]} = useGamepad();
+    const {joystick: [leftRightAxis, _], buttonA: buttonAPressed} = useGamepad();
     const {down: leftPressed, up: rightPressed} = getDiscreteAxisStates(leftRightAxis);
-    usePressEffect(leftPressed, navigationInterval, () => {
-        setGlobalIndex(globalIndex - 1);
-    });
-    usePressEffect(rightPressed, navigationInterval, () => {
-        setGlobalIndex(globalIndex + 1);
-    });
+    usePressEffect(leftPressed, navigationInterval, navigateLeftCallback);
+    usePressEffect(rightPressed, navigationInterval, navigateRightCallback);
+    usePressEffect(buttonAPressed, navigationInterval, finalMenuCallback);
 
     return <Panel style={{...(style || {})}}>
         {filteredChildren}
