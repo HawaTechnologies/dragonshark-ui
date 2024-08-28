@@ -1,4 +1,4 @@
-import React, {useState, useEffect, Children, cloneElement, useCallback} from 'react';
+import React, {useState, useEffect, Children, cloneElement, useCallback, useRef} from 'react';
 import Section from "./Section.jsx";
 import Option from "./Option.jsx";
 import Panel from "../Panel.jsx";
@@ -109,21 +109,27 @@ function getFilteredSectionsAndIndex(globalIndex, children) {
  * @param children The children of this component.
  * @constructor
  */
-export default function Menu({ style, children, selectedIndex, navigationInterval }) {
+export default function Menu({ style, children, selectedIndex = 0, navigationInterval = 250}) {
     // 1. Define the new state to track the global index, and the
     //    state to track the filtered children.
     const [globalIndex, setGlobalIndex] = useState(selectedIndex);
     const [filteredChildren, setFilteredChildren] = useState(children);
     const [menuCallback, setMenuCallback] = useState(null);
-    const finalMenuCallback = useCallback(() => {
+    const finalMenuCallback = useRef();
+    finalMenuCallback.current = () => {
+        console.log("Invoking callback");
         if (menuCallback) menuCallback();
-    }, [menuCallback]);
-    const navigateLeftCallback = useCallback(() => {
-        setGlobalIndex(globalIndex - 1);
-    }, [globalIndex]);
-    const navigateRightCallback = useCallback(() => {
+    };
+    const navigateLeftCallback = useRef();
+    navigateLeftCallback.current = () => {
+        console.log(`Moving left (attempting: ${globalIndex - 1})`);
+        setGlobalIndex(Math.max(0, globalIndex - 1));
+    };
+    const navigateRightCallback = useRef();
+    navigateRightCallback.current = () => {
+        console.log(`Moving left (attempting: ${globalIndex + 1})`);
         setGlobalIndex(globalIndex + 1);
-    }, [globalIndex]);
+    };
 
     // 2. If the selectedIndex change, update the global index.
     useEffect(() => {
@@ -133,9 +139,11 @@ export default function Menu({ style, children, selectedIndex, navigationInterva
     // 3. In a state, tell to fix the globalIndex based on it
     //    being filtered.
     useEffect(() => {
+        console.log("Global index:", globalIndex);
         const [filteredGlobalIndex, filteredSections, callback] = getFilteredSectionsAndIndex(globalIndex, children);
         setFilteredChildren(filteredSections);
 
+        console.log("Filtered global index:", filteredGlobalIndex, "vs:", globalIndex);
         if (filteredGlobalIndex !== globalIndex) {
             setGlobalIndex(filteredGlobalIndex);
         }

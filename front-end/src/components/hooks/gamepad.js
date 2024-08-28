@@ -85,10 +85,11 @@ export function getDiscreteAxisStates(value) {
  * was occurred.
  * @param pressed The pressed state (true=pressed, false=released).
  * @param interval The interval.
- * @param callback The callback.
+ * @param ref The callback ref.
  */
-export function usePressEffect(pressed, interval, callback) {
+export function usePressEffect(pressed, interval, ref) {
     useEffect(() => {
+        const callback = () => (ref.current || (() => {}))();
         if (pressed) {
             // Trigger as immediately as possible.
             setTimeout(callback, 0);
@@ -102,5 +103,5 @@ export function usePressEffect(pressed, interval, callback) {
             // Do nothing.
             return () => {}
         }
-    }, [pressed, interval, callback]);
+    }, [pressed, interval, ref]);
 }
