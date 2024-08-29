@@ -107,17 +107,19 @@ function getFilteredSectionsAndIndex(globalIndex, children) {
  * @param navigationInterval The interval of movement between
  * each option when left/right is pressed.
  * @param children The children of this component.
+ * @param readyTimeout The timeout until the click pad button works.
  * @constructor
  */
-export default function Menu({ style, children, selectedIndex = 0, navigationInterval = 500}) {
+export default function Menu({ style, children, selectedIndex = 0, navigationInterval = 500, readyTimeout = 1000}) {
     // 1. Define the new state to track the global index, and the
     //    state to track the filtered children.
     const [globalIndex, setGlobalIndex] = useState(selectedIndex);
     const [filteredChildren, setFilteredChildren] = useState(children);
     const [menuCallback, setMenuCallback] = useState(null);
+    const [menuReady, setMenuReady] = useState(false);
     const finalMenuCallback = useRef();
     finalMenuCallback.current = () => {
-        if (menuCallback?.func) menuCallback.func();
+        if (menuCallback?.func && menuReady) menuCallback.func();
     };
     const navigateLeftCallback = useRef();
     navigateLeftCallback.current = () => {
@@ -152,6 +154,11 @@ export default function Menu({ style, children, selectedIndex = 0, navigationInt
     usePressEffect(leftPressed, navigationInterval, navigateLeftCallback);
     usePressEffect(rightPressed, navigationInterval, navigateRightCallback);
     usePressEffect(menuPressed, navigationInterval, finalMenuCallback);
+
+    // 5. And a final effect to set the button ready.
+    useEffect(() => {
+        setTimeout(() => setMenuReady(true), readyTimeout);
+    }, [])
 
     return <Panel style={{...(style || {})}}>
         {filteredChildren}

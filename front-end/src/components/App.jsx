@@ -4,12 +4,11 @@ import Logo from "./common/Logo.jsx";
 import Clock from "./common/Clock.jsx";
 import Panel from "./common/Panel.jsx";
 import VirtualPadPreview from "./common/VirtualPadPreview.jsx";
-// import {BUp, BRight, BDown, BLeft} from "./common/icons/RightPanelButton.jsx";
-// import {Up, Right, Down, Left} from "./common/icons/DirectionalPanelButton.jsx";
 import {/*L1, */L2/*, L3, R1, R2, R3, Start, Select*/} from "./common/icons/TextButton.jsx";
 import {MemoryRouter, Route, Routes} from "react-router-dom";
 import Main from "./sections/Main.jsx";
 import Play from "./sections/Play.jsx";
+import Connectivity from "./sections/Connectivity.jsx";
 
 export default function App() {
     return <>
@@ -31,6 +30,7 @@ export default function App() {
                 <Routes>
                     <Route path="/" Component={Main} />
                     <Route path="/play" Component={Play} />
+                    <Route path="/connectivity" Component={Connectivity} />
                     {/**
                          <Route path="/native-games" element={<NativeGames />} />
                          <Route path="/native-games/app-store" element={<AppStore />} />
