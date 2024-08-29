@@ -117,7 +117,7 @@ export default function Menu({ style, children, selectedIndex = 0, navigationInt
     const [menuCallback, setMenuCallback] = useState(null);
     const finalMenuCallback = useRef();
     finalMenuCallback.current = () => {
-        if (menuCallback) menuCallback();
+        if (menuCallback) menuCallback.func();
     };
     const navigateLeftCallback = useRef();
     navigateLeftCallback.current = () => {
@@ -143,7 +143,7 @@ export default function Menu({ style, children, selectedIndex = 0, navigationInt
             setGlobalIndex(filteredGlobalIndex);
         }
 
-        setMenuCallback(callback);
+        setMenuCallback({func: callback});
     }, [globalIndex, children]);
 
     // 4. Enable left/right gamepad commands.
