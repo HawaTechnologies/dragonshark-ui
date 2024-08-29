@@ -44,7 +44,6 @@ async function getVirtualPadStatus() {
 
     // 3. Get the server's status.
     const statusResult = await vpAPI.status();
-    console.log("Status result:", statusResult);
     if (statusResult.code || !statusResult.details
         || statusResult.details.type !== "response"
         || statusResult.details.code !== "pad:status") {
@@ -100,7 +99,6 @@ export default function VirtualPadPreview({ style }) {
             const {
                 connected, wirelessInterfaces, pads, passwords
             } = virtualPadStatus;
-            console.log(virtualPadStatus);
             return <Panel style={{...style}}>
                 <div className="text-blue">
                     Connected: {connected ? "Yes" : "No"} {connected ? `- Address(es): ${wirelessInterfaces.join(", ")}`: null}
