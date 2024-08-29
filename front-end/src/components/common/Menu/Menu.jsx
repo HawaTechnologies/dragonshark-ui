@@ -63,7 +63,7 @@ function cleanAndSelectSectionAndOption(sectionIndex, optionIndex, sectionAndOpt
     return [sectionAndOptions.map(([section, count], secIndex) => {
         const options = Children.toArray(section.props.children).map((option, optIndex) => {
             const selected = optionIndex === optIndex;
-            if (selected) {
+            if (selected && (sectionIndex === secIndex)) {
                 callback = option.props.callback;
             }
             return cloneElement(option, {selected});
@@ -117,7 +117,7 @@ export default function Menu({ style, children, selectedIndex = 0, navigationInt
     const [menuCallback, setMenuCallback] = useState(null);
     const finalMenuCallback = useRef();
     finalMenuCallback.current = () => {
-        if (menuCallback) menuCallback.func();
+        if (menuCallback?.func) menuCallback.func();
     };
     const navigateLeftCallback = useRef();
     navigateLeftCallback.current = () => {
@@ -147,11 +147,11 @@ export default function Menu({ style, children, selectedIndex = 0, navigationInt
     }, [globalIndex, children]);
 
     // 4. Enable left/right gamepad commands.
-    const {joystick: [leftRightAxis, _], buttonA: buttonAPressed} = useGamepad();
+    const {joystick: [leftRightAxis, _], buttonX: menuPressed} = useGamepad();
     const {down: leftPressed, up: rightPressed} = getDiscreteAxisStates(leftRightAxis);
     usePressEffect(leftPressed, navigationInterval, navigateLeftCallback);
     usePressEffect(rightPressed, navigationInterval, navigateRightCallback);
-    usePressEffect(buttonAPressed, navigationInterval, finalMenuCallback);
+    usePressEffect(menuPressed, navigationInterval, finalMenuCallback);
 
     return <Panel style={{...(style || {})}}>
         {filteredChildren}
