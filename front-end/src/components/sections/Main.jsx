@@ -28,7 +28,7 @@ export default function Main() {
 
             {/* This is the "Connectivity" section. Intended to configure network and VirtualPad. */}
             <Option caption="Connectivity" image={connectivity}
-                    callback={(() => console.log("Connectivity section is not ready yet"))}/>
+                    callback={(() => navigate("/connectivity"))}/>
         </Section>
         <Section>
             {/* This is the "Connectivity" section. Intended to configure system volume, Date/Time and other things. */}

@@ -12,7 +12,7 @@ import {useGamepad, usePressEffect} from "../hooks/gamepad";
 import {useRef} from "react";
 
 /**
- * The main section.
+ * The connectivity section.
  * @constructor
  */
 export default function Connectivity() {
