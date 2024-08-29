@@ -28,17 +28,17 @@ export default function Play() {
     return <Menu style={{position: "absolute", left: "48px", right: "48px", bottom: "208px", top: "288px"}}>
         <Section>
             {/* This is the "Play" section. Intended to manage or play games. */}
-            <Option caption="Installed Games" image={installedgames} />
+            <Option caption="Installed Games" image={installedgames} callback={() => navigate("/play/installed-games")} />
 
             {/* This is the "Emulation Station" section. Launches EmulationStation. */}
-            <Option caption="Emulation Station" image={emulationstation} />
+            <Option caption="Emulation Station" image={emulationstation} callback={() => console.log("EmulationStation launch is not ready")} />
         </Section>
         <Section>
             {/* This is the "Save Files" section. Intended to back-up and restore saves. */}
-            <Option caption="Save Files" image={savefiles} />
+            <Option caption="Save Files" image={savefiles} callback={() => navigate("/play/save-files")} />
 
             {/* This is the "Configuration". Intended to game-related configurations. */}
-            <Option caption="Configuration" image={configuration} />
+            <Option caption="Configuration" image={configuration} callback={() => navigate("/play/configuration")} />
         </Section>
     </Menu>;
 }

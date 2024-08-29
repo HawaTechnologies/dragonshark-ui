@@ -11,6 +11,9 @@ import Play from "./sections/Play.jsx";
 import Connectivity from "./sections/Connectivity.jsx";
 import UserExperience from "./sections/UserExperience.jsx";
 import Advanced from "./sections/Advanced.jsx";
+import InstalledGames from "./sections/play/InstalledGames.jsx";
+import SaveFiles from "./sections/play/SaveFiles.jsx";
+import PlayConfiguration from "./sections/play/Configuration.jsx";
 
 export default function App() {
     return <>
@@ -24,7 +27,7 @@ export default function App() {
             width: "100%", height: "100%"
         }}>
             <Clock style={{position: 'absolute', top: '48px', right: '48px'}} />
-            <Logo />;
+            <Logo />
             <Panel style={{position: 'absolute', left: '48px', top: '48px'}}>
                 <div className="text-red">Press <L2 /> to go back to the main menu</div>
             </Panel>
@@ -32,6 +35,9 @@ export default function App() {
                 <Routes>
                     <Route path="/" Component={Main} />
                     <Route path="/play" Component={Play} />
+                    <Route path="/play/installed-games" Component={InstalledGames} />
+                    <Route path="/play/save-files" Component={SaveFiles} />
+                    <Route path="/play/configuration" Component={PlayConfiguration} />
                     <Route path="/connectivity" Component={Connectivity} />
                     <Route path="/user-experience" Component={UserExperience} />
                     <Route path="/advanced" Component={Advanced} />
