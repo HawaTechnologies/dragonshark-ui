@@ -4,16 +4,15 @@ import Menu from "../common/Menu/Menu.jsx";
 import Section from "../common/Menu/Section.jsx";
 import Option from "../common/Menu/Option.jsx";
 // Images
-import sound from "../../images/options/userexperience/sound.png";
-import datetime from "../../images/options/userexperience/date-time.png";
+import debugmode from "../../images/options/advanced/debug-mode.png";
 import {useGamepad, usePressEffect} from "../hooks/gamepad";
 import {useRef} from "react";
 
 /**
- * The user experience section.
+ * The advanced section.
  * @constructor
  */
-export default function UserExperience() {
+export default function Advanced() {
     const navigate = useNavigate();
     const { LT } = useGamepad();
     const ref = useRef();
@@ -25,11 +24,8 @@ export default function UserExperience() {
 
     return <Menu style={{position: "absolute", left: "48px", right: "48px", bottom: "208px", top: "288px"}}>
         <Section>
-            {/* This is the "Sound" section. Intended to manage the sound settings. */}
-            <Option caption="Sound" image={sound} />
-
-            {/* This is the "Date & Time" section. Intended to configure Date, Time and Time Zone. */}
-            <Option caption="Date & Time" image={datetime} />
+            {/* This is the "Debug Mode" section. Restarts the console in debug mode. */}
+            <Option caption="Restart in Debug Mode" image={debugmode} />
         </Section>
     </Menu>;
 }

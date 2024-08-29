@@ -71,7 +71,7 @@ body {
   display: flex;
   flex-direction: row;
   align-self: center;
-  justify-content: space-between;
+  justify-content: space-evenly;
 }
 
 .option {

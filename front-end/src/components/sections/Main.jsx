@@ -37,7 +37,7 @@ export default function Main() {
 
             {/* This is the "Advanced section". Intended to low-level configurations. */}
             <Option caption="Advanced" image={advanced}
-                    callback={() => console.log("Advanced section is not ready yet")}/>
+                    callback={() => navigate("/advanced")}/>
         </Section>
     </Menu>;
 }

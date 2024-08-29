@@ -10,6 +10,7 @@ import Main from "./sections/Main.jsx";
 import Play from "./sections/Play.jsx";
 import Connectivity from "./sections/Connectivity.jsx";
 import UserExperience from "./sections/UserExperience.jsx";
+import Advanced from "./sections/Advanced.jsx";
 
 export default function App() {
     return <>
@@ -33,6 +34,7 @@ export default function App() {
                     <Route path="/play" Component={Play} />
                     <Route path="/connectivity" Component={Connectivity} />
                     <Route path="/user-experience" Component={UserExperience} />
+                    <Route path="/advanced" Component={Advanced} />
                     {/**
                          <Route path="/native-games" element={<NativeGames />} />
                          <Route path="/native-games/app-store" element={<AppStore />} />
