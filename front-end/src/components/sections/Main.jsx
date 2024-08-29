@@ -33,7 +33,7 @@ export default function Main() {
         <Section>
             {/* This is the "Connectivity" section. Intended to configure system volume, Date/Time and other things. */}
             <Option caption="User Experience" image={userExperience}
-                    callback={() => console.log("User Experience section is not ready yet")}/>
+                    callback={() => navigate("/user-experience")}/>
 
             {/* This is the "Advanced section". Intended to low-level configurations. */}
             <Option caption="Advanced" image={advanced}
