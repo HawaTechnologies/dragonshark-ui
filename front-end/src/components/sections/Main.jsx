@@ -8,29 +8,36 @@ import play from "../../images/options/play.png";
 import userExperience from "../../images/options/userexperience.png";
 import advanced from "../../images/options/advanced.png";
 import marketplace from "../../images/options/marketplace.png";
+import {useNavigate} from "react-router-dom";
 
 /**
  * The main section.
  * @constructor
  */
 export default function Main() {
+    const navigate = useNavigate();
+
     return <Menu style={{position: "absolute", left: "48px", right: "48px", bottom: "208px", top: "288px"}}>
         <Section>
             {/* This is the "Play" section. Intended to play or configure gameplay settings. */}
-            <Option caption="Play" image={play} />
+            <Option caption="Play" image={play} callback={() => navigate("/play")} />
 
             {/* This is the "Marketplace" section. The last thing I'll ever implement. */}
-            <Option caption="Marketplace" image={marketplace} />
+            <Option caption="Marketplace" image={marketplace}
+                    callback={() => console.log("Marketplace section is not ready yet")}/>
 
             {/* This is the "Connectivity" section. Intended to configure network and VirtualPad. */}
-            <Option caption="Connectivity" image={connectivity} />
+            <Option caption="Connectivity" image={connectivity}
+                    callback={(() => console.log("Connectivity section is not ready yet"))}/>
         </Section>
         <Section>
             {/* This is the "Connectivity" section. Intended to configure system volume, Date/Time and other things. */}
-            <Option caption="User Experience" image={userExperience} />
+            <Option caption="User Experience" image={userExperience}
+                    callback={() => console.log("User Experience section is not ready yet")}/>
 
             {/* This is the "Advanced section". Intended to low-level configurations. */}
-            <Option caption="Advanced" image={advanced} />
+            <Option caption="Advanced" image={advanced}
+                    callback={() => console.log("Advanced section is not ready yet")}/>
         </Section>
     </Menu>;
 }
