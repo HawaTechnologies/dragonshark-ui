@@ -17,6 +17,8 @@ import PlayConfiguration from "./sections/play/Configuration.jsx";
 import Network from "./sections/connectivity/Network.jsx";
 import VirtualPad from "./sections/connectivity/VirtualPad.jsx";
 import Marketplace from "./sections/marketplace/Marketplace.jsx";
+import Sound from "./sections/userexperience/Sound.jsx";
+import DateTime from "./sections/userexperience/DateTime.jsx";
 
 export default function App() {
     return <>
@@ -46,6 +48,8 @@ export default function App() {
                     <Route path="/connectivity/network" Component={Network} />
                     <Route path="/connectivity/virtualpad" Component={VirtualPad} />
                     <Route path="/user-experience" Component={UserExperience} />
+                    <Route path="/user-experience/sound" Component={Sound} />
+                    <Route path="/user-experience/datetime" Component={DateTime} />
                     <Route path="/advanced" Component={Advanced} />
                     {/**
                          <Route path="/native-games" element={<NativeGames />} />

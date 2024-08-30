@@ -26,10 +26,10 @@ export default function UserExperience() {
     return <Menu style={{position: "absolute", left: "48px", right: "48px", bottom: "208px", top: "288px"}}>
         <Section>
             {/* This is the "Sound" section. Intended to manage the sound settings. */}
-            <Option caption="Sound" image={sound} />
+            <Option caption="Sound" image={sound} callback={() => navigate("/user-experience/sound")} />
 
             {/* This is the "Date & Time" section. Intended to configure Date, Time and Time Zone. */}
-            <Option caption="Date & Time" image={datetime} />
+            <Option caption="Date & Time" image={datetime} callback={() => navigate("/user-experience/datetime")} />
         </Section>
     </Menu>;
 }
