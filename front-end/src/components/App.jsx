@@ -14,6 +14,8 @@ import Advanced from "./sections/Advanced.jsx";
 import InstalledGames from "./sections/play/InstalledGames.jsx";
 import SaveFiles from "./sections/play/SaveFiles.jsx";
 import PlayConfiguration from "./sections/play/Configuration.jsx";
+import Network from "./sections/connectivity/Network.jsx";
+import VirtualPad from "./sections/connectivity/VirtualPad.jsx";
 
 export default function App() {
     return <>
@@ -39,6 +41,8 @@ export default function App() {
                     <Route path="/play/save-files" Component={SaveFiles} />
                     <Route path="/play/configuration" Component={PlayConfiguration} />
                     <Route path="/connectivity" Component={Connectivity} />
+                    <Route path="/connectivity/network" Component={Network} />
+                    <Route path="/connectivity/virtualpad" Component={VirtualPad} />
                     <Route path="/user-experience" Component={UserExperience} />
                     <Route path="/advanced" Component={Advanced} />
                     {/**

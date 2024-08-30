@@ -6,7 +6,7 @@ import BaseActivitySection from "../BaseActivitySection.jsx";
  * @constructor
  */
 export default function SaveFiles() {
-    return <BaseActivitySection caption="Save Files" backPath="/play">
+    return <BaseActivitySection caption="Network" backPath="/connectivity">
         <div style={{position: "absolute", left: "50%", top: "50%", transform: "translate(-50%, -50%)"}}>
             This section is not ready yet.
         </div>
