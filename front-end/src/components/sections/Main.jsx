@@ -24,7 +24,7 @@ export default function Main() {
 
             {/* This is the "Marketplace" section. The last thing I'll ever implement. */}
             <Option caption="Marketplace" image={marketplace}
-                    callback={() => console.log("Marketplace section is not ready yet")}/>
+                    callback={() => navigate("/marketplace")}/>
 
             {/* This is the "Connectivity" section. Intended to configure network and VirtualPad. */}
             <Option caption="Connectivity" image={connectivity}

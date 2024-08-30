@@ -16,6 +16,7 @@ import SaveFiles from "./sections/play/SaveFiles.jsx";
 import PlayConfiguration from "./sections/play/Configuration.jsx";
 import Network from "./sections/connectivity/Network.jsx";
 import VirtualPad from "./sections/connectivity/VirtualPad.jsx";
+import Marketplace from "./sections/marketplace/Marketplace.jsx";
 
 export default function App() {
     return <>
@@ -40,6 +41,7 @@ export default function App() {
                     <Route path="/play/installed-games" Component={InstalledGames} />
                     <Route path="/play/save-files" Component={SaveFiles} />
                     <Route path="/play/configuration" Component={PlayConfiguration} />
+                    <Route path="/marketplace" Component={Marketplace} />
                     <Route path="/connectivity" Component={Connectivity} />
                     <Route path="/connectivity/network" Component={Network} />
                     <Route path="/connectivity/virtualpad" Component={VirtualPad} />
