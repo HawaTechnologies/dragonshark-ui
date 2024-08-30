@@ -25,7 +25,7 @@ export default function Advanced() {
     return <Menu style={{position: "absolute", left: "48px", right: "48px", bottom: "208px", top: "288px"}}>
         <Section>
             {/* This is the "Debug Mode" section. Restarts the console in debug mode. */}
-            <Option caption="Restart in Debug Mode" image={debugmode} />
+            <Option caption="Restart in Debug Mode" image={debugmode} callback={() => navigate("/advanced/debug")}/>
         </Section>
     </Menu>;
 }

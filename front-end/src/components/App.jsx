@@ -19,6 +19,7 @@ import VirtualPad from "./sections/connectivity/VirtualPad.jsx";
 import Marketplace from "./sections/marketplace/Marketplace.jsx";
 import Sound from "./sections/userexperience/Sound.jsx";
 import DateTime from "./sections/userexperience/DateTime.jsx";
+import RestartInDebugMode from "./sections/advanced/RestartInDebugMode.jsx";
 
 export default function App() {
     return <>
@@ -51,14 +52,7 @@ export default function App() {
                     <Route path="/user-experience/sound" Component={Sound} />
                     <Route path="/user-experience/datetime" Component={DateTime} />
                     <Route path="/advanced" Component={Advanced} />
-                    {/**
-                         <Route path="/native-games" element={<NativeGames />} />
-                         <Route path="/native-games/app-store" element={<AppStore />} />
-                         <Route path="/native-games/library" element={<Library />} />
-                         <Route path="/date-time" element={<DateTime />} />
-                         <Route path="/network" element={<Network />} />
-                         <Route path="/virtualpad" element={<VirtualPad />} />
-                      */}
+                    <Route path="/advanced/debug" Component={RestartInDebugMode} />
                 </Routes>
             </MemoryRouter>
             <VirtualPadPreview style={{position: 'absolute', bottom: '48px', left: '48px', right: '48px'}} />
