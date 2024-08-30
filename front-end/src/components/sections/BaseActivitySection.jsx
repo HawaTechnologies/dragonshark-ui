@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import {useGamepad, usePressEffect} from "../hooks/gamepad";
 import {useEffect, useRef, useState} from "react";
 import Panel from "../common/Panel.jsx";
-import {L1, L2} from "../common/icons/TextButton";
+import {L1, L2} from "../common/icons/TextButton.jsx";
 
 /**
  * The base activity section component.
