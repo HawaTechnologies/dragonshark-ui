@@ -104,13 +104,10 @@ function getFilteredSectionsAndIndex(globalIndex, children) {
  * @param selectedIndex If set, an option that will be
  * selected by default. By default, this stands for the
  * first option of the first section.
- * @param navigationInterval The interval of movement between
- * each option when left/right is pressed.
  * @param children The children of this component.
- * @param readyTimeout The timeout until the click pad button works.
  * @constructor
  */
-export default function Menu({ style, children, selectedIndex = 0, navigationInterval = 500, readyTimeout = 1000}) {
+export default function Menu({ style, children, selectedIndex = 0}) {
     // 1. Define the new state to track the global index, and the
     //    state to track the filtered children.
     const [globalIndex, setGlobalIndex] = useState(selectedIndex);
@@ -151,13 +148,13 @@ export default function Menu({ style, children, selectedIndex = 0, navigationInt
     // 4. Enable left/right gamepad commands.
     const {joystick: [leftRightAxis, _], buttonX: menuPressed} = useGamepad();
     const {down: leftPressed, up: rightPressed} = getDiscreteAxisStates(leftRightAxis);
-    usePressEffect(leftPressed, navigationInterval, navigateLeftCallback);
-    usePressEffect(rightPressed, navigationInterval, navigateRightCallback);
-    usePressEffect(menuPressed, navigationInterval, finalMenuCallback);
+    usePressEffect(leftPressed, 500, navigateLeftCallback);
+    usePressEffect(rightPressed, 500, navigateRightCallback);
+    usePressEffect(menuPressed, 500, finalMenuCallback);
 
     // 5. And a final effect to set the button ready.
     useEffect(() => {
-        setTimeout(() => setMenuReady(true), readyTimeout);
+        setTimeout(() => setMenuReady(true), 1000);
     }, [])
 
     return <Panel style={{...(style || {})}}>
