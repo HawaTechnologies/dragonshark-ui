@@ -14,7 +14,7 @@ const LAYOUTS = [
             "S T U V W X Y Z s t u v w x y z".split(" ")
         ]
     },
-    // numbers,
+    // numbers
     {
         name: "Numbers",
         keys: [
@@ -23,7 +23,7 @@ const LAYOUTS = [
             "⅑ ⅒ ↉ ⅟ ⁄"
         ]
     },
-    // accented-letters,
+    // accented-letters
     {
         name: "Accented Letters",
         keys: [
@@ -63,6 +63,61 @@ function clamp(position, layoutIndex) {
             return {x: clampedX, y: clampedY};
     }
 }
+
+/**
+ * Moves the position 1 box up. If the position is among SPACE,
+ * BACKSPACE or CONFIRM, the new position will be among (0, r),
+ * (3, r) or (6, r) where r is the index of the last row. If
+ * the position is (_, 0), it will be unchanged. Otherwise, it
+ * will be (x, y-1).
+ * @param clampedPosition The current, clamped, position.
+ * @param layoutIndex The current keyboard layout.
+ * @returns {string|{x: number, y: number}} The new position.
+ */
+function up(clampedPosition, layoutIndex) {
+
+}
+
+/**
+ * Moves the position 1 box down. If the position is among SPACE,
+ * BACKSPACE or CONFIRM, it will be unchanged. If the position is
+ * y=r then one of SPACE (x in 0..2), BACKSPACE (x in 2..5) or
+ * CONFIRM (x >= 6) will be selected.
+ * @param clampedPosition The current, clamped, position.
+ * @param layoutIndex The current keyboard layout.
+ * @returns {string|{x: number, y: number}} The new position.
+ */
+function down(clampedPosition, layoutIndex) {
+
+}
+
+/**
+ * Moves the position 1 box left. If the position is SPACE or the
+ * x position is 0, it will be unchanged. CONFIRM becomes BACKSPACE
+ * and BACKSPACE becomes SPACE. For other positions, (x-1, y) is
+ * returned.
+ * @param clampedPosition The current, clamped, position.
+ * @param layoutIndex The current keyboard layout.
+ * @returns {string|{x: number, y: number}} The new position.
+ */
+function left(clampedPosition, layoutIndex) {
+
+}
+
+/**
+ * Moves the position 1 box right. If the position is CONFIRM or
+ * x position is rows[y].length-1, it will be unchanged. BACKSPACE
+ * becomes CONFIRM and SPACE becomes BACKSPACE. Other positions
+ * become (x+1, y).
+ * @param clampedPosition The current, clamped, position.
+ * @param layoutIndex The current keyboard layout.
+ * @returns {string|{x: number, y: number}} The new position.
+ */
+function right(clampedPosition, layoutIndex) {
+
+}
+
+
 
 function VirtualKeyboardLayout({append, backspace, confirm, cancel}) {
     // R1 will be used to switch the keyboard layout.
