@@ -2,7 +2,7 @@ import {forwardRef, useCallback, useEffect, useMemo, useRef, useState} from "rea
 import Panel from "./Panel.jsx";
 import {R1, R2} from "./icons/TextButton.jsx";
 import * as React from "react";
-import {useGamepad, usePressEffect} from "../hooks/gamepad";
+import {getDiscreteAxisStates, useGamepad, usePressEffect} from "../hooks/gamepad";
 
 const LAYOUTS = [
     // letters
@@ -117,9 +117,7 @@ function right(clampedPosition, layoutIndex) {
 
 }
 
-
-
-function VirtualKeyboardLayout({append, backspace, confirm, cancel}) {
+function VirtualKeyboardLayout({append, backspace, confirm}) {
     // R1 will be used to switch the keyboard layout.
     const { RB } = useGamepad();
     // A state will be used to track the current layout.
@@ -136,18 +134,32 @@ function VirtualKeyboardLayout({append, backspace, confirm, cancel}) {
     // In this scenario, the keys will be properly clamped, but the initial key
     // will always be valid: {x: 0, y: 0}. The clamped position will be used for
     // rendering and also as starting point of any movement.
-    const [position, setPosition] = useState({x: 0, y: 0});
+    const [position, setPosition] = useState({x: 0, y: 0} || "");
     const clampedPosition = useMemo(
         () => clamp(position, layoutIndex),
         [position, layoutIndex]
     );
+    const {joystick: [leftRightAxis, upDownAxis], buttonY: keyPressed} = useGamepad();
+    const {down: leftPressed, up: rightPressed} = getDiscreteAxisStates(leftRightAxis);
+    const {down: upPressed, up: downPressed} = getDiscreteAxisStates(upDownAxis);
+    const upRef = useRef(() => {});
+    const downRef = useRef(() => {});
+    const leftRef = useRef(() => {});
+    const rightRef = useRef(() => {});
+    const keyRef = useRef(() => {});
+    upRef.current = () => setPosition(up(clampedPosition, layoutIndex));
+    downRef.current = () => setPosition(down(clampedPosition, layoutIndex));
+    leftRef.current = () => setPosition(left(clampedPosition, layoutIndex));
+    rightRef.current = () => setPosition(right(clampedPosition, layoutIndex));
+    keyRef.current = () => {
+        // TODO IMPLEMENT THE keyPress: append, delete or confirm.
+    }
+    usePressEffect(leftPressed, 500, leftRef);
+    usePressEffect(rightPressed, 500, rightRef);
+    usePressEffect(upPressed, 500, upRef);
+    usePressEffect(downPressed, 500, downRef);
+    usePressEffect(keyPressed, 500, keyRef);
 
-    // There will be callbacks to move UP, DOWN, LEFT and RIGHT, but the
-    // implementation is not trivial for these.
-
-    // TODO Track position (x, y) and press effects.
-    // TODO Adjust position depending on layout.
-    // TODO Identify the current button.
     // TODO render.
     return <></>;
 }
@@ -260,8 +272,7 @@ export default forwardRef(({}, ref) => {
                 <input type="text" value={isSecret ? secretize(value) : value}
                        style={{width: "100%", fontSize: "20px"}} />
             </Panel>
-            <VirtualKeyboardLayout confirm={confirm} cancel={cancel}
-                                   append={append} backspace={backspace} />
+            <VirtualKeyboardLayout confirm={confirm} append={append} backspace={backspace} />
         </Panel>;
     }
 });
