@@ -1,10 +1,27 @@
 import {forwardRef, useCallback, useEffect, useRef, useState} from "react";
 import Panel from "./Panel.jsx";
-import {R1} from "./icons/TextButton.jsx";
+import {R1, R2} from "./icons/TextButton.jsx";
 import * as React from "react";
 import {useGamepad, usePressEffect} from "../hooks/gamepad";
+const LAYOUTS = ["letters", "numbers", "accented-letters", "other"];
 
 function VirtualKeyboardLayout({append, backspace, confirm, cancel}) {
+    // R1 will be used to switch the keyboard layout.
+    const { RB } = useGamepad();
+    // A state will be used to track the current layout.
+    const [layoutIndex, setLayoutIndex] = useState(0);
+    const layout = LAYOUTS[layoutIndex];
+    // We install the pressed effect for it.
+    const ref = useRef();
+    ref.current = useCallback(() => {
+        setLayoutIndex(layoutIndex >= LAYOUTS.length ? 0 : layoutIndex + 1);
+    }, [layoutIndex]);
+    usePressEffect(RB, 500, ref);
+
+    // TODO Track position (x, y) and press effects.
+    // TODO Adjust position depending on layout.
+    // TODO Identify the current button.
+    // TODO render.
     return <></>;
 }
 
@@ -34,7 +51,7 @@ function secretize(v) {
  * confirmed by the user.
  * @constructor
  */
-export default forwardRef(({backTimeout = 1000}, ref) => {
+export default forwardRef(({}, ref) => {
     const [caption, setCaption] = useState("");
     const [open, setOpen] = useState(false);
     const [value, setValue] = useState("");
@@ -44,10 +61,10 @@ export default forwardRef(({backTimeout = 1000}, ref) => {
     const { RT } = useGamepad();
     const append = useCallback((chr) => {
         setValue(value + chr);
-    }, [value, setValue]);
+    }, [value]);
     const backspace = useCallback(() => {
         setValue(value.length ? value.substring(0, value.length - 1) : "");
-    }, [value, setValue]);
+    }, [value]);
     const confirm = useCallback(() => {
         try {
             onChange.callback(value);
@@ -66,7 +83,7 @@ export default forwardRef(({backTimeout = 1000}, ref) => {
     }
     usePressEffect(RT, 500, refClose);
     useEffect(() => {
-        setTimeout(() => setCloseReady(true), backTimeout);
+        setTimeout(() => setCloseReady(true), 1000);
     }, []);
 
     if (ref) {
@@ -94,7 +111,10 @@ export default forwardRef(({backTimeout = 1000}, ref) => {
         return <></>;
     } else {
         return <Panel style={{position: "absolute", left: "48px", right: "48px", bottom: "208px", top: "288px"}}>
-            <div className="text-blue" style={{position: "absolute", right: "48px"}}>Press <R1/> to leave</div>
+            <div className="text-blue" style={{position: "absolute", right: "48px"}}>
+                Press <R2/> to cancel<br />
+                Press <R1/> to switch keyboard layout
+            </div>
             <div className="text-soft" style={{
                 position: "absolute",
                 top: "48px",
