@@ -43,6 +43,27 @@ const LAYOUTS = [
     }
 ];
 
+/**
+ * Properly clamps a position with respect to its layout.
+ * @param position The position.
+ * @param layoutIndex The layout index.
+ * @returns {string|{x: number, y: number}} The new position.
+ */
+function clamp(position, layoutIndex) {
+    switch(position) {
+        case "SPACE":
+        case "BACKSPACE":
+        case "CONFIRM":
+            return position;
+        default:
+            const length = LAYOUTS[layoutIndex].keys.length;
+            const clampedY = Math.min(length - 1, Math.max(0, position.y));
+            const rowLength = LAYOUTS[layoutIndex].keys[clampedY].length - 1;
+            const clampedX = Math.min(rowLength - 1, Math.max(0, position.x));
+            return {x: clampedX, y: clampedY};
+    }
+}
+
 function VirtualKeyboardLayout({append, backspace, confirm, cancel}) {
     // R1 will be used to switch the keyboard layout.
     const { RB } = useGamepad();
@@ -61,20 +82,10 @@ function VirtualKeyboardLayout({append, backspace, confirm, cancel}) {
     // will always be valid: {x: 0, y: 0}. The clamped position will be used for
     // rendering and also as starting point of any movement.
     const [position, setPosition] = useState({x: 0, y: 0});
-    const clampedPosition = useMemo(() => {
-        switch(position) {
-            case "SPACE":
-            case "BACKSPACE":
-            case "CONFIRM":
-                return position;
-            default:
-                const length = LAYOUTS[layoutIndex].keys.length;
-                const clampedY = Math.min(length - 1, Math.max(0, position.y));
-                const rowLength = LAYOUTS[layoutIndex].keys[clampedY].length - 1;
-                const clampedX = Math.min(rowLength - 1, Math.max(0, position.x));
-                return {x: clampedX, y: clampedY};
-        }
-    }, [position.x, position.y, layoutIndex]);
+    const clampedPosition = useMemo(
+        () => clamp(position, layoutIndex),
+        [position, layoutIndex]
+    );
 
     // There will be callbacks to move UP, DOWN, LEFT and RIGHT, but the
     // implementation is not trivial for these.
