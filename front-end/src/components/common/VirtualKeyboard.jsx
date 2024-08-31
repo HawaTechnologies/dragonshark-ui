@@ -1,4 +1,4 @@
-import {forwardRef, useCallback, useEffect, useRef, useState} from "react";
+import {forwardRef, useCallback, useEffect, useMemo, useRef, useState} from "react";
 import Panel from "./Panel.jsx";
 import {R1, R2} from "./icons/TextButton.jsx";
 import * as React from "react";
@@ -9,17 +9,17 @@ const LAYOUTS = [
     {
         name: "Letters",
         keys: [
-            "A B C D E F G H I a b c d e f g h i",
-            "J K L M N O P Q R j k l m n o p q r",
-            "S T U V W X Y Z s t u v w x y z"
+            "A B C D E F G H I a b c d e f g h i".split(" "),
+            "J K L M N O P Q R j k l m n o p q r".split(" "),
+            "S T U V W X Y Z s t u v w x y z".split(" ")
         ]
     },
     // numbers,
     {
         name: "Numbers",
         keys: [
-            "1 2 3 4 5 6 7 8 9 0 + - * / % # . , ^ ÷",
-            "× ¹ ² ³ ½ ⅓ ⅔ ¼ ¾ ⅕ ⅖ ⅗ ⅘ ⅙ ⅚ ⅐ ⅛ ⅜ ⅝ ⅞",
+            "1 2 3 4 5 6 7 8 9 0 + - * / % # . , ^ ÷".split(" "),
+            "× ¹ ² ³ ½ ⅓ ⅔ ¼ ¾ ⅕ ⅖ ⅗ ⅘ ⅙ ⅚ ⅐ ⅛ ⅜ ⅝ ⅞".split(" "),
             "⅑ ⅒ ↉ ⅟ ⁄"
         ]
     },
@@ -27,18 +27,18 @@ const LAYOUTS = [
     {
         name: "Accented Letters",
         keys: [
-            "Á É Í Ó Ú À È Ì Ò Ù á é í ó ú à è ì ò ù",
-            "Ä Ë Ï Ö Ü Ã Ẽ Ĩ Õ Ũ ä ë ï ö ü ã ẽ ĩ õ ũ",
-            "Ñ Ç Å Ů ñ ç å ů"
+            "Á É Í Ó Ú À È Ì Ò Ù á é í ó ú à è ì ò ù".split(" "),
+            "Ä Ë Ï Ö Ü Ã Ẽ Ĩ Õ Ũ ä ë ï ö ü ã ẽ ĩ õ ũ".split(" "),
+            "Ñ Ç Å Ů ñ ç å ů".split(" ")
         ]
     },
     // other
     {
         name: "Other",
         keys: [
-            "! @ # $ % ^ & * ( ) - _ + = [ ] { } | \\",
-            "\" ' ´ ¨ : ; < > ? / . , ¡ ¿ ¬ « » “ ” ¦",
-            "¶ ° ® þ ß ð œ ø æ © µ § ¥ £ € Ð Œ Ø Æ ¢"
+            "! @ # $ % ^ & * ( ) - _ + = [ ] { } | \\".split(" "),
+            "\" ' ´ ¨ : ; < > ? / . , ¡ ¿ ¬ « » “ ” ¦".split(" "),
+            "¶ ° ® þ ß ð œ ø æ © µ § ¥ £ € Ð Œ Ø Æ ¢".split(" ")
         ]
     }
 ];
@@ -48,13 +48,36 @@ function VirtualKeyboardLayout({append, backspace, confirm, cancel}) {
     const { RB } = useGamepad();
     // A state will be used to track the current layout.
     const [layoutIndex, setLayoutIndex] = useState(0);
-    const {name: layoutName, keys} = LAYOUTS[layoutIndex];
     // We install the pressed effect for it.
     const ref = useRef();
     ref.current = useCallback(() => {
         setLayoutIndex(layoutIndex >= LAYOUTS.length ? 0 : layoutIndex + 1);
     }, [layoutIndex]);
     usePressEffect(RB, 500, ref);
+
+    // A position will be: "SPACE", "BACKSPACE" or "CONFIRM" (no "CANCEL" here).
+    // Alternatively, a position will be {x: 0..(keys[y].length-1), y: 0..(keys.length-1)}.
+    // In this scenario, the keys will be properly clamped, but the initial key
+    // will always be valid: {x: 0, y: 0}. The clamped position will be used for
+    // rendering and also as starting point of any movement.
+    const [position, setPosition] = useState({x: 0, y: 0});
+    const clampedPosition = useMemo(() => {
+        switch(position) {
+            case "SPACE":
+            case "BACKSPACE":
+            case "CONFIRM":
+                return position;
+            default:
+                const length = LAYOUTS[layoutIndex].keys.length;
+                const clampedY = Math.min(length - 1, Math.max(0, position.y));
+                const rowLength = LAYOUTS[layoutIndex].keys[clampedY].length - 1;
+                const clampedX = Math.min(rowLength - 1, Math.max(0, position.x));
+                return {x: clampedX, y: clampedY};
+        }
+    }, [position.x, position.y, layoutIndex]);
+
+    // There will be callbacks to move UP, DOWN, LEFT and RIGHT, but the
+    // implementation is not trivial for these.
 
     // TODO Track position (x, y) and press effects.
     // TODO Adjust position depending on layout.
