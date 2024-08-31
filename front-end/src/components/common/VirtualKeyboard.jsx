@@ -3,14 +3,52 @@ import Panel from "./Panel.jsx";
 import {R1, R2} from "./icons/TextButton.jsx";
 import * as React from "react";
 import {useGamepad, usePressEffect} from "../hooks/gamepad";
-const LAYOUTS = ["letters", "numbers", "accented-letters", "other"];
+
+const LAYOUTS = [
+    // letters
+    {
+        name: "Letters",
+        keys: [
+            "A B C D E F G H I a b c d e f g h i",
+            "J K L M N O P Q R j k l m n o p q r",
+            "S T U V W X Y Z s t u v w x y z"
+        ]
+    },
+    // numbers,
+    {
+        name: "Numbers",
+        keys: [
+            "1 2 3 4 5 6 7 8 9 0 + - * / % # . , ^ ÷",
+            "× ¹ ² ³ ½ ⅓ ⅔ ¼ ¾ ⅕ ⅖ ⅗ ⅘ ⅙ ⅚ ⅐ ⅛ ⅜ ⅝ ⅞",
+            "⅑ ⅒ ↉ ⅟ ⁄"
+        ]
+    },
+    // accented-letters,
+    {
+        name: "Accented Letters",
+        keys: [
+            "Á É Í Ó Ú À È Ì Ò Ù á é í ó ú à è ì ò ù",
+            "Ä Ë Ï Ö Ü Ã Ẽ Ĩ Õ Ũ ä ë ï ö ü ã ẽ ĩ õ ũ",
+            "Ñ Ç Å Ů ñ ç å ů"
+        ]
+    },
+    // other
+    {
+        name: "Other",
+        keys: [
+            "! @ # $ % ^ & * ( ) - _ + = [ ] { } | \\",
+            "\" ' ´ ¨ : ; < > ? / . , ¡ ¿ ¬ « » “ ” ¦",
+            "¶ ° ® þ ß ð œ ø æ © µ § ¥ £ € Ð Œ Ø Æ ¢"
+        ]
+    }
+];
 
 function VirtualKeyboardLayout({append, backspace, confirm, cancel}) {
     // R1 will be used to switch the keyboard layout.
     const { RB } = useGamepad();
     // A state will be used to track the current layout.
     const [layoutIndex, setLayoutIndex] = useState(0);
-    const layout = LAYOUTS[layoutIndex];
+    const {name: layoutName, keys} = LAYOUTS[layoutIndex];
     // We install the pressed effect for it.
     const ref = useRef();
     ref.current = useCallback(() => {
