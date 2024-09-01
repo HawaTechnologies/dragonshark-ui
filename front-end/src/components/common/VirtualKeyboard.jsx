@@ -75,7 +75,22 @@ function clamp(position, layoutIndex) {
  * @returns {string|{x: number, y: number}} The new position.
  */
 function up(clampedPosition, layoutIndex) {
-
+    const nRows = LAYOUTS[layoutIndex].keys.length;
+    switch(clampedPosition) {
+        case "SPACE":
+            return {x: 0, y: nRows - 1};
+        case "BACKSPACE":
+            return {x: 3, y: nRows - 1};
+        case "CONFIRM":
+            return {x: 6, y: nRows - 1};
+        default:
+            const {x, y} = clampedPosition;
+            if (x === 0) {
+                return {x, y};
+            } else {
+                return {x, y: y - 1};
+            }
+    }
 }
 
 /**
@@ -88,7 +103,26 @@ function up(clampedPosition, layoutIndex) {
  * @returns {string|{x: number, y: number}} The new position.
  */
 function down(clampedPosition, layoutIndex) {
-
+    const nRows = LAYOUTS[layoutIndex].keys.length;
+    switch(clampedPosition) {
+        case "SPACE":
+        case "BACKSPACE":
+        case "CONFIRM":
+            return clampedPosition;
+        default:
+            const {x, y} = clampedPosition;
+            if (y === nRows - 1) {
+                if (x >= 6) {
+                    return "CONFIRM";
+                } else if (x >= 3) {
+                    return "BACKSPACE";
+                } else {
+                    return "SPACE";
+                }
+            } else {
+                return {x, y: y + 1};
+            }
+    }
 }
 
 /**
@@ -101,7 +135,20 @@ function down(clampedPosition, layoutIndex) {
  * @returns {string|{x: number, y: number}} The new position.
  */
 function left(clampedPosition, layoutIndex) {
-
+    switch(clampedPosition) {
+        case "SPACE":
+        case "BACKSPACE":
+            return "SPACE";
+        case "CONFIRM":
+            return "BACKSPACE";
+        default:
+            const {x, y} = clampedPosition;
+            if (x === 0) {
+                return {x, y};
+            } else {
+                return {x: x - 1, y};
+            }
+    }
 }
 
 /**
@@ -114,7 +161,22 @@ function left(clampedPosition, layoutIndex) {
  * @returns {string|{x: number, y: number}} The new position.
  */
 function right(clampedPosition, layoutIndex) {
-
+    switch(clampedPosition) {
+        case "SPACE":
+            return "BACKSPACE";
+        case "BACKSPACE":
+        case "CONFIRM":
+            return "CONFIRM";
+        default:
+            const {x, y} = clampedPosition;
+            const {keys} = LAYOUTS[layoutIndex].keys;
+            const rowLength = keys[y].length;
+            if (x >= rowLength) {
+                return {x: rowLength, y};
+            } else {
+                return {x: x + 1, y};
+            }
+    }
 }
 
 function VirtualKeyboardLayout({append, backspace, confirm}) {
