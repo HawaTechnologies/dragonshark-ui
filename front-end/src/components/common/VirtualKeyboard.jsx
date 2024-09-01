@@ -1,8 +1,9 @@
+import * as React from "react";
 import {forwardRef, useCallback, useEffect, useMemo, useRef, useState} from "react";
+import {getDiscreteAxisStates, useGamepad, usePressEffect} from "../hooks/gamepad";
 import Panel from "./Panel.jsx";
 import {R1, R2} from "./icons/TextButton.jsx";
-import * as React from "react";
-import {getDiscreteAxisStates, useGamepad, usePressEffect} from "../hooks/gamepad";
+import {BRight} from "./icons/RightPanelButton.jsx";
 
 const LAYOUTS = [
     // letters
@@ -326,9 +327,10 @@ export default forwardRef(({}, ref) => {
         return <></>;
     } else {
         return <Panel style={{position: "absolute", left: "48px", right: "48px", bottom: "208px", top: "288px"}}>
-            <div className="text-blue" style={{position: "absolute", right: "48px"}}>
+            <div className="text-red" style={{position: "absolute", right: "48px", textAlign: "right"}}>
                 Press <R2/> to cancel<br />
-                Press <R1/> to switch keyboard layout
+                Press <R1/> to switch keyboard layout<br />
+                Press <BRight/> to write/delete a character or confirm
             </div>
             <div className="text-soft" style={{
                 position: "absolute",
