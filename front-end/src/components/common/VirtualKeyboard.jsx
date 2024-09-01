@@ -237,8 +237,23 @@ function VirtualKeyboardLayout({append, backspace, confirm}) {
     usePressEffect(downPressed, 500, downRef);
     usePressEffect(keyPressed, 500, keyRef);
 
-    // TODO render.
-    return <></>;
+    return <div className="keyboard">
+        <div>{LAYOUTS[layoutIndex].name}</div>
+        <div>
+            {LAYOUTS[layoutIndex].keys.map((row, y) => {
+                return <div>
+                    {row.forEach((char, x) => {
+                        return <div className={`key ${(typeof clampedPosition !== "string" && (clampedPosition.x === x && clampedPosition.y === y) ? "selected" : "")}`}>{char}</div>
+                    })}
+                </div>;
+            })}
+            <div>
+                <div className={`key ${clampedPosition === "SPACE" ? "selected" : ""}`}>SPACE</div>
+                <div className={`key ${clampedPosition === "BACKSPACE" ? "selected" : ""}`}>BACKSPACE</div>
+                <div className={`key ${clampedPosition === "CONFIRM" ? "selected" : ""}`}>CONFIRM</div>
+            </div>;
+        </div>
+    </div>;
 }
 
 /**

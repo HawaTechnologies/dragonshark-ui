@@ -74,6 +74,30 @@ body {
   justify-content: space-evenly;
 }
 
+.keyboard {
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-bottom-left-radius: 16px;
+  border-bottom-right-radius: 16px;
+  padding: 48px;
+  background-color: gray;
+  font-size: 24px;
+  color: black;
+}
+
+.keyboard .key {
+  display: inline-block;
+  padding: 16px;
+}
+
+.keyboard .key.selected {
+  color: white;
+}
+
 .option {
   border-radius: 16px;
   border-width: 2px;
