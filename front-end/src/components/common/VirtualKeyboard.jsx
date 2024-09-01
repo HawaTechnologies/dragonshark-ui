@@ -214,7 +214,21 @@ function VirtualKeyboardLayout({append, backspace, confirm}) {
     leftRef.current = () => setPosition(left(clampedPosition, layoutIndex));
     rightRef.current = () => setPosition(right(clampedPosition, layoutIndex));
     keyRef.current = () => {
-        // TODO IMPLEMENT THE keyPress: append, delete or confirm.
+        switch(clampedPosition) {
+            case "SPACE":
+                append(" ");
+                break;
+            case "BACKSPACE":
+                backspace();
+                break;
+            case "CONFIRM":
+                confirm();
+                break;
+            default:
+                const {x, y} = clampedPosition;
+                const keys = LAYOUTS[layoutIndex].keys;
+                append(keys[y][x]);
+        }
     }
     usePressEffect(leftPressed, 500, leftRef);
     usePressEffect(rightPressed, 500, rightRef);
