@@ -45,7 +45,7 @@ async function listWirelessNetworks() {
     const code = result?.code || 0;
 
     // Parse the results.
-    return {code, interfaces: code ? [] : stdout.trim().split("\n").map(e => {
+    return {code, networks: code ? [] : stdout.trim().split("\n").map(e => {
         const [active, ssid, signal, security] = e.split(":");
         return [
             active === "*", ssid, parseInt(signal),
