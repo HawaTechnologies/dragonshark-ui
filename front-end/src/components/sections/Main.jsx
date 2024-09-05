@@ -1,4 +1,5 @@
 import * as React from 'react';
+// Menu components
 import Menu from "../common/Menu/Menu.jsx";
 import Section from "../common/Menu/Section.jsx";
 import Option from "../common/Menu/Option.jsx";
@@ -8,6 +9,7 @@ import play from "../../images/options/play.png";
 import userExperience from "../../images/options/userexperience.png";
 import advanced from "../../images/options/advanced.png";
 import marketplace from "../../images/options/marketplace.png";
+// More non-standard hooks
 import {useNavigate} from "react-router-dom";
 
 /**
