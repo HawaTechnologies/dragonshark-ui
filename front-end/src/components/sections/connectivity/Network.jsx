@@ -1,6 +1,8 @@
 import * as React from 'react';
 import BaseActivitySection from "../BaseActivitySection.jsx";
-import {MemoryRouter, Routes} from "react-router-dom";
+import {MemoryRouter, Route, Routes} from "react-router-dom";
+import ChooseInterface from "./Network/ChooseInterface.jsx";
+import ViewInterface from "./Network/ViewInterface.jsx";
 
 /**
  * The Play > Save Files section.
@@ -13,6 +15,8 @@ export default function SaveFiles() {
         </div>
         <MemoryRouter>
             <Routes>
+                <Route path="/" Component={ChooseInterface} />
+                <Route path="/interfaces/:interface" Component={ViewInterface} />
                 {/* TODO each component like this:
                 <Route path="/" Component={SomeComponent} />
                 Except that SomeComponent should make use of the `back`
