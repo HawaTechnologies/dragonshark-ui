@@ -235,7 +235,7 @@ function VirtualKeyboardLayout({append, backspace, confirm}) {
     usePressEffect(rightPressed, 500, rightRef);
     usePressEffect(upPressed, 500, upRef);
     usePressEffect(downPressed, 500, downRef);
-    usePressEffect(keyPressed, 500, keyRef);
+    usePressEffect(keyPressed, 500, keyRef, 1000);
 
     return <div className="keyboard">
         <div>{LAYOUTS[layoutIndex].name}</div>
@@ -288,7 +288,6 @@ export default forwardRef(({}, ref) => {
     const [value, setValue] = useState("");
     const [onChange, setOnChange] = useState({callback: null});
     const [isSecret, setIsSecret] = useState(false);
-    const [closeReady, setCloseReady] = useState(false);
     const { RT } = useGamepad();
     const append = useCallback((chr) => {
         setValue(value + chr);
@@ -306,16 +305,9 @@ export default forwardRef(({}, ref) => {
         // Closes the virtual keyboard, cancelling.
         setOpen(false);
     }, [setOpen]);
-    const refClose = useRef();
-    refClose.current = () => {
-        if (closeReady) {
-            setOpen(false);
-        }
-    }
+    const refClose = useRef(() => {});
+    refClose.current = () => setOpen(false);
     usePressEffect(RT, 500, refClose);
-    useEffect(() => {
-        setTimeout(() => setCloseReady(true), 1000);
-    }, []);
 
     if (ref) {
         // The `ref` must set an object with methods such as:

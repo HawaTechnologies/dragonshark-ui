@@ -113,10 +113,9 @@ export default function Menu({ style, children, selectedIndex = 0}) {
     const [globalIndex, setGlobalIndex] = useState(selectedIndex);
     const [filteredChildren, setFilteredChildren] = useState(children);
     const [menuCallback, setMenuCallback] = useState(null);
-    const [menuReady, setMenuReady] = useState(false);
     const finalMenuCallback = useRef();
     finalMenuCallback.current = () => {
-        if (menuCallback?.func && menuReady) menuCallback.func();
+        if (menuCallback?.func) menuCallback.func();
     };
     const navigateLeftCallback = useRef();
     navigateLeftCallback.current = () => {
@@ -150,12 +149,7 @@ export default function Menu({ style, children, selectedIndex = 0}) {
     const {down: leftPressed, up: rightPressed} = getDiscreteAxisStates(leftRightAxis);
     usePressEffect(leftPressed, 500, navigateLeftCallback);
     usePressEffect(rightPressed, 500, navigateRightCallback);
-    usePressEffect(menuPressed, 500, finalMenuCallback);
-
-    // 5. And a final effect to set the button ready.
-    useEffect(() => {
-        setTimeout(() => setMenuReady(true), 1000);
-    }, [])
+    usePressEffect(menuPressed, 500, finalMenuCallback, 1000);
 
     return <Panel style={{...(style || {})}}>
         {filteredChildren}
