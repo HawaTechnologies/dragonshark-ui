@@ -86,11 +86,27 @@ export function getDiscreteAxisStates(value) {
  * @param pressed The pressed state (true=pressed, false=released).
  * @param interval The interval.
  * @param ref The callback ref.
+ * @param delay An optional delay (for if we don't want the press effect to be available immediately).
  */
-export function usePressEffect(pressed, interval, ref) {
+export function usePressEffect(pressed, interval, ref, delay = 0) {
+    // Flag to account for the delay.
+    const [ready, setReady] = useState(delay === 0);
+
+    // If there's delay, then launch a timeout to set ready=true.
+    useEffect(() => {
+        if (!ready) {
+            const t = setTimeout(() => {
+                setReady(true);
+            }, delay);
+            return () => clearTimeout(t);
+        } else {
+            return () => {};
+        }
+    }, []);
+
     useEffect(() => {
         const callback = () => (ref.current || (() => {}))();
-        if (pressed) {
+        if (pressed && ready) {
             // Trigger as immediately as possible.
             setTimeout(callback, 0);
             // Also trigger after the interval, each time.
@@ -103,5 +119,5 @@ export function usePressEffect(pressed, interval, ref) {
             // Do nothing.
             return () => {}
         }
-    }, [pressed, interval, ref]);
+    }, [pressed, interval, ref, ready]);
 }
