@@ -2,6 +2,7 @@ import {useNavigate} from "react-router-dom";
 import {network} from "../../../../main_utils";
 import {useEffect, useMemo, useRef, useState} from "react";
 import {getDiscreteAxisStates, useGamepad, usePressEffect} from "../../../hooks/gamepad";
+import * as React from "react";
 
 /**
  * Invokes the network interfaces' listing and properly
@@ -99,7 +100,8 @@ export default function ChooseInterface() {
             let frame = 0;
             setFetchingFrame(0);
             const t = setInterval(() => {
-                setFetchingFrame(++frame);
+                frame = (frame + 1) % 3;
+                setFetchingFrame(frame);
             }, 1000);
             return () => clearInterval(t);
         } else if (interfaceFetchData.status === "success") {
@@ -111,17 +113,32 @@ export default function ChooseInterface() {
 
     switch(interfaceFetchData.status) {
         case "ready":
-            // TODO render static message.
-            return <></>;
+            return <div className="text-soft" style={{
+                textAlign: "center", position: "absolute", left: "50%", top: "50%", transform: "translate(-50%, -50%)"
+            }}>
+                Wireless network interfaces will be listed here.
+            </div>;
         case "fetching":
-            // TODO render static message depending on `fetchingFrame`.
-            return <></>;
+            let ellipsis = "";
+            for(let idx = 0; idx <= frames; idx++) {
+                ellipsis += ".";
+            }
+
+            return <div className="text-soft" style={{
+                textAlign: "center", position: "absolute", left: "50%", top: "50%", transform: "translate(-50%, -50%)"
+            }}>
+                Fetching network interfaces{ellipsis}
+            </div>;
         case "success":
             // TODO render a handler that attends the </> axis to switch, and BDown (buttonY) to select interface.
             return <></>;
         case "empty":
-            // TODO render static message.
-            return <></>;
+            return <div className="text-soft" style={{
+                textAlign: "center", position: "absolute",
+                left: "50%", top: "50%", transform: "translate(-50%, -50%)"
+            }}>
+                No wireless network interfaces were detected.
+            </div>;
         case "error":
             // TODO render an error, with the possibility to press BLeft (not sure which button is) to toggle debug stderr.
             return <></>;
