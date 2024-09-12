@@ -20,6 +20,7 @@ import Marketplace from "./sections/marketplace/Marketplace.jsx";
 import Sound from "./sections/userexperience/Sound.jsx";
 import DateTime from "./sections/userexperience/DateTime.jsx";
 import RestartInDebugMode from "./sections/advanced/RestartInDebugMode.jsx";
+import ChooseInterface from "./sections/connectivity/Network/ChooseInterface.jsx";
 
 export default function App() {
     return <>
@@ -46,7 +47,8 @@ export default function App() {
                     <Route path="/play/configuration" Component={PlayConfiguration} />
                     <Route path="/marketplace" Component={Marketplace} />
                     <Route path="/connectivity" Component={Connectivity} />
-                    <Route path="/connectivity/network" Component={Network} />
+                    <Route path="/connectivity/network" Component={ChooseInterface} />
+                    <Route path="/connectivity/network/interfaces/:interface" Component={Network} />
                     <Route path="/connectivity/virtualpad" Component={VirtualPad} />
                     <Route path="/user-experience" Component={UserExperience} />
                     <Route path="/user-experience/sound" Component={Sound} />

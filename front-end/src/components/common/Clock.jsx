@@ -76,7 +76,7 @@ export default function Clock({ style }) {
     }, []);
 
     return <Panel style={style}>
-        <div className={"big text-blue text-right"}>{dateTime}</div>
+        <div className={"text-big text-blue text-right"}>{dateTime}</div>
         <div className={"text-blue text-right"}>{timezone} ({offset})</div>
         {/*
              <div className={"text-blue text-right"}>Press <BLeft /> to configure the date & time</div>

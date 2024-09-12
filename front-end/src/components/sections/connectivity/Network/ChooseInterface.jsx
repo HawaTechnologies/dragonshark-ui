@@ -1,8 +1,11 @@
 import {useNavigate} from "react-router-dom";
-import {network} from "../../../../main_utils";
 import {useEffect, useMemo, useRef, useState} from "react";
 import {getDiscreteAxisStates, useGamepad, usePressEffect} from "../../../hooks/gamepad";
 import * as React from "react";
+import {BDown} from "../../../common/icons/RightPanelButton.jsx";
+import BaseActivitySection from "../../BaseActivitySection.jsx";
+
+const network = window.dragonSharkAPI.network;
 
 /**
  * Invokes the network interfaces' listing and properly
@@ -75,7 +78,7 @@ export default function ChooseInterface() {
         setSelectedInterface(selectedInterface === l - 1 ? 0 : selectedInterface + 1);
     }
     keyRef.current = () => {
-        navigate("/interfaces/" + selectedInterfaceName);
+        navigate("/connectivity/network/interfaces/" + selectedInterfaceName);
     }
     usePressEffect(leftPressed, 500, leftRef);
     usePressEffect(rightPressed, 500, rightRef);
@@ -111,36 +114,77 @@ export default function ChooseInterface() {
         return () => {};
     }, [interfaceFetchData.status]);
 
+    let component = null;
     switch(interfaceFetchData.status) {
         case "ready":
-            return <div className="text-soft" style={{
+            component = <div className="text-soft" style={{
                 textAlign: "center", position: "absolute", left: "50%", top: "50%", transform: "translate(-50%, -50%)"
             }}>
                 Wireless network interfaces will be listed here.
             </div>;
+            break;
         case "fetching":
             let ellipsis = "";
-            for(let idx = 0; idx <= frames; idx++) {
+            for(let idx = 0; idx <= fetchingFrame; idx++) {
                 ellipsis += ".";
             }
 
-            return <div className="text-soft" style={{
+            component = <div className="text-soft" style={{
                 textAlign: "center", position: "absolute", left: "50%", top: "50%", transform: "translate(-50%, -50%)"
             }}>
                 Fetching network interfaces{ellipsis}
             </div>;
+            break;
         case "success":
-            // TODO render a handler that attends the </> axis to switch, and BDown (buttonY) to select interface.
-            return <></>;
+            component = <div className="text-soft" style={{
+                textAlign: "center", position: "absolute", left: "50%", top: "50%", transform: "translate(-50%, -50%)"
+            }}>
+                <div>
+                    <span className="text-red">⮜</span>
+                    <div style={{display: "inline-block", padding: "0 8px"}}>{selectedInterfaceName}</div>
+                    <span className="text-blue">⮞</span>
+                </div>
+                <div>
+                    Press <BDown /> to select this interface.
+                </div>
+            </div>;
+            break;
         case "empty":
-            return <div className="text-soft" style={{
+            component = <div className="text-soft" style={{
                 textAlign: "center", position: "absolute",
                 left: "50%", top: "50%", transform: "translate(-50%, -50%)"
             }}>
                 No wireless network interfaces were detected.
             </div>;
+            break;
         case "error":
-            // TODO render an error, with the possibility to press BLeft (not sure which button is) to toggle debug stderr.
-            return <></>;
+            component = <>
+                <div className="text-soft" style={{
+                    textAlign: "center",
+                    position: "absolute",
+                    left: "50%",
+                    top: "50%",
+                    transform: "translate(-50%, -50%)"
+                }}>
+                    There was an error while loading the available interfaces.
+                </div>
+                <div className="text-soft" style={{
+                    textAlign: "left",
+                    position: "absolute",
+                    left: "0", right: "0", bottom: "0",
+                    padding: "16px",
+                    transform: "translateX(-50%)",
+                    backgroundColor: "gray",
+                    color: "white"
+                }}>
+                    {interfaceFetchData.stderr}
+                </div>
+            </>;
+            break;
     }
+    return <BaseActivitySection caption="Virtual Pad" backPath="/connectivity">
+        <div className="text-bigger">
+            {component}
+        </div>
+    </BaseActivitySection>;
 }
