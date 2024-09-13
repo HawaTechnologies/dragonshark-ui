@@ -182,7 +182,7 @@ export default function ChooseInterface() {
             </>;
             break;
     }
-    return <BaseActivitySection caption="Virtual Pad" backPath="/connectivity">
+    return <BaseActivitySection caption="Choose Network Interface" backPath="/connectivity">
         <div className="text-bigger">
             {component}
         </div>

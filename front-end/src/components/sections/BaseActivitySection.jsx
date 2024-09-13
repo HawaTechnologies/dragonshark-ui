@@ -32,7 +32,7 @@ export default function BaseActivitySection({ caption, children, backPath, backT
 
     return <Panel style={{position: "absolute", left: "48px", right: "48px", bottom: "208px", top: "288px"}}>
         <div className="text-red" style={{position: "absolute", left: "48px"}}>Press <L1/> to leave</div>
-        <div className="text-soft" style={{position: "absolute", top: "48px", left: "50%", transform: "translateX(-50%)", fontSize: "20px"}}>{caption}</div>
+        <div className="text-soft text-bigger" style={{position: "absolute", top: "48px", left: "50%", transform: "translateX(-50%)"}}>{caption}</div>
         {children}
     </Panel>;
 }

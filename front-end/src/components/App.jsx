@@ -14,13 +14,13 @@ import Advanced from "./sections/Advanced.jsx";
 import InstalledGames from "./sections/play/InstalledGames.jsx";
 import SaveFiles from "./sections/play/SaveFiles.jsx";
 import PlayConfiguration from "./sections/play/Configuration.jsx";
-import Network from "./sections/connectivity/Network.jsx";
 import VirtualPad from "./sections/connectivity/VirtualPad.jsx";
 import Marketplace from "./sections/marketplace/Marketplace.jsx";
 import Sound from "./sections/userexperience/Sound.jsx";
 import DateTime from "./sections/userexperience/DateTime.jsx";
 import RestartInDebugMode from "./sections/advanced/RestartInDebugMode.jsx";
 import ChooseInterface from "./sections/connectivity/Network/ChooseInterface.jsx";
+import ViewInterface from "./sections/connectivity/Network/ViewInterface.jsx";
 
 export default function App() {
     return <>
@@ -48,7 +48,7 @@ export default function App() {
                     <Route path="/marketplace" Component={Marketplace} />
                     <Route path="/connectivity" Component={Connectivity} />
                     <Route path="/connectivity/network" Component={ChooseInterface} />
-                    <Route path="/connectivity/network/interfaces/:interface" Component={Network} />
+                    <Route path="/connectivity/network/interfaces/:interface" Component={ViewInterface} />
                     <Route path="/connectivity/virtualpad" Component={VirtualPad} />
                     <Route path="/user-experience" Component={UserExperience} />
                     <Route path="/user-experience/sound" Component={Sound} />
