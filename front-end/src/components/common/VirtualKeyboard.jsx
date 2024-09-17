@@ -202,7 +202,7 @@ function VirtualKeyboardLayout({append, backspace, confirm}) {
         () => clamp(position, layoutIndex),
         [position, layoutIndex]
     );
-    const {joystick: [leftRightAxis, upDownAxis], buttonY: keyPressed} = useGamepad();
+    const {joystick: [leftRightAxis, upDownAxis], buttonX: keyPressed} = useGamepad();
     const {down: leftPressed, up: rightPressed} = getDiscreteAxisStates(leftRightAxis);
     const {down: upPressed, up: downPressed} = getDiscreteAxisStates(upDownAxis);
     const upRef = useRef(() => {});

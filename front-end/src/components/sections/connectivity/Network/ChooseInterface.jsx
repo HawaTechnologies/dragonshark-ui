@@ -64,7 +64,7 @@ export default function ChooseInterface() {
 
     // Finally, also only meaningful for "success", we have the
     // setup of keys:
-    const {joystick: [leftRightAxis, _], buttonX: keyPressed} = useGamepad();
+    const {joystick: [leftRightAxis, _], buttonA: keyPressed} = useGamepad();
     const {down: leftPressed, up: rightPressed} = getDiscreteAxisStates(leftRightAxis);
     const leftRef = useRef(() => {});
     const rightRef = useRef(() => {});

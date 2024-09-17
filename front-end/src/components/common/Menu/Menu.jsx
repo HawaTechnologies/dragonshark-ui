@@ -145,7 +145,7 @@ export default function Menu({ style, children, selectedIndex = 0}) {
     }, [globalIndex, children]);
 
     // 4. Enable left/right gamepad commands.
-    const {joystick: [leftRightAxis, _], buttonX: menuPressed} = useGamepad();
+    const {joystick: [leftRightAxis, _], buttonA: menuPressed} = useGamepad();
     const {down: leftPressed, up: rightPressed} = getDiscreteAxisStates(leftRightAxis);
     usePressEffect(leftPressed, 500, navigateLeftCallback);
     usePressEffect(rightPressed, 500, navigateRightCallback);
