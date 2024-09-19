@@ -3,10 +3,10 @@ import {useEffect, useState} from "react";
 
 /**
  * This is a progress text. Just a caption with ellipsis.
- * @param caption The caption.
+ * @param children The content (typically just text).
  * @param interval The ellipsis interval (1000 by default).
  */
-export default function ProgressText({caption, interval = 1000}) {
+export default function ProgressText({children, interval = 1000}) {
     const [progressFrame, setProgressFrame] = useState(0);
 
     useEffect(() => {
@@ -16,7 +16,7 @@ export default function ProgressText({caption, interval = 1000}) {
         const t = setInterval(() => {
             frame = (frame + 1) % 3;
             setProgressFrame(frame);
-        }, 1000);
+        }, interval);
         return () => clearInterval(t);
     }, []);
 
@@ -25,5 +25,5 @@ export default function ProgressText({caption, interval = 1000}) {
         ellipsis += ".";
     }
 
-    return <>{caption}{ellipsis}</>
+    return <>{children}{ellipsis}</>
 }
