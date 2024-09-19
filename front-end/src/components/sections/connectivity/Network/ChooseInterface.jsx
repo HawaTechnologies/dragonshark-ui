@@ -4,6 +4,7 @@ import {getDiscreteAxisStates, useGamepad, usePressEffect} from "../../../hooks/
 import * as React from "react";
 import {BDown} from "../../../common/icons/RightPanelButton.jsx";
 import BaseActivitySection from "../../BaseActivitySection.jsx";
+import ProgressText from "../../../common/ProgressText.jsx";
 
 const network = window.dragonSharkAPI.network;
 
@@ -84,11 +85,6 @@ export default function ChooseInterface() {
     usePressEffect(rightPressed, 500, rightRef);
     usePressEffect(keyPressed, 500, keyRef, 1000);
 
-    // This is a state only meaningful for "fetching". Tells how many
-    // dots (., .., ...) to show to the "fetching" text to tell that
-    // the call is busy but not dead.
-    const [fetchingFrame, setFetchingFrame] = useState(0);
-
     // Launch the refresh for the first time. This first time is always
     // given when this component loads.
     useEffect(() => {
@@ -98,16 +94,7 @@ export default function ChooseInterface() {
 
     // Launch an effect to track status changes.
     useEffect(() => {
-        if (interfaceFetchData.status === "fetching") {
-            // Set a clock to animate "fetching".
-            let frame = 0;
-            setFetchingFrame(0);
-            const t = setInterval(() => {
-                frame = (frame + 1) % 3;
-                setFetchingFrame(frame);
-            }, 1000);
-            return () => clearInterval(t);
-        } else if (interfaceFetchData.status === "success") {
+        if (interfaceFetchData.status === "success") {
             // Reset the interface index.
             setSelectedInterface(0);
         }
@@ -124,15 +111,10 @@ export default function ChooseInterface() {
             </div>;
             break;
         case "fetching":
-            let ellipsis = "";
-            for(let idx = 0; idx <= fetchingFrame; idx++) {
-                ellipsis += ".";
-            }
-
             component = <div className="text-soft" style={{
                 textAlign: "center", position: "absolute", left: "50%", top: "50%", transform: "translate(-50%, -50%)"
             }}>
-                Fetching network interfaces{ellipsis}
+                <ProgressText>Fetching network interfaces</ProgressText>
             </div>;
             break;
         case "success":
