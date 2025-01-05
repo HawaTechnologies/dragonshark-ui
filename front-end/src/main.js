@@ -64,12 +64,12 @@ app.whenReady().then(() => {
   ipcMain.handle("games.restoreSavesDirs", games.restoreSavesDirs);
   ipcMain.handle("games.launchGame", games.launchGame);
   ipcMain.handle("games.launchEmulationStation", games.launchEmulationStation);
-  ipcMain.handle("virtualpad.startServer", virtualpad.startServer);
-  ipcMain.handle("virtualpad.stopServer", virtualpad.stopServer);
-  ipcMain.handle("virtualpad.checkServer", virtualpad.checkServer);
-  ipcMain.handle("virtualpad.clearPad", virtualpad.clearPad);
-  ipcMain.handle("virtualpad.status", virtualpad.status);
-  ipcMain.handle("virtualpad.resetPasswords", virtualpad.resetPasswords);
+  ipcMain.handle("virtualpad.startServer", (_) => virtualpad.startServer());
+  ipcMain.handle("virtualpad.stopServer", (_) => virtualpad.stopServer());
+  ipcMain.handle("virtualpad.checkServer", (_) => virtualpad.checkServer());
+  ipcMain.handle("virtualpad.clearPad", (_, pad) => virtualpad.clearPad(pad));
+  ipcMain.handle("virtualpad.status", (_) => virtualpad.status());
+  ipcMain.handle("virtualpad.resetPasswords", (_, pads) => virtualpad.resetPasswords(pads));
   ipcMain.handle("datetime.getTimeData", datetime.getTimeData);
   ipcMain.handle("datetime.listTimezones", datetime.listTimezones);
   ipcMain.handle("datetime.setNTPActive", datetime.setNTPActive);
