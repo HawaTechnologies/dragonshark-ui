@@ -42,5 +42,9 @@ contextBridge.exposeInMainWorld('dragonSharkAPI', {
         listTimezones: () => ipcRenderer.invoke("datetime.listTimezones"),
         setNTPActive: (active) => ipcRenderer.invoke("datetime.setNTPActive", active),
         setTimezone: (tz) => ipcRenderer.invoke("datetime.setTimezone", tz),
+    },
+    sound: {
+        setVolume: (volume) => ipcRenderer.invoke("sound.setVolume", volume),
+        getVolume: () => ipcRenderer.invoke("sound.getVolume")
     }
 });
