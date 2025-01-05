@@ -29,6 +29,10 @@ body {
   color: dimgray;
 }
 
+.text-black {
+  color: black;
+}
+
 .text-right {
   text-align: right;
 }
