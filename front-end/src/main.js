@@ -51,11 +51,11 @@ const createWindow = () => {
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
   createWindow();
-  ipcMain.handle("network.listIPv4Interfaces", network.listIPv4Interfaces);
-  ipcMain.handle("network.listWLANInterfaces", network.listWLANInterfaces);
-  ipcMain.handle("network.listWirelessNetworks", network.listWirelessNetworks);
-  ipcMain.handle("network.connectToNetwork", network.connectToNetwork);
-  ipcMain.handle("network.disconnectFromNetwork", network.disconnectFromNetwork);
+  ipcMain.handle("network.listIPv4Interfaces", (_) => network.listIPv4Interfaces());
+  ipcMain.handle("network.listWLANInterfaces", (_) => network.listWLANInterfaces());
+  ipcMain.handle("network.listWirelessNetworks", (_) => network.listWirelessNetworks());
+  ipcMain.handle("network.connectToNetwork", (_, ssid, password, interfaceName) => network.connectToNetwork(ssid, password, interfaceName));
+  ipcMain.handle("network.disconnectFromNetwork", (_, interfaceName) => network.disconnectFromNetwork(interfaceName));
   ipcMain.handle("games.listExternalDeviceDirs", (_) => games.listExternalDeviceDirs());
   ipcMain.handle("games.setRomsDir", (_, dir) => games.setRomsDir(dir));
   ipcMain.handle("games.getRomsDir", (_) => games.getRomsDir());
