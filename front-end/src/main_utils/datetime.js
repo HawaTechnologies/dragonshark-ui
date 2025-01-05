@@ -2,7 +2,7 @@ const {exec, escapeShellArg} = require("./processes");
 
 /**
  * Lists the known timezones.
- * @returns {Promise<{code: number, timezones: string[]}>} The list of timezones (async functions).
+ * @returns {Promise<{code: number, timezones: string[]}>} The list of timezones (async function).
  */
 async function listTimezones() {
     // Run the process.
