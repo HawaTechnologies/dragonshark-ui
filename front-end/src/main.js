@@ -70,10 +70,10 @@ app.whenReady().then(() => {
   ipcMain.handle("virtualpad.clearPad", (_, pad) => virtualpad.clearPad(pad));
   ipcMain.handle("virtualpad.status", (_) => virtualpad.status());
   ipcMain.handle("virtualpad.resetPasswords", (_, pads) => virtualpad.resetPasswords(pads));
-  ipcMain.handle("datetime.getTimeData", datetime.getTimeData);
-  ipcMain.handle("datetime.listTimezones", datetime.listTimezones);
-  ipcMain.handle("datetime.setNTPActive", datetime.setNTPActive);
-  ipcMain.handle("datetime.setTimezone", datetime.setTimezone);
+  ipcMain.handle("datetime.getTimeData", (_) => datetime.getTimeData());
+  ipcMain.handle("datetime.listTimezones", (_) => datetime.listTimezones());
+  ipcMain.handle("datetime.setNTPActive", (_, active) => datetime.setNTPActive(active));
+  ipcMain.handle("datetime.setTimezone", (_, tz) => datetime.setTimezone(tz));
   ipcMain.handle("sound.setVolume", (_, volume) => sound.setVolume(volume));
   ipcMain.handle("sound.getVolume", (_) => sound.getVolume());
   // TODO The broadcast server (127.0.0.1:2358) should always
