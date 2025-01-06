@@ -19,7 +19,7 @@ function clampVolume(volume) {
  * @constructor
  */
 export default function Sound() {
-    // buttonY / buttonB to manage volume.
+    // Controls: left / right to manage volume.
     const {joystick: [leftRightAxis, _]} = useGamepad();
     const {down: leftPressed, up: rightPressed} = getDiscreteAxisStates(leftRightAxis);
     const refDown = useRef(() => {});
