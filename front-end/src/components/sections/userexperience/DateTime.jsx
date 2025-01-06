@@ -2,7 +2,7 @@ import * as React from 'react';
 import BaseActivitySection from "../BaseActivitySection.jsx";
 import {useCallback, useEffect, useRef, useState} from "react";
 import {getDiscreteAxisStates, useGamepad, usePressEffect} from "../../hooks/gamepad.js";
-import {BLeft} from "../../common/icons/RightPanelButton.jsx";
+import {BDown, BLeft} from "../../common/icons/RightPanelButton.jsx";
 
 const datetime = window.dragonSharkAPI.datetime;
 
@@ -24,10 +24,10 @@ async function updateAll({timezone, canNTP, ntp}) {
  */
 export default function DateTime() {
     // Controls:
-    // - left / right to manage timezone
-    // - A/BDown to update all
-    // - X/BRight to refresh time data
-    // - Y/BLeft to manage NTP setting
+    // - left / right to manage timezone.
+    // - A/BDown to update all.
+    // - X/BRight to refresh time data.
+    // - Y/BLeft to manage NTP setting.
     const {joystick: [leftRightAxis, _], buttonA, buttonX, buttonB} = useGamepad();
     const {down: leftPressed, up: rightPressed} = getDiscreteAxisStates(leftRightAxis);
     const refLeft = useRef(() => {});
@@ -65,7 +65,10 @@ export default function DateTime() {
             if (timeData === null) {
                 setTimeData(data);
             } else {
-                setTimeData({...timeData, ntpSynchronized: data.ntpSynchronized, canNTP: data.canNTP});
+                setTimeData({
+                    ...timeData, ntpSynchronized: data.ntpSynchronized,
+                    time: data.time, canNTP: data.canNTP
+                });
             }
         }
     }
@@ -75,7 +78,7 @@ export default function DateTime() {
         const interval = setInterval(refreshAll, 10000);
         const _ = refreshAll();
         return () => clearInterval(interval);
-    }, []);
+    }, [timezone]);
 
     // On each frame, update the functions for the controllers.
     refLeft.current = function () {
@@ -95,7 +98,7 @@ export default function DateTime() {
         } else if (index === timezones.length - 1) {
             setTimezone(timezones[0]);
         } else {
-            setTimezone(timezones[index - 1]);
+            setTimezone(timezones[index + 1]);
         }
     }
     refNTP.current = function () {
@@ -106,6 +109,7 @@ export default function DateTime() {
     }
     refUpdateAll.current = function () {
         const _ = updateAll({timezone, canNTP, ntp});
+        const __ = refreshAll();
     }
 
     usePressEffect(timezones.length !== 0 && timeData && leftPressed, 500, refLeft);
@@ -128,17 +132,23 @@ export default function DateTime() {
             {(!timeData && <div>
                 Retrieving time data...
             </div>)}
-            {(timeData && !canNTP && <div>
+            {(time && timezone && <div style={{marginBottom: "40px"}}>
+                Current time is: {time}.
+            </div>)}
+            {(timeData && !canNTP && <div style={{marginBottom: "40px"}}>
                 NTP synchronization is not available in this device.
             </div>)}
-            {(timeData && canNTP && ntp && <div>
+            {(timeData && canNTP && ntp && <div style={{marginBottom: "40px"}}>
                 NTP synchronization is enabled.<br/>
-                Current status: {ntpSynchronized ? "Synchronized" : "Synchronizing"}<br/>
+                Current status: {ntpSynchronized ? "Synchronized" : "Synchronizing"}.<br/>
                 Press <BLeft/> to stop NTP synchronization.
             </div>)}
-            {(timeData && canNTP && !ntp && <div>
+            {(timeData && canNTP && !ntp && <div style={{marginBottom: "40px"}}>
                 NTP synchronization is disabled.<br/>
                 Press <BLeft/> to start NTP synchronization.
+            </div>)}
+            {(timeData && timezones && <div>
+                Press <BDown/> to confirm all the changes.
             </div>)}
         </div>
     </BaseActivitySection>;
