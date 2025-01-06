@@ -29,7 +29,7 @@ export default function DateTime() {
     // - X/BRight to refresh time data
     // - Y/BLeft to manage NTP setting
     const {joystick: [leftRightAxis, _], buttonA, buttonX, buttonB} = useGamepad();
-    const {left: leftPressed, right: rightPressed} = getDiscreteAxisStates(leftRightAxis);
+    const {down: leftPressed, up: rightPressed} = getDiscreteAxisStates(leftRightAxis);
     const refLeft = useRef(() => {});
     const refRight = useRef(() => {});
     const refUpdateAll = useRef(() => {});
