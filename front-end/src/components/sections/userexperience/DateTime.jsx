@@ -1,7 +1,8 @@
 import * as React from 'react';
 import BaseActivitySection from "../BaseActivitySection.jsx";
-import {useCallback, useEffect, useMemo, useRef, useState} from "react";
+import {useCallback, useEffect, useRef, useState} from "react";
 import {getDiscreteAxisStates, useGamepad, usePressEffect} from "../../hooks/gamepad.js";
+import {BLeft} from "../../common/icons/RightPanelButton.jsx";
 
 const datetime = window.dragonSharkAPI.datetime;
 
@@ -59,9 +60,13 @@ export default function DateTime() {
         if (code === 0) setTimezones(timezones);
 
         // Update the timeData ONLY ONCE.
-        if (timeData === null) {
-            const newTimeData = await datetime.getTimeData();
-            setTimeData(newTimeData);
+        const {code: code2, data} = await datetime.getTimeData();
+        if (code2 === 0) {
+            if (timeData === null) {
+                setTimeData(data);
+            } else {
+                setTimeData({...timeData, ntpSynchronized: data.ntpSynchronized, canNTP: data.canNTP});
+            }
         }
     }
 
@@ -72,6 +77,7 @@ export default function DateTime() {
         return () => clearInterval(interval);
     }, []);
 
+    // On each frame, update the functions for the controllers.
     refLeft.current = function () {
         const index = timezones.indexOf(timezone);
         if (index < 0) {
@@ -110,7 +116,30 @@ export default function DateTime() {
 
     return <BaseActivitySection caption="Date & Time" backPath="/user-experience">
         <div style={{position: "absolute", left: "50%", top: "50%", transform: "translate(-50%, -50%)"}}>
-            This section is not ready yet.
+            {(!timezones && <div>
+                Retrieving timezones...
+            </div>)}
+            {(timezones && <div>
+                Select timezone:
+                <span className="text-red" style={{flex: 0, textWrap: "nowrap"}}>⮜</span>
+                <span style={{textWrap: "nowrap"}}>{timezone}</span>
+                <span className="text-blue" style={{flex: 0, textWrap: "nowrap"}}>⮞</span>
+            </div>)}
+            {(!timeData && <div>
+                Retrieving time data...
+            </div>)}
+            {(timeData && !canNTP && <div>
+                NTP synchronization is not available in this device.
+            </div>)}
+            {(timeData && canNTP && ntp && <div>
+                NTP synchronization is enabled.<br/>
+                Current status: {ntpSynchronized ? "Synchronized" : "Synchronizing"}<br/>
+                Press <BLeft/> to stop NTP synchronization.
+            </div>)}
+            {(timeData && canNTP && !ntp && <div>
+                NTP synchronization is disabled.<br/>
+                Press <BLeft/> to start NTP synchronization.
+            </div>)}
         </div>
     </BaseActivitySection>;
 }
