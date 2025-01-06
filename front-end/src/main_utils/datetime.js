@@ -53,6 +53,10 @@ async function setNTPActive(active) {
     return {code, stdout, stderr};
 }
 
+/**
+ * Gets the whole time data.
+ * @returns {Promise<{code: (*|number), data: (null|{canNTP: boolean, ntpSynchronized: boolean, timezone: *, ntp: boolean, time: (*|string), localRTC: boolean, rtcTime: (*|string)})}>} The data (async function).
+ */
 async function getTimeData() {
     // Run the process.
     const {stdout, result} = await exec("timedatectl show");
