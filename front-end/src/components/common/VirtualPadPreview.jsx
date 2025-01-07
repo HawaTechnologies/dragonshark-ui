@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Panel from "./Panel.jsx";
 import {useEffect, useMemo, useState} from "react";
-import {getVirtualPadServerStatus} from "./virtualpad.js";
+import {getVirtualPadServerStatus} from "../utils/virtualpad.js";
 
 function ellipsis(nickname) {
     nickname = nickname.trim();
