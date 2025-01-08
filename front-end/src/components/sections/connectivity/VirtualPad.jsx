@@ -3,7 +3,7 @@ import BaseActivitySection from "../BaseActivitySection.jsx";
 import {getDiscreteAxisStates, useGamepad, usePressEffect} from "../../hooks/gamepad.js";
 import {useEffect, useRef, useState} from "react";
 import {getVirtualPadServerStatus} from "../../utils/virtualpad.js";
-import {BUp} from "../../common/icons/RightPanelButton.jsx";
+import {BLeft, BRight, BUp} from "../../common/icons/RightPanelButton.jsx";
 
 const virtualpad = window.dragonSharkAPI.virtualpad;
 
@@ -47,11 +47,11 @@ export default function VirtualPad() {
     // Handlers:
     refLeft.current = function() {
         if (!(status?.pads)) return;
-        setStatus((selectedPadIndex === 0) ? (status.pads.length - 1) : (selectedPadIndex - 1));
+        setSelectedPadIndex((selectedPadIndex === 0) ? (status.pads.length - 1) : (selectedPadIndex - 1));
     }
     refRight.current = function() {
         if (!(status?.pads)) return;
-        setStatus((selectedPadIndex === status.pads.length) ? 0 : (selectedPadIndex + 1));
+        setSelectedPadIndex((selectedPadIndex === status.pads.length) ? 0 : (selectedPadIndex + 1));
     }
     refResetPassword.current = async function() {
         if (!(status?.pads)) return;
@@ -90,14 +90,14 @@ export default function VirtualPad() {
     return <BaseActivitySection caption="Virtual Pad" backPath="/connectivity">
         <div style={{position: "absolute", left: "50%", top: "50%", width: "75%", height: "75%",
                      transform: "translate(-50%, -50%)"}}>
-            <p style={{fontSize: "14px"}}>
+            <div style={{fontSize: "14px", marginBottom: "20px"}}>
                 This section is for VirtualPad configuration. VirtualPad, by HawaTechnologies, is a mobile
                 client application that allows players to turn their mobile devices into a standard joystick
                 with D-Pad, L1/L2/R1/R2/Select/Start buttons, A/B/X/Y buttons and analog axes. While the
                 experience is not the same as a regular joystick, it is expected for it to be useful in
                 simple games and a substitute of actual, physical, joysticks.
-            </p>
-            <p style={{fontSize: "14px"}}>
+            </div>
+            <div style={{fontSize: "14px", marginBottom: "20px"}}>
                 VirtualPad comes built-in and supports up to 8 players (this means: up to 8 players can
                 connect to the same VirtualPad server). This has nothing to do with any physical joystick
                 that might be connected to this console (directly or via Blue Tooth), which means that the
@@ -106,28 +106,34 @@ export default function VirtualPad() {
                 joysticks and, actually, many of them even support less than 4. Also, it is important to know
                 that it should not be expected the numeric order to be preserved (especially if the VirtualPad
                 service is disabled by the user) among virtual and/or physical joysticks.
-            </p>
-            {!status && <p style={{textAlign: "center"}}>
+            </div>
+            {!status && <div style={{textAlign: "center", marginBottom: "40px"}}>
                 Fetching VirtualPad status...
-            </p>}
-            {status && status.result !== "success" && <p style={{textAlign: "center"}}>
+            </div>}
+            {status && status.result !== "success" && <div style={{textAlign: "center", marginBottom: "40px"}}>
                 There was an error while trying to recover the VirtualPad status.
-            </p>}
-            {status && status.result === "success" && status.connected && <p>
-                VirtualPad server is running.<br />
-                Press <BUp /> to stop VirtualPad server.
-            </p>}
-            {status && status.result === "success" && !status.connected && <p>
-                VirtualPad server is not running.<br />
-                Press <BUp /> to start VirtualPad server.
-            </p>}
+            </div>}
+            {status && status.result === "success" && status.connected && <div style={{marginBottom: "40px"}}>
+                VirtualPad server is running. Press <BUp /> to stop it.
+            </div>}
+            {status && status.result === "success" && !status.connected && <div style={{marginBottom: "40px"}}>
+                VirtualPad server is not running. Press <BUp /> to launch it.
+            </div>}
             {status && status.result === "success" && status.connected && <div>
-                <div style={{marginBottom: "40px"}}>
-                    {/* Here: Horizontal list of 8 pads being selectable (0 to 7) */}
+                <div style={{marginBottom: "40px", display: "flex", flexDirection: "row",
+                             justifyContent: "space-around"}}>
+                    {[0, 1, 2, 3, 4, 5, 6, 7].map((e) => <div style={{
+                        display: "inline-block", padding: "20px", fontSize: "20px",
+                        border: (e === selectedPadIndex) ? "2px solid yellow" : "2px solid gray",
+                        backgroundColor: (e === selectedPadIndex) ? "#ffff0077" : "#77777777"
+                    }}>
+                        {(e + 1).toString()}
+                    </div>)}
                 </div>
                 {padStatus !== null && <div>
-                    {/* Here: Display of the current pad in terms of: padStatus, user, password */}
-                    {/* Here: Also, prompts for actions: kick user, refresh password */}
+                    Status: {padStatus} - Password: {password} {user ? `- User: ${user}` : ""}<br />
+                    Press <BLeft /> to reset the password.
+                    {user && (<> Press <BRight/> to disconnect this user.</>)}
                 </div>}
             </div>}
         </div>
