@@ -51,7 +51,7 @@ export default function VirtualPad() {
     }
     refRight.current = function() {
         if (!(status?.pads)) return;
-        setSelectedPadIndex((selectedPadIndex === status.pads.length) ? 0 : (selectedPadIndex + 1));
+        setSelectedPadIndex((selectedPadIndex === status.pads.length - 1) ? 0 : (selectedPadIndex + 1));
     }
     refResetPassword.current = async function() {
         if (!(status?.pads)) return;
