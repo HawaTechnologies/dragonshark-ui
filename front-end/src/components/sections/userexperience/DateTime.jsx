@@ -120,36 +120,36 @@ export default function DateTime() {
 
     return <BaseActivitySection caption="Date & Time" backPath="/user-experience">
         <div style={{position: "absolute", left: "50%", top: "50%", transform: "translate(-50%, -50%)"}}>
-            {(!timezones && <p>
+            {(!timezones && <div>
                 Retrieving timezones...
-            </p>)}
-            {(timezones && <p>
+            </div>)}
+            {(timezones && <div>
                 Select timezone:
                 <span className="text-red" style={{flex: 0, textWrap: "nowrap"}}>⮜</span>
                 <span style={{textWrap: "nowrap"}}>{timezone}</span>
                 <span className="text-blue" style={{flex: 0, textWrap: "nowrap"}}>⮞</span>
-            </p>)}
+            </div>)}
             {(!timeData && <div>
                 Retrieving time data...
             </div>)}
-            {(time && timezone && <p>
+            {(time && timezone && <div style={{marginBottom: "40px"}}>
                 Current time is: {time}.
-            </p>)}
-            {(timeData && !canNTP && <p>
+            </div>)}
+            {(timeData && !canNTP && <div style={{marginBottom: "40px"}}>
                 NTP synchronization is not available in this device.
-            </p>)}
-            {(timeData && canNTP && ntp && <p>
+            </div>)}
+            {(timeData && canNTP && ntp && <div style={{marginBottom: "40px"}}>
                 NTP synchronization is enabled.<br/>
                 Current status: {ntpSynchronized ? "Synchronized" : "Synchronizing"}.<br/>
                 Press <BLeft/> to stop NTP synchronization.
-            </p>)}
-            {(timeData && canNTP && !ntp && <p>
+            </div>)}
+            {(timeData && canNTP && !ntp && <div style={{marginBottom: "40px"}}>
                 NTP synchronization is disabled.<br/>
                 Press <BLeft/> to start NTP synchronization.
-            </p>)}
-            {(timeData && timezones && <p>
+            </div>)}
+            {(timeData && timezones && <div>
                 Press <BDown/> to confirm all the changes.
-            </p>)}
+            </div>)}
         </div>
     </BaseActivitySection>;
 }
