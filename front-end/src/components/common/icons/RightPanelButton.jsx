@@ -8,17 +8,17 @@ function RightPanelButton({ style, color, caption }) {
 }
 
 export function BUp({ style }) {
-    return <RightPanelButton style={style} color="darkgreen" caption="1" />;
+    return <RightPanelButton style={style} color="darkgreen" caption="Y" />;
 }
 
 export function BRight({ style }) {
-    return <RightPanelButton style={style} color="#733f00" caption="2" />;
+    return <RightPanelButton style={style} color="#733f00" caption="B" />;
 }
 
 export function BDown({ style }) {
-    return <RightPanelButton style={style} color="#3535fd" caption="3" />;
+    return <RightPanelButton style={style} color="#3535fd" caption="A" />;
 }
 
 export function BLeft({ style }) {
-    return <RightPanelButton style={style} color="mediumpurple" caption="4" />;
+    return <RightPanelButton style={style} color="mediumpurple" caption="X" />;
 }
