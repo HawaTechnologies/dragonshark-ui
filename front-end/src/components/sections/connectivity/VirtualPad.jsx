@@ -38,8 +38,6 @@ export default function VirtualPad() {
         return () => clearInterval(interval);
     }, [statusRefreshKey]);
     // 2. The selected pad index, object, password.
-    // TODO There's an error somewhere here since pressing LEFT twice triggers
-    // TODO access error of the property '0'. Debug this later.
     const [selectedPadIndex, setSelectedPadIndex] = useState(0);
     const selectedPad = status?.pads ? status.pads[selectedPadIndex] : null;
     const [padStatus, user] = selectedPad || [null, null];
