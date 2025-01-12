@@ -4,6 +4,7 @@ import {getDiscreteAxisStates, useGamepad, usePressEffect} from "../../hooks/gam
 import {useEffect, useRef, useState} from "react";
 import {getVirtualPadServerStatus} from "../../utils/virtualpad.js";
 import {BLeft, BRight, BUp} from "../../common/icons/RightPanelButton.jsx";
+import ProgressText from "../../common/ProgressText.jsx";
 
 const virtualpad = window.dragonSharkAPI.virtualpad;
 
@@ -106,7 +107,7 @@ export default function VirtualPad() {
                 service is disabled by the user) among virtual and/or physical joysticks.
             </div>
             {!status && <div style={{textAlign: "center", marginBottom: "40px"}}>
-                Fetching VirtualPad status...
+                <ProgressText>Fetching VirtualPad status</ProgressText>
             </div>}
             {status && status.result !== "success" && <div style={{textAlign: "center", marginBottom: "40px"}}>
                 There was an error while trying to recover the VirtualPad status.
