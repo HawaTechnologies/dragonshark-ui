@@ -42,7 +42,7 @@ export default function VirtualPad() {
     const [selectedPadIndex, setSelectedPadIndex] = useState(0);
     const selectedPad = status?.pads ? status.pads[selectedPadIndex] : null;
     const [padStatus, user] = selectedPad || [null, null];
-    const password = status ? status.passwords[selectedPadIndex] : null;
+    const password = status?.passwords ? status.passwords[selectedPadIndex] : null;
     // Handlers:
     refLeft.current = function() {
         if (!(status?.pads)) return;
