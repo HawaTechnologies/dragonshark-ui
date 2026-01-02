@@ -8,8 +8,6 @@ import ProgressText from "../../../common/ProgressText.jsx";
 
 const network = window.dragonSharkAPI.network;
 
-// TODO THIS COMPONENT IS INCOMPLETE.
-
 /**
  * This component is meant to render the status of a chosen
  * network interface.
@@ -66,11 +64,12 @@ export default function ViewInterface() {
     }, [currentSSIDIndex]);
 
     // Also, this intends to select one of the networks.
-    const {joystick: [leftRightAxis, _], buttonA: keyPressed} = useGamepad();
+    const {joystick: [leftRightAxis, _], buttonA: keyAPressed, buttonB: keyBPressed} = useGamepad();
     const {down: leftPressed, up: rightPressed} = getDiscreteAxisStates(leftRightAxis);
     const leftRef = useRef(() => {});
     const rightRef = useRef(() => {});
-    const keyRef = useRef(() => {});
+    const keyARef = useRef(() => {});
+    const keyBRef = useRef(() => {});
     leftRef.current = () => {
         if (!networks.length) return;
         const l = networks.length;
@@ -81,13 +80,18 @@ export default function ViewInterface() {
         const l = networks.length;
         setCurrentSSIDIndex(effectiveCurrentSSIDIndex === l - 1 ? 0 : effectiveCurrentSSIDIndex + 1);
     }
-    keyRef.current = () => {
+    keyARef.current = () => {
         if (!networks.length) return;
-        navigate(`/connectivity/network/interfaces/${interface_}/connect`);
+        navigate(`/connectivity/network/interfaces/${interface_}/connect/listed`);
+    }
+    keyBRef.current = () => {
+        if (!networks.length) return;
+        navigate(`/connectivity/network/interfaces/${interface_}/connect/hidden`);
     }
     usePressEffect(leftPressed, 500, leftRef);
     usePressEffect(rightPressed, 500, rightRef);
-    usePressEffect(keyPressed, 500, keyRef, 1000);
+    usePressEffect(keyAPressed, 500, keyARef, 1000);
+    usePressEffect(keyBPressed, 500, keyBRef, 1000);
 
     // 3. Now, the users will have options:
     // 3.1. Which network is it connected to?
