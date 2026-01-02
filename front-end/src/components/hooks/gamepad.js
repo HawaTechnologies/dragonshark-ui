@@ -1,4 +1,4 @@
-import {useState, useEffect, useMemo} from 'react';
+import {useState, useEffect, useMemo, useRef} from 'react';
 
 /**
  * Gets the input from the first connected gamepad.
@@ -84,10 +84,14 @@ export function getDiscreteAxisStates(value) {
  * was occurred.
  * @param pressed The pressed state (true=pressed, false=released).
  * @param interval The interval.
- * @param ref The callback ref.
+ * @param func The callback function.
  * @param delay An optional delay (for if we don't want the press effect to be available immediately).
  */
-export function usePressEffect(pressed, interval, ref, delay = 0) {
+export function usePressEffect(pressed, interval, func, delay = 0) {
+    // A non-reactivizator ref.
+    const ref = useRef(() => {});
+    ref.current = func;
+
     // Flag to account for the delay.
     const [ready, setReady] = useState(delay === 0);
 

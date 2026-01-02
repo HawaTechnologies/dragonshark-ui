@@ -20,11 +20,6 @@ export default function VirtualPad() {
     // - B/BRight to kick the current selected pad, if any.
     const {joystick: [leftRightAxis, _], buttonX, buttonB, buttonY} = useGamepad();
     const {down: leftPressed, up: rightPressed} = getDiscreteAxisStates(leftRightAxis);
-    const refLeft = useRef(() => {});
-    const refRight = useRef(() => {});
-    const refResetPassword = useRef(() => {});
-    const refKick = useRef(() => {});
-    const refServer = useRef(() => {});
     // States:
     // 1. The whole current status of the server.
     const [status, setStatus] = useState(null);
@@ -44,31 +39,31 @@ export default function VirtualPad() {
     const [padStatus, user] = selectedPad || [null, null];
     const password = status?.passwords ? status.passwords[selectedPadIndex] : null;
     // Handlers:
-    refLeft.current = function() {
+    usePressEffect(leftPressed, 500, function() {
         if (!(status?.pads)) return;
         setSelectedPadIndex((selectedPadIndex === 0) ? (status.pads.length - 1) : (selectedPadIndex - 1));
-    }
-    refRight.current = function() {
+    });
+    usePressEffect(rightPressed, 500, function() {
         if (!(status?.pads)) return;
         setSelectedPadIndex((selectedPadIndex === status.pads.length - 1) ? 0 : (selectedPadIndex + 1));
-    }
-    refResetPassword.current = async function() {
+    });
+    usePressEffect(buttonX, 500, async function() {
         if (!(status?.pads)) return;
         // Change a password.
         await virtualpad.resetPasswords([selectedPadIndex]);
         // Refresh the full status.
         setStatus(await getVirtualPadServerStatus());
         setStatusRefreshKey(Math.random());
-    }
-    refKick.current = async function() {
+    });
+    usePressEffect(buttonB, 500, async function() {
         if (!(status?.pads)) return;
         // Clear the pad.
         await virtualpad.clearPad(selectedPadIndex);
         // Refresh the full status.
         setStatus(await getVirtualPadServerStatus());
         setStatusRefreshKey(Math.random());
-    }
-    refServer.current = async function() {
+    });
+    usePressEffect(buttonY, 500, async function() {
         if (!status) return;
         // Start/Stop the server.
         if (!status.connected) {
@@ -79,12 +74,7 @@ export default function VirtualPad() {
         // Refresh the full status.
         setStatus(await getVirtualPadServerStatus());
         setStatusRefreshKey(Math.random());
-    }
-    usePressEffect(leftPressed, 500, refLeft);
-    usePressEffect(rightPressed, 500, refRight);
-    usePressEffect(buttonX, 500, refResetPassword);
-    usePressEffect(buttonB, 500, refKick);
-    usePressEffect(buttonY, 500, refServer);
+    });
 
     return <BaseActivitySection caption="Virtual Pad" backPath="/connectivity">
         <div style={{position: "absolute", left: "50%", top: "50%", width: "75%", height: "75%",

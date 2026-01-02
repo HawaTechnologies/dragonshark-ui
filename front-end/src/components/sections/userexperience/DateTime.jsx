@@ -31,11 +31,6 @@ export default function DateTime() {
     // - X/BLeft to manage NTP setting.
     const {joystick: [leftRightAxis, _], buttonA, buttonX, buttonB} = useGamepad();
     const {down: leftPressed, up: rightPressed} = getDiscreteAxisStates(leftRightAxis);
-    const refLeft = useRef(() => {});
-    const refRight = useRef(() => {});
-    const refUpdateAll = useRef(() => {});
-    const refRefreshAll = useRef(() => {});
-    const refNTP = useRef(() => {});
     // This data is fetched every 0 seconds.
     const [timezones, setTimezones] = useState([]);
     const [timeData, setTimeData] = useState(null);
@@ -82,7 +77,7 @@ export default function DateTime() {
     }, [timezone]);
 
     // On each frame, update the functions for the controllers.
-    refLeft.current = function () {
+    usePressEffect(timezones.length !== 0 && timeData && leftPressed, 500, function () {
         const index = timezones.indexOf(timezone);
         if (index < 0) {
             setTimezone(timezones[0]);
@@ -91,8 +86,8 @@ export default function DateTime() {
         } else {
             setTimezone(timezones[index - 1]);
         }
-    }
-    refRight.current = function () {
+    });
+    usePressEffect(timezones.length !== 0 && timeData && rightPressed, 500, function () {
         const index = timezones.indexOf(timezone);
         if (index < 0) {
             setTimezone(timezones[0]);
@@ -101,23 +96,17 @@ export default function DateTime() {
         } else {
             setTimezone(timezones[index + 1]);
         }
-    }
-    refNTP.current = function () {
-        toggleNTP();
-    }
-    refRefreshAll.current = function () {
-        const _ = refreshAll();
-    }
-    refUpdateAll.current = function () {
+    });
+    usePressEffect(timeData && buttonA, 500, function () {
         const _ = updateAll({timezone, canNTP, ntp});
         const __ = refreshAll();
-    }
-
-    usePressEffect(timezones.length !== 0 && timeData && leftPressed, 500, refLeft);
-    usePressEffect(timezones.length !== 0 && timeData && rightPressed, 500, refRight);
-    usePressEffect(timeData && buttonA, 500, refUpdateAll);
-    usePressEffect(timeData && buttonB, 500, refRefreshAll);
-    usePressEffect(timeData && buttonX, 500, refNTP);
+    });
+    usePressEffect(timeData && buttonB, 500, function () {
+        const _ = refreshAll();
+    });
+    usePressEffect(timeData && buttonX, 500, function () {
+        toggleNTP();
+    });
 
     return <BaseActivitySection caption="Date & Time" backPath="/user-experience">
         <div style={{position: "absolute", left: "50%", top: "50%", transform: "translate(-50%, -50%)"}}>

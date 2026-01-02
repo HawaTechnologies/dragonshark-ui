@@ -18,12 +18,10 @@ import {useRef} from "react";
 export default function Play() {
     const navigate = useNavigate();
     const { LT } = useGamepad();
-    const ref = useRef();
-    ref.current = () => {
-        navigate("/");
-    }
 
-    usePressEffect(LT, 500, ref);
+    usePressEffect(LT, 500, () => {
+        navigate("/");
+    });
 
     return <Menu style={{position: "absolute", left: "48px", right: "48px", bottom: "208px", top: "288px"}}>
         <Section>

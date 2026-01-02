@@ -17,18 +17,13 @@ import {L1} from "../common/icons/TextButton.jsx";
 export default function BaseActivitySection({ caption, children, backPath, backTimeout = 1000 }) {
     const navigate = useNavigate();
     const { LT, LB } = useGamepad();
-    const ref = useRef();
-    const refBack = useRef();
 
-    ref.current = () => {
+    usePressEffect(LT, 500, () => {
         navigate("/");
-    }
-    refBack.current = () => {
+    });
+    usePressEffect(LB, backTimeout, () => {
         if (backPath) navigate(backPath);
-    }
-
-    usePressEffect(LT, 500, ref);
-    usePressEffect(LB, backTimeout, refBack, 1000);
+    }, 1000);
 
     return <Panel style={{position: "absolute", left: "48px", right: "48px", bottom: "208px", top: "288px"}}>
         <div className="text-red" style={{position: "absolute", left: "48px"}}>Press <L1/> to leave</div>

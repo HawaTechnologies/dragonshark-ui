@@ -67,23 +67,17 @@ export default function ChooseInterface() {
     // setup of keys:
     const {joystick: [leftRightAxis, _], buttonA: keyPressed} = useGamepad();
     const {down: leftPressed, up: rightPressed} = getDiscreteAxisStates(leftRightAxis);
-    const leftRef = useRef(() => {});
-    const rightRef = useRef(() => {});
-    const keyRef = useRef(() => {});
-    leftRef.current = () => {
+    usePressEffect(leftPressed, 500, () => {
         const l = interfaceFetchData.interfaces.length;
         setSelectedInterface(selectedInterface === 0 ? l - 1 : selectedInterface - 1);
-    }
-    rightRef.current = () => {
+    });
+    usePressEffect(rightPressed, 500, () => {
         const l = interfaceFetchData.interfaces.length;
         setSelectedInterface(selectedInterface === l - 1 ? 0 : selectedInterface + 1);
-    }
-    keyRef.current = () => {
+    });
+    usePressEffect(keyPressed, 500, () => {
         navigate("/connectivity/network/interfaces/" + selectedInterfaceName);
-    }
-    usePressEffect(leftPressed, 500, leftRef);
-    usePressEffect(rightPressed, 500, rightRef);
-    usePressEffect(keyPressed, 500, keyRef, 1000);
+    }, 1000);
 
     // Launch the refresh for the first time. This first time is always
     // given when this component loads.

@@ -186,11 +186,10 @@ function VirtualKeyboardLayout({append, backspace, confirm}) {
     // A state will be used to track the current layout.
     const [layoutIndex, setLayoutIndex] = useState(0);
     // We install the pressed effect for it.
-    const ref = useRef();
-    ref.current = useCallback(() => {
+    const f = useCallback(() => {
         setLayoutIndex(layoutIndex >= LAYOUTS.length ? 0 : layoutIndex + 1);
     }, [layoutIndex]);
-    usePressEffect(RB, 500, ref);
+    usePressEffect(RB, 500, f);
 
     // A position will be: "SPACE", "BACKSPACE" or "CONFIRM" (no "CANCEL" here).
     // Alternatively, a position will be {x: 0..(keys[y].length-1), y: 0..(keys.length-1)}.
@@ -205,16 +204,11 @@ function VirtualKeyboardLayout({append, backspace, confirm}) {
     const {joystick: [leftRightAxis, upDownAxis], buttonX: keyPressed} = useGamepad();
     const {down: leftPressed, up: rightPressed} = getDiscreteAxisStates(leftRightAxis);
     const {down: upPressed, up: downPressed} = getDiscreteAxisStates(upDownAxis);
-    const upRef = useRef(() => {});
-    const downRef = useRef(() => {});
-    const leftRef = useRef(() => {});
-    const rightRef = useRef(() => {});
-    const keyRef = useRef(() => {});
-    upRef.current = () => setPosition(up(clampedPosition, layoutIndex));
-    downRef.current = () => setPosition(down(clampedPosition, layoutIndex));
-    leftRef.current = () => setPosition(left(clampedPosition, layoutIndex));
-    rightRef.current = () => setPosition(right(clampedPosition, layoutIndex));
-    keyRef.current = () => {
+    usePressEffect(leftPressed, 500, () => setPosition(left(clampedPosition, layoutIndex)));
+    usePressEffect(rightPressed, 500, () => setPosition(right(clampedPosition, layoutIndex)));
+    usePressEffect(upPressed, 500, () => setPosition(up(clampedPosition, layoutIndex)));
+    usePressEffect(downPressed, 500, () => setPosition(down(clampedPosition, layoutIndex)));
+    usePressEffect(keyPressed, 500, () => {
         switch(clampedPosition) {
             case "SPACE":
                 append(" ");
@@ -230,12 +224,7 @@ function VirtualKeyboardLayout({append, backspace, confirm}) {
                 const keys = LAYOUTS[layoutIndex].keys;
                 append(keys[y][x]);
         }
-    }
-    usePressEffect(leftPressed, 500, leftRef);
-    usePressEffect(rightPressed, 500, rightRef);
-    usePressEffect(upPressed, 500, upRef);
-    usePressEffect(downPressed, 500, downRef);
-    usePressEffect(keyPressed, 500, keyRef, 1000);
+    }, 1000);
 
     return <div className="keyboard">
         <div>{LAYOUTS[layoutIndex].name}</div>
@@ -305,9 +294,7 @@ export default forwardRef(({}, ref) => {
         // Closes the virtual keyboard, cancelling.
         setOpen(false);
     }, [setOpen]);
-    const refClose = useRef(() => {});
-    refClose.current = () => setOpen(false);
-    usePressEffect(RT, 500, refClose);
+    usePressEffect(RT, 500, () => setOpen(false));
 
     if (ref) {
         // The `ref` must set an object with methods such as:

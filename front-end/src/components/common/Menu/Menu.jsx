@@ -113,18 +113,6 @@ export default function Menu({ style, children, selectedIndex = 0}) {
     const [globalIndex, setGlobalIndex] = useState(selectedIndex);
     const [filteredChildren, setFilteredChildren] = useState(children);
     const [menuCallback, setMenuCallback] = useState(null);
-    const finalMenuCallback = useRef();
-    finalMenuCallback.current = () => {
-        if (menuCallback?.func) menuCallback.func();
-    };
-    const navigateLeftCallback = useRef();
-    navigateLeftCallback.current = () => {
-        setGlobalIndex(Math.max(0, globalIndex - 1));
-    };
-    const navigateRightCallback = useRef();
-    navigateRightCallback.current = () => {
-        setGlobalIndex(globalIndex + 1);
-    };
 
     // 2. If the selectedIndex change, update the global index.
     useEffect(() => {
@@ -147,9 +135,15 @@ export default function Menu({ style, children, selectedIndex = 0}) {
     // 4. Enable left/right gamepad commands.
     const {joystick: [leftRightAxis, _], buttonA: menuPressed} = useGamepad();
     const {down: leftPressed, up: rightPressed} = getDiscreteAxisStates(leftRightAxis);
-    usePressEffect(leftPressed, 500, navigateLeftCallback);
-    usePressEffect(rightPressed, 500, navigateRightCallback);
-    usePressEffect(menuPressed, 500, finalMenuCallback, 1000);
+    usePressEffect(leftPressed, 500, () => {
+        setGlobalIndex(Math.max(0, globalIndex - 1));
+    });
+    usePressEffect(rightPressed, 500, () => {
+        setGlobalIndex(globalIndex + 1);
+    });
+    usePressEffect(menuPressed, 500, () => {
+        if (menuCallback?.func) menuCallback.func();
+    }, 1000);
 
     return <Panel style={{...(style || {})}}>
         {filteredChildren}
