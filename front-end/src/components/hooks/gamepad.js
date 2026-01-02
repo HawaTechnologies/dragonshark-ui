@@ -1,5 +1,4 @@
 import {useState, useEffect, useMemo} from 'react';
-import usePrevious from "./previous";
 
 /**
  * Gets the input from the first connected gamepad.
