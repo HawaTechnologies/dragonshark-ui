@@ -21,6 +21,8 @@ import DateTime from "./sections/userexperience/DateTime.jsx";
 import RestartInDebugMode from "./sections/advanced/RestartInDebugMode.jsx";
 import ChooseInterface from "./sections/connectivity/Network/ChooseInterface.jsx";
 import ViewInterface from "./sections/connectivity/Network/ViewInterface.jsx";
+import ConnectInterfaceToSpecifiedNetwork from "./sections/connectivity/Network/ConnectInterfaceToSpecifiedNetwork.jsx";
+import SpecifyHiddenNetwork from "./sections/connectivity/Network/SpecifyHiddenNetwork.jsx";
 
 export default function App() {
     return <>
@@ -49,6 +51,10 @@ export default function App() {
                     <Route path="/connectivity" Component={Connectivity} />
                     <Route path="/connectivity/network" Component={ChooseInterface} />
                     <Route path="/connectivity/network/interfaces/:interface" Component={ViewInterface} />
+                    <Route path="/connectivity/network/interfaces/:interface/connect/:network"
+                           Component={ConnectInterfaceToSpecifiedNetwork} />
+                    <Route path="/connectivity/network/interfaces/:interface/specify-hidden-network"
+                           Component={SpecifyHiddenNetwork} />
                     <Route path="/connectivity/virtualpad" Component={VirtualPad} />
                     <Route path="/user-experience" Component={UserExperience} />
                     <Route path="/user-experience/sound" Component={Sound} />

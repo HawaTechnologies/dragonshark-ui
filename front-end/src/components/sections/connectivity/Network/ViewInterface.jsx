@@ -78,11 +78,11 @@ export default function ViewInterface() {
     });
     usePressEffect(keyAPressed, 500, () => {
         if (!networks.length) return;
-        navigate(`/connectivity/network/interfaces/${interface_}/connect/listed`);
+        navigate(`/connectivity/network/interfaces/${interface_}/connect/${networks[effectiveCurrentSSIDIndex][1]}`);
     }, 1000);
     usePressEffect(keyBPressed, 500, () => {
         if (!networks.length) return;
-        navigate(`/connectivity/network/interfaces/${interface_}/connect/hidden`);
+        navigate(`/connectivity/network/interfaces/${interface_}/specify-hidden-network`);
     }, 1000);
 
     // 3. Now, the users will have options:
@@ -110,7 +110,7 @@ export default function ViewInterface() {
                 <div>
                     <span className="text-red">⮜</span>
                     <div style={{display: "inline-block", padding: "0 8px"}}>
-                        {networks[currentSSIDIndex][1]} ({networks[currentSSIDIndex][2]}%)
+                        {networks[effectiveCurrentSSIDIndex][1]} ({networks[effectiveCurrentSSIDIndex][2]}%)
                     </div>
                     <span className="text-blue">⮞</span>
                 </div>
