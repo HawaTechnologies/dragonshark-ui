@@ -1,5 +1,5 @@
 import * as React from "react";
-import {forwardRef, useCallback, useEffect, useMemo, useRef, useState} from "react";
+import {forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState} from "react";
 import {getDiscreteAxisStates, useGamepad, usePressEffect} from "../hooks/gamepad";
 import Panel from "./Panel.jsx";
 import {R1, R2} from "./icons/TextButton.jsx";
@@ -296,25 +296,23 @@ export default forwardRef(({}, ref) => {
     }, [setOpen]);
     usePressEffect(RT, 500, () => setOpen(false));
 
-    if (ref) {
-        // The `ref` must set an object with methods such as:
-        // - open(caption, isSecret, value, onChange) -> Opens the object for a component and its value.
-        // - cancel() -> Cancels the edition.
-        //
-        // Confirming the keyboard will NOT be available by the red.
-        ref.current = {
-            open: (caption, isSecret, value, onChange) => {
-                // Opens the virtual keyboard. Sets an initial value
-                // and tracks a callback.
-                setCaption(caption);
-                setIsSecret(isSecret);
-                setValue(value);
-                setOnChange({callback: () => { onChange(value) }})
-                setOpen(true);
-            },
-            cancel
-        }
-    }
+    // The `ref` must set an object with methods such as:
+    // - open(caption, isSecret, value, onChange) -> Opens the object for a component and its value.
+    // - cancel() -> Cancels the edition.
+    //
+    // Confirming the keyboard will NOT be available by the red.
+    useImperativeHandle(ref, () => ({
+        open: (caption, isSecret, value, onChange) => {
+            // Opens the virtual keyboard. Sets an initial value
+            // and tracks a callback.
+            setCaption(caption);
+            setIsSecret(isSecret);
+            setValue(value);
+            setOnChange({callback: () => { onChange(value) }})
+            setOpen(true);
+        },
+        cancel
+    }));
 
     // Rendering the actual keyboard layout for good.
     if (!open) {
