@@ -1,9 +1,9 @@
 import * as React from "react";
-import {forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState} from "react";
+import {forwardRef, useCallback, useImperativeHandle, useMemo, useState} from "react";
 import {getDiscreteAxisStates, useGamepad, usePressEffect} from "../hooks/gamepad";
 import Panel from "./Panel.jsx";
 import {R1, R2} from "./icons/TextButton.jsx";
-import {BRight} from "./icons/RightPanelButton.jsx";
+import {BLeft} from "./icons/RightPanelButton.jsx";
 
 const LAYOUTS = [
     // letters
@@ -21,7 +21,7 @@ const LAYOUTS = [
         keys: [
             "1 2 3 4 5 6 7 8 9 0 + - * / % # . , ^ ÷".split(" "),
             "× ¹ ² ³ ½ ⅓ ⅔ ¼ ¾ ⅕ ⅖ ⅗ ⅘ ⅙ ⅚ ⅐ ⅛ ⅜ ⅝ ⅞".split(" "),
-            "⅑ ⅒ ↉ ⅟ ⁄"
+            "⅑ ⅒ ↉ ⅟ ⁄".split(" ")
         ]
     },
     // accented-letters
@@ -170,7 +170,7 @@ function right(clampedPosition, layoutIndex) {
             return "CONFIRM";
         default:
             const {x, y} = clampedPosition;
-            const {keys} = LAYOUTS[layoutIndex].keys;
+            const {keys} = LAYOUTS[layoutIndex];
             const rowLength = keys[y].length;
             if (x >= rowLength) {
                 return {x: rowLength, y};
@@ -227,12 +227,12 @@ function VirtualKeyboardLayout({append, backspace, confirm}) {
     }, 1000);
 
     return <div className="keyboard">
-        <div>{LAYOUTS[layoutIndex].name}</div>
+        <div className="key">{LAYOUTS[layoutIndex].name}</div>
         <div>
             {LAYOUTS[layoutIndex].keys.map((row, y) => {
-                return <div>
-                    {row.forEach((char, x) => {
-                        return <div className={`key ${(typeof clampedPosition !== "string" && (clampedPosition.x === x && clampedPosition.y === y) ? "selected" : "")}`}>{char}</div>
+                return <div key={y}>
+                    {row.map((char, x) => {
+                        return <div key={x} className={`key ${(typeof clampedPosition !== "string" && (clampedPosition.x === x && clampedPosition.y === y) ? "selected" : "")}`}>{char}</div>
                     })}
                 </div>;
             })}
@@ -240,7 +240,7 @@ function VirtualKeyboardLayout({append, backspace, confirm}) {
                 <div className={`key ${clampedPosition === "SPACE" ? "selected" : ""}`}>SPACE</div>
                 <div className={`key ${clampedPosition === "BACKSPACE" ? "selected" : ""}`}>BACKSPACE</div>
                 <div className={`key ${clampedPosition === "CONFIRM" ? "selected" : ""}`}>CONFIRM</div>
-            </div>;
+            </div>
         </div>
     </div>;
 }
@@ -327,7 +327,7 @@ export default forwardRef(({ allowCancelWithRT }, ref) => {
             <div className="text-red" style={{position: "absolute", right: "48px", textAlign: "right"}}>
                 Press <R2/> to cancel<br />
                 Press <R1/> to switch keyboard layout<br />
-                Press <BRight/> to write/delete/confirm
+                Press <BLeft/> to write/delete/confirm
             </div>
             <div className="text-soft" style={{
                 position: "absolute",
