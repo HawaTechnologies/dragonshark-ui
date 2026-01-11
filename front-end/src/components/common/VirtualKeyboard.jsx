@@ -263,15 +263,18 @@ function secretize(v) {
 }
 
 /**
- * This is a virtual keyboard. It is triggered on a
- * @param fieldCaption The caption for the field, so the user knows what
- * are they editing.
- * @param value The initial value of the field (always a string).
- * @param onChange A callback that will be triggered when the value is
- * confirmed by the user.
+ * This is a virtual keyboard. It is triggered by using a handle
+ * and invoking .open(caption, isSecret, initialValue, onChange)
+ * where caption is the visual hint of the edited field, isSecret
+ * tells whether it's a password, initialValue tells the initial
+ * value (typically, empty string) and onChange is the callback
+ * for the edited value (a state setter, typically). The handle
+ * also supports a manual .cancel() method to close the keyboard.
+ * @param allowCancelWithRT tells whether the keyboard can be
+ * cancelled / closed by pressing R2 or not.
  * @constructor
  */
-export default forwardRef(({}, ref) => {
+export default forwardRef(({ allowCancelWithRT }, ref) => {
     const [caption, setCaption] = useState("");
     const [open, setOpen] = useState(false);
     const [value, setValue] = useState("");
@@ -294,7 +297,9 @@ export default forwardRef(({}, ref) => {
         // Closes the virtual keyboard, cancelling.
         setOpen(false);
     }, [setOpen]);
-    usePressEffect(RT, 500, () => setOpen(false));
+    usePressEffect(RT, 500, () => {
+        if (allowCancelWithRT !== false) setOpen(false);
+    });
 
     // The `ref` must set an object with methods such as:
     // - open(caption, isSecret, value, onChange) -> Opens the object for a component and its value.
@@ -308,7 +313,7 @@ export default forwardRef(({}, ref) => {
             setCaption(caption);
             setIsSecret(isSecret);
             setValue(value);
-            setOnChange({callback: () => { onChange(value) }})
+            setOnChange({callback: () => { onChange(value) }});
             setOpen(true);
         },
         cancel
