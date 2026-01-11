@@ -323,26 +323,22 @@ export default forwardRef(({ allowCancelWithRT }, ref) => {
     if (!open) {
         return <></>;
     } else {
-        return <Panel style={{position: "absolute", left: "48px", right: "48px", bottom: "208px", top: "288px"}}>
+        return <Panel style={{position: "absolute", left: "10%", right: "10%", bottom: "10%", top: "15%"}}>
             <div className="text-red" style={{position: "absolute", right: "48px", textAlign: "right"}}>
                 Press <R2/> to cancel<br />
                 Press <R1/> to switch keyboard layout<br />
-                Press <BRight/> to write/delete a character or confirm
+                Press <BRight/> to write/delete/confirm
             </div>
             <div className="text-soft" style={{
                 position: "absolute",
-                top: "48px",
-                left: "50%",
-                transform: "translateX(-50%)",
-                fontSize: "20px"
+                left: "48px"
             }}>Editing: {caption}</div>
 
             <Panel style={{
                 position: "absolute",
-                top: "96px",
-                left: "50%",
-                width: "400px",
-                transform: "translateX(-50%)"
+                top: "64px",
+                left: "48px",
+                width: "400px"
             }}>
                 <input type="text" value={isSecret ? secretize(value) : value}
                        style={{width: "100%", fontSize: "20px"}} />

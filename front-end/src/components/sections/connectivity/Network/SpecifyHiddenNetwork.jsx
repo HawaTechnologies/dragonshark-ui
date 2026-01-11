@@ -4,7 +4,7 @@ import {getDiscreteAxisStates, useGamepad, usePressEffect} from "../../../hooks/
 import * as React from "react";
 import {BDown} from "../../../common/icons/RightPanelButton.jsx";
 import BaseActivitySection from "../../BaseActivitySection.jsx";
-import ProgressText from "../../../common/ProgressText.jsx";
+import VirtualKeyboard from "../../../common/VirtualKeyboard.jsx";
 
 const network = window.dragonSharkAPI.network;
 
@@ -17,11 +17,24 @@ export default function SpecifyHiddenNetwork() {
     const params = useParams();
     const interface_ = params["interface"];
     const navigate = useNavigate();
+    const handle = useRef(null);
+    const [networkName, setNetworkName] = useState(null);
+
+    useEffect(() => {
+        handle.current.open("Network name", false, "", setNetworkName);
+    }, []);
+
+    useEffect(() => {
+        const _name = networkName && networkName.trim();
+        if (typeof _name === "string" && _name) {
+            navigate("/connectivity/network/interfaces/:interface/connect/:network".replace(
+                ":interface", interface_
+            ).replace(":network", _name || ""));
+        }
+    }, [networkName]);
 
     return <BaseActivitySection caption="Choose Hidden Network for Interface"
                                 backPath={"/connectivity/network/interfaces/" + interface_}>
-        <div style={{position: "absolute", left: "50%", top: "50%", transform: "translate(-50%, -50%)"}}>
-            TODO implement
-        </div>
+        <VirtualKeyboard ref={handle} allowCancelWithRT={false} />
     </BaseActivitySection>;
 }
