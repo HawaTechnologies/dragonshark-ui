@@ -59,7 +59,7 @@ function clamp(position, layoutIndex) {
         default:
             const length = LAYOUTS[layoutIndex].keys.length;
             const clampedY = Math.min(length - 1, Math.max(0, position.y));
-            const rowLength = LAYOUTS[layoutIndex].keys[clampedY].length - 1;
+            const rowLength = LAYOUTS[layoutIndex].keys[clampedY].length;
             const clampedX = Math.min(rowLength - 1, Math.max(0, position.x));
             return {x: clampedX, y: clampedY};
     }
@@ -86,7 +86,7 @@ function up(clampedPosition, layoutIndex) {
             return {x: 6, y: nRows - 1};
         default:
             const {x, y} = clampedPosition;
-            if (x === 0) {
+            if (y === 0) {
                 return {x, y};
             } else {
                 return {x, y: y - 1};
