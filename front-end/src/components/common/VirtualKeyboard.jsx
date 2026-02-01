@@ -3,7 +3,7 @@ import {forwardRef, useCallback, useImperativeHandle, useMemo, useState, useRef}
 import {getDiscreteAxisStates, useGamepad, usePressEffect} from "../hooks/gamepad";
 import Panel from "./Panel.jsx";
 import {R1, R2} from "./icons/TextButton.jsx";
-import {BLeft} from "./icons/RightPanelButton.jsx";
+import {BDown} from "./icons/RightPanelButton.jsx";
 
 const LAYOUTS = [
     // letters
@@ -201,7 +201,7 @@ function VirtualKeyboardLayout({append, backspace, confirm}) {
         () => clamp(position, layoutIndex),
         [position, layoutIndex]
     );
-    const {joystick: [leftRightAxis, upDownAxis], buttonX: keyPressed} = useGamepad();
+    const {joystick: [leftRightAxis, upDownAxis], buttonA: keyPressed} = useGamepad();
     const {down: leftPressed, up: rightPressed} = getDiscreteAxisStates(leftRightAxis);
     const {down: upPressed, up: downPressed} = getDiscreteAxisStates(upDownAxis);
     usePressEffect(leftPressed, 500, () => setPosition(left(clampedPosition, layoutIndex)));
@@ -329,10 +329,10 @@ export default forwardRef(({ allowCancelWithRT }, ref) => {
         return <></>;
     } else {
         return <Panel style={{position: "absolute", left: "10%", right: "10%", bottom: "10%", top: "15%"}}>
-            <div className="text-red" style={{position: "absolute", right: "48px", textAlign: "right"}}>
-                Press <R2/> to cancel<br />
+            <div style={{position: "absolute", right: "48px", textAlign: "right"}}>
+                {allowCancelWithRT && <>Press <R2/> to cancel<br /></>}
                 Press <R1/> to switch keyboard layout<br />
-                Press <BLeft/> to write/delete/confirm
+                Press <BDown/> to write/delete/confirm
             </div>
             <div className="text-soft" style={{
                 position: "absolute",
@@ -345,7 +345,7 @@ export default forwardRef(({ allowCancelWithRT }, ref) => {
                 left: "48px",
                 width: "400px"
             }}>
-                <input type="text" value={isSecret ? secretize(value) : value}
+                <input type="text" value={isSecret ? secretize(value) : value} readOnly
                        style={{width: "100%", fontSize: "20px"}} />
             </Panel>
             <VirtualKeyboardLayout confirm={confirm} append={append} backspace={backspace} />
