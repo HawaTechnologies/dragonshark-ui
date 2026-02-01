@@ -1,5 +1,5 @@
 import * as React from "react";
-import {forwardRef, useCallback, useImperativeHandle, useMemo, useState} from "react";
+import {forwardRef, useCallback, useImperativeHandle, useMemo, useState, useRef} from "react";
 import {getDiscreteAxisStates, useGamepad, usePressEffect} from "../hooks/gamepad";
 import Panel from "./Panel.jsx";
 import {R1, R2} from "./icons/TextButton.jsx";
@@ -187,7 +187,7 @@ function VirtualKeyboardLayout({append, backspace, confirm}) {
     const [layoutIndex, setLayoutIndex] = useState(0);
     // We install the pressed effect for it.
     const f = useCallback(() => {
-        setLayoutIndex(layoutIndex >= LAYOUTS.length ? 0 : layoutIndex + 1);
+        setLayoutIndex(layoutIndex >= LAYOUTS.length - 1 ? 0 : layoutIndex + 1);
     }, [layoutIndex]);
     usePressEffect(RB, 500, f);
 
@@ -301,6 +301,9 @@ export default forwardRef(({ allowCancelWithRT }, ref) => {
         if (allowCancelWithRT !== false) setOpen(false);
     });
 
+    const r = useRef(null);
+    r.current = value;
+
     // The `ref` must set an object with methods such as:
     // - open(caption, isSecret, value, onChange) -> Opens the object for a component and its value.
     // - cancel() -> Cancels the edition.
@@ -313,11 +316,13 @@ export default forwardRef(({ allowCancelWithRT }, ref) => {
             setCaption(caption);
             setIsSecret(isSecret);
             setValue(value);
-            setOnChange({callback: () => { onChange(value) }});
+            setOnChange({callback: () => {
+                onChange(value);
+            }});
             setOpen(true);
         },
         cancel
-    }));
+    }), [r]);
 
     // Rendering the actual keyboard layout for good.
     if (!open) {
