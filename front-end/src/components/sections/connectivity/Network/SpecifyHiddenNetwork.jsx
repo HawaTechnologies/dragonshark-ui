@@ -13,6 +13,8 @@ export default function SpecifyHiddenNetwork() {
     const params = useParams();
     const interface_ = params["interface"];
     const navigate = useNavigate();
+
+    // 2. Input handles, states and effects.
     const handle = useRef(null);
     const [networkName, setNetworkName] = useState(null);
 
@@ -25,7 +27,7 @@ export default function SpecifyHiddenNetwork() {
         if (typeof _name === "string" && _name) {
             const route = "/connectivity/network/interfaces/:interface/connect/:network".replace(
                 ":interface", interface_
-            ).replace(":network", _name || "");
+            ).replace(":network", encodeURIComponent(_name || ""));
             navigate(route);
         }
     }, [networkName]);
