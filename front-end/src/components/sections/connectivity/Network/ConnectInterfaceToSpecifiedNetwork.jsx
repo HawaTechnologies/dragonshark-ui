@@ -12,7 +12,8 @@ import BaseActivitySection from "../../BaseActivitySection.jsx";
 export default function ConnectInterfaceToSpecifiedNetwork() {
     // 1. Get the parameters and the navigate function.
     const params = useParams();
-    const { interface: interface_, network} = params;
+    let { interface: interface_, network} = params;
+    network = decodeURIComponent(network);
     const navigate = useNavigate();
 
     // 2. Get the buttons.
@@ -20,12 +21,12 @@ export default function ConnectInterfaceToSpecifiedNetwork() {
     usePressEffect(buttonAPressed, 500, () => {
         navigate("/connectivity/network/interfaces/:interface/connect/:network/input-password".replace(
             ":interface", interface_
-        ).replace(":network", network));
+        ).replace(":network", encodeURIComponent(network)));
     });
     usePressEffect(buttonBPressed, 500, () => {
         navigate("/connectivity/network/interfaces/:interface/connect/:network/no-password".replace(
             ":interface", interface_
-        ).replace(":network", network));
+        ).replace(":network", encodeURIComponent(network)));
     });
 
     return <BaseActivitySection caption="Connect Interface to Network"
