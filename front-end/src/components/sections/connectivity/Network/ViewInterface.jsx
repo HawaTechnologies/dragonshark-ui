@@ -78,7 +78,7 @@ export default function ViewInterface() {
     });
     usePressEffect(keyAPressed, 500, () => {
         if (!networks.length) return;
-        navigate(`/connectivity/network/interfaces/${interface_}/connect/${networks[effectiveCurrentSSIDIndex][1]}`);
+        navigate(`/connectivity/network/interfaces/${interface_}/connect/${encodeURIComponent(networks[effectiveCurrentSSIDIndex][1])}`);
     }, 1000);
     usePressEffect(keyBPressed, 500, () => {
         if (!networks.length) return;
