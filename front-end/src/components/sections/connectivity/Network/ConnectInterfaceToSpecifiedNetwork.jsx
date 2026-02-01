@@ -5,8 +5,9 @@ import {BDown, BRight} from "../../../common/icons/RightPanelButton.jsx";
 import BaseActivitySection from "../../BaseActivitySection.jsx";
 
 /**
- * This component is meant to choose a new (listed) network for
- * the selected wireless interface.
+ * This component is meant to connect the interface to
+ * the chosen network, by prompting the user to choose
+ * whether try a password or not.
  */
 export default function ConnectInterfaceToSpecifiedNetwork() {
     // 1. Get the parameters and the navigate function.

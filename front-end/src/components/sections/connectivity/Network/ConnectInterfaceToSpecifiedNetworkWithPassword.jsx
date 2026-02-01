@@ -7,13 +7,13 @@ import ProgressText from "../../../common/ProgressText.jsx";
 const network = window.dragonSharkAPI.network;
 
 /**
- * This component is meant to connect to the chosen network without
- * a password.
+ * This component is meant to connect to the chosen network with
+ * a provided password.
  */
-export default function ConnectInterfaceToSpecifiedNetworkNoPassword() {
+export default function ConnectInterfaceToSpecifiedNetworkInputPassword() {
     // 1. Get the parameters and the navigate function.
     const params = useParams();
-    const { interface: interface_, network: network_} = params;
+    const { interface: interface_, network: network_, password} = params;
     const navigate = useNavigate();
 
     // 2. Connection status is kept here.
@@ -21,7 +21,7 @@ export default function ConnectInterfaceToSpecifiedNetworkNoPassword() {
     useEffect(function() {
         setStatus("trying");
         (async () => {
-            const { code } = await network.connectToNetwork(network_, "", interface_);
+            const { code } = await network.connectToNetwork(network_, password, interface_);
             if (code === 0) {
                 navigate("/connectivity/network/interfaces/" + interface_);
             } else {
