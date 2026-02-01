@@ -1,12 +1,8 @@
 import {useNavigate, useParams} from "react-router-dom";
-import {useEffect, useMemo, useRef, useState} from "react";
-import {getDiscreteAxisStates, useGamepad, usePressEffect} from "../../../hooks/gamepad";
+import {useGamepad, usePressEffect} from "../../../hooks/gamepad";
 import * as React from "react";
-import {BDown} from "../../../common/icons/RightPanelButton.jsx";
+import {BDown, BRight} from "../../../common/icons/RightPanelButton.jsx";
 import BaseActivitySection from "../../BaseActivitySection.jsx";
-import ProgressText from "../../../common/ProgressText.jsx";
-
-const network = window.dragonSharkAPI.network;
 
 /**
  * This component is meant to choose a new (listed) network for
@@ -15,11 +11,32 @@ const network = window.dragonSharkAPI.network;
 export default function ConnectInterfaceToSpecifiedNetwork() {
     // 1. Get the parameters and the navigate function.
     const params = useParams();
-    const interface_ = params["interface"];
+    const { interface: interface_, network} = params;
     const navigate = useNavigate();
 
-    return <BaseActivitySection caption="Choose Network for Interface"
+    // 2. Get the buttons.
+    const {buttonA: buttonAPressed, buttonB: buttonBPressed} = useGamepad();
+    usePressEffect(buttonAPressed, 500, () => {
+        navigate("/connectivity/network/interfaces/:interface/connect/:network/input-password".replace(
+            ":interface", interface_
+        ).replace(":network", network));
+    });
+    usePressEffect(buttonBPressed, 500, () => {
+        navigate("/connectivity/network/interfaces/:interface/connect/:network/no-password".replace(
+            ":interface", interface_
+        ).replace(":network", network));
+    });
+
+    return <BaseActivitySection caption="Connect Interface to Network"
                                 backPath={"/connectivity/network/interfaces/" + interface_}>
-        <div className="text-bigger">TODO implement</div>
+        <div style={{position: "absolute", left: "10%", right: "10%", bottom: "10%", top: "15%"}}>
+            <div>
+                Connecting interface '{interface_}' to network: {network}.
+            </div>
+            <div>
+                Press <BDown /> to input a password.<br/>
+                Press <BRight /> to connect without a password.
+            </div>
+        </div>
     </BaseActivitySection>;
 }
