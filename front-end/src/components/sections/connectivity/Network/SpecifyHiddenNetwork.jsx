@@ -1,10 +1,8 @@
 import {useNavigate, useParams} from "react-router-dom";
-import {useEffect, useMemo, useRef, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import * as React from "react";
 import BaseActivitySection from "../../BaseActivitySection.jsx";
 import VirtualKeyboard from "../../../common/VirtualKeyboard.jsx";
-
-const network = window.dragonSharkAPI.network;
 
 /**
  * This component is meant to choose a new (hidden) network for
