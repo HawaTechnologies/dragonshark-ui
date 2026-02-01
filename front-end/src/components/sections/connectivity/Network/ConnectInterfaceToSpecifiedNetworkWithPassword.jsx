@@ -13,7 +13,9 @@ const network = window.dragonSharkAPI.network;
 export default function ConnectInterfaceToSpecifiedNetworkInputPassword() {
     // 1. Get the parameters and the navigate function.
     const params = useParams();
-    const { interface: interface_, network: network_, password} = params;
+    let { interface: interface_, network: network_, password} = params;
+    password = decodeURIComponent(password);
+    network_ = decodeURIComponent(network_);
     const navigate = useNavigate();
 
     // 2. Connection status is kept here.
