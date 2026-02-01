@@ -21,7 +21,14 @@ import DateTime from "./sections/userexperience/DateTime.jsx";
 import RestartInDebugMode from "./sections/advanced/RestartInDebugMode.jsx";
 import ChooseInterface from "./sections/connectivity/Network/ChooseInterface.jsx";
 import ViewInterface from "./sections/connectivity/Network/ViewInterface.jsx";
-import ConnectInterfaceToSpecifiedNetwork from "./sections/connectivity/Network/ConnectInterfaceToSpecifiedNetwork.jsx";
+import ConnectInterfaceToSpecifiedNetwork from
+    "./sections/connectivity/Network/ConnectInterfaceToSpecifiedNetwork.jsx";
+import ConnectInterfaceToSpecifiedNetworkNoPassword from
+    "./sections/connectivity/Network/ConnectInterfaceToSpecifiedNetworkNoPassword.jsx";
+import ConnectInterfaceToSpecifiedNetworkInputPassword from
+    "./sections/connectivity/Network/ConnectInterfaceToSpecifiedNetworkInputPassword.jsx";
+import ConnectInterfaceToSpecifiedNetworkWithPassword from
+    "./sections/connectivity/Network/ConnectInterfaceToSpecifiedNetworkWithPassword.jsx";
 import SpecifyHiddenNetwork from "./sections/connectivity/Network/SpecifyHiddenNetwork.jsx";
 
 export default function App() {
@@ -53,6 +60,12 @@ export default function App() {
                     <Route path="/connectivity/network/interfaces/:interface" Component={ViewInterface} />
                     <Route path="/connectivity/network/interfaces/:interface/connect/:network"
                            Component={ConnectInterfaceToSpecifiedNetwork} />
+                    <Route path="/connectivity/network/interfaces/:interface/connect/:network/no-password"
+                           Component={ConnectInterfaceToSpecifiedNetworkNoPassword} />
+                    <Route path="/connectivity/network/interfaces/:interface/connect/:network/input-password"
+                           Component={ConnectInterfaceToSpecifiedNetworkInputPassword} />
+                    <Route path="/connectivity/network/interfaces/:interface/connect/:network/with-password/:password"
+                           Component={ConnectInterfaceToSpecifiedNetworkWithPassword} />
                     <Route path="/connectivity/network/interfaces/:interface/specify-hidden-network"
                            Component={SpecifyHiddenNetwork} />
                     <Route path="/connectivity/virtualpad" Component={VirtualPad} />
