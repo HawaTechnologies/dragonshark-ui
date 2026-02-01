@@ -108,13 +108,13 @@ export default function ViewInterface() {
             );
             let component2 = networks && networks.length ? <div>
                 <div>
-                    <span className="text-red">⮜</span>
+                    Choose a network: <span className="text-red">⮜</span>
                     <div style={{display: "inline-block", padding: "0 8px"}}>
                         {networks[effectiveCurrentSSIDIndex][1]} ({networks[effectiveCurrentSSIDIndex][2]}%)
                     </div>
                     <span className="text-blue">⮞</span>
                 </div>
-                <div>Press <BDown/> to select this interface.</div>
+                <div>Press <BDown/> to to connect to this network.</div>
                 <div>Press <BRight /> to connect to a hidden network.</div>
             </div> : <div>
                 <div>There are no networks available.</div>
