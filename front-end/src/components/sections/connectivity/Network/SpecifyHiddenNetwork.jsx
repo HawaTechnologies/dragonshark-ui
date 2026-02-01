@@ -1,8 +1,6 @@
 import {useNavigate, useParams} from "react-router-dom";
 import {useEffect, useMemo, useRef, useState} from "react";
-import {getDiscreteAxisStates, useGamepad, usePressEffect} from "../../../hooks/gamepad";
 import * as React from "react";
-import {BDown} from "../../../common/icons/RightPanelButton.jsx";
 import BaseActivitySection from "../../BaseActivitySection.jsx";
 import VirtualKeyboard from "../../../common/VirtualKeyboard.jsx";
 
@@ -27,9 +25,10 @@ export default function SpecifyHiddenNetwork() {
     useEffect(() => {
         const _name = networkName && networkName.trim();
         if (typeof _name === "string" && _name) {
-            navigate("/connectivity/network/interfaces/:interface/connect/:network".replace(
+            const route = "/connectivity/network/interfaces/:interface/connect/:network".replace(
                 ":interface", interface_
-            ).replace(":network", _name || ""));
+            ).replace(":network", _name || "");
+            navigate(route);
         }
     }, [networkName]);
 
