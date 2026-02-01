@@ -317,7 +317,7 @@ export default forwardRef(({ allowCancelWithRT }, ref) => {
             setIsSecret(isSecret);
             setValue(value);
             setOnChange({callback: () => {
-                onChange(value);
+                onChange(r.current);
             }});
             setOpen(true);
         },
