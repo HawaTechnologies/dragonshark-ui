@@ -19,7 +19,7 @@ export default function ConnectInterfaceToSpecifiedNetworkInputPassword() {
     const [password, setPassword] = useState("");
 
     useEffect(() => {
-        handle.current.open(`Setting password for network: ${network}.`, false, "", setPassword);
+        handle.current.open(`Setting password for network: ${network}.`, true, "", setPassword);
     }, []);
 
     useEffect(() => {
