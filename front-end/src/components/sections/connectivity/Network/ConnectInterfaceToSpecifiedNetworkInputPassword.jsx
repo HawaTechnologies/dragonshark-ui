@@ -2,7 +2,7 @@ import {useNavigate, useParams} from "react-router-dom";
 import {useEffect, useRef, useState} from "react";
 import * as React from "react";
 import BaseActivitySection from "../../BaseActivitySection.jsx";
-import VirtualKeyboard from "../../../common/VirtualKeyboard";
+import VirtualKeyboard from "../../../common/VirtualKeyboard.jsx";
 
 /**
  * This component is meant to input a password for the chosen network.
