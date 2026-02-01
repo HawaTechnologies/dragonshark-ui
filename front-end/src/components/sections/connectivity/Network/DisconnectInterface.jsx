@@ -7,15 +7,12 @@ import ProgressText from "../../../common/ProgressText.jsx";
 const network = window.dragonSharkAPI.network;
 
 /**
- * This component is meant to connect to the chosen network with
- * a provided password.
+ * Disconnects the chosen network interface.
  */
-export default function ConnectInterfaceToSpecifiedNetworkInputPassword() {
+export default function DisconnectInterface() {
     // 1. Get the parameters and the navigate function.
     const params = useParams();
-    let { interface: interface_, network: network_, password} = params;
-    password = decodeURIComponent(password);
-    network_ = decodeURIComponent(network_);
+    let { interface: interface_} = params;
     const navigate = useNavigate();
 
     // 2. Connection status is kept here.
@@ -23,7 +20,7 @@ export default function ConnectInterfaceToSpecifiedNetworkInputPassword() {
     useEffect(function() {
         setStatus("trying");
         (async () => {
-            const { code } = await network.connectToNetwork(network_, password, interface_);
+            const { code } = await network.disconnectFromNetwork(interface_);
             if (code === 0) {
                 navigate("/connectivity/network/interfaces/" + interface_);
             } else {
@@ -36,14 +33,11 @@ export default function ConnectInterfaceToSpecifiedNetworkInputPassword() {
         })();
     }, []);
 
-    return <BaseActivitySection caption="Connect Interface to Network"
+    return <BaseActivitySection caption="Disconnecting Interface"
                                 backPath={"/connectivity/network/interfaces/" + interface_}>
         <div style={{position: "absolute", left: "10%", right: "10%", bottom: "10%", top: "15%"}}>
-            <div>
-                Connecting interface '{interface_}' to network: {network_}.
-            </div>
-            {(status === "trying") && <ProgressText>Attempting connection with interface '{interface_}' to network: {network_}</ProgressText>}
-            {(status === "error") && <div>Could not connect interface '{interface_}' to network: {network_}.</div>}
+            {(status === "trying") && <ProgressText>Disconnecting interface '{interface_}'</ProgressText>}
+            {(status === "error") && <div>Could not disconnect interface '{interface_}'.</div>}
         </div>
     </BaseActivitySection>;
 }

@@ -30,6 +30,7 @@ import ConnectInterfaceToSpecifiedNetworkInputPassword from
 import ConnectInterfaceToSpecifiedNetworkWithPassword from
     "./sections/connectivity/Network/ConnectInterfaceToSpecifiedNetworkWithPassword.jsx";
 import SpecifyHiddenNetwork from "./sections/connectivity/Network/SpecifyHiddenNetwork.jsx";
+import DisconnectInterface from "./sections/connectivity/Network/DisconnectInterface.jsx";
 
 export default function App() {
     return <>
@@ -68,6 +69,8 @@ export default function App() {
                            Component={ConnectInterfaceToSpecifiedNetworkWithPassword} />
                     <Route path="/connectivity/network/interfaces/:interface/specify-hidden-network"
                            Component={SpecifyHiddenNetwork} />
+                    <Route path="/connectivity/network/interfaces/:interface/disconnect"
+                           Component={DisconnectInterface} />
                     <Route path="/connectivity/virtualpad" Component={VirtualPad} />
                     <Route path="/user-experience" Component={UserExperience} />
                     <Route path="/user-experience/sound" Component={Sound} />

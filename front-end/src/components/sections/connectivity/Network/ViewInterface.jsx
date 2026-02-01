@@ -2,7 +2,7 @@ import * as React from "react";
 import {useNavigate, useParams} from "react-router-dom";
 import BaseActivitySection from "../../BaseActivitySection.jsx";
 import {useEffect, useMemo, useRef, useState} from "react";
-import {BDown, BRight} from "../../../common/icons/RightPanelButton.jsx";
+import {BDown, BRight, BLeft} from "../../../common/icons/RightPanelButton.jsx";
 import {getDiscreteAxisStates, useGamepad, usePressEffect} from "../../../hooks/gamepad";
 import ProgressText from "../../../common/ProgressText.jsx";
 
@@ -64,7 +64,10 @@ export default function ViewInterface() {
     }, [currentSSIDIndex]);
 
     // Also, this intends to select one of the networks.
-    const {joystick: [leftRightAxis, _], buttonA: keyAPressed, buttonB: keyBPressed} = useGamepad();
+    const {
+        joystick: [leftRightAxis, _],
+        buttonA: keyAPressed, buttonB: keyBPressed, buttonX: keyXPressed
+    } = useGamepad();
     const {down: leftPressed, up: rightPressed} = getDiscreteAxisStates(leftRightAxis);
     usePressEffect(leftPressed, 500, () => {
         if (!networks.length) return;
@@ -84,6 +87,10 @@ export default function ViewInterface() {
         if (!networks.length) return;
         navigate(`/connectivity/network/interfaces/${interface_}/specify-hidden-network`);
     }, 1000);
+    usePressEffect(keyXPressed, 500, () => {
+        if (!currentNetwork) return;
+        navigate(`/connectivity/network/interfaces/${interface_}/disconnect`);
+    });
 
     // 3. Now, the users will have options:
     // 3.1. Which network is it connected to?
@@ -115,6 +122,7 @@ export default function ViewInterface() {
                     <span className="text-blue">⮞</span>
                 </div>
                 <div>Press <BDown/> to to connect to this network.</div>
+                {currentNetwork && <div>Press <BLeft/> to disconnect from the current network.</div>}
                 <div>Press <BRight /> to connect to a hidden network.</div>
             </div> : <div>
                 <div>There are no networks available.</div>

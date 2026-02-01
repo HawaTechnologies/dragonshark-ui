@@ -42,7 +42,7 @@ export default function ConnectInterfaceToSpecifiedNetworkNoPassword() {
                 Connecting interface '{interface_}' to network: {network_}.
             </div>
             {(status === "trying") && <ProgressText>Attempting connection with interface '{interface_}' to network: {network_}</ProgressText>}
-            {(status === "error") && <div>Could not connect interface '{interface_}' to network: {network_}</div>}
+            {(status === "error") && <div>Could not connect interface '{interface_}' to network: {network_}.</div>}
         </div>
     </BaseActivitySection>;
 }
