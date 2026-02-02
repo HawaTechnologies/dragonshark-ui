@@ -9,7 +9,8 @@ import emulationstation from "../../images/options/play/emulationstation.png";
 import configuration from "../../images/options/play/configuration.png";
 import savefiles from "../../images/options/play/savefiles.png";
 import {useGamepad, usePressEffect} from "../hooks/gamepad";
-import {useRef} from "react";
+
+const games = window.dragonSharkAPI.games;
 
 /**
  * The play section.
@@ -29,7 +30,7 @@ export default function Play() {
             <Option caption="Installed Games" image={installedgames} callback={() => navigate("/play/installed-games")} />
 
             {/* This is the "Emulation Station" section. Launches EmulationStation. */}
-            <Option caption="Emulation Station" image={emulationstation} callback={() => console.log("EmulationStation launch is not ready")} />
+            <Option caption="Emulation Station" image={emulationstation} callback={() => games.launchEmulationStation()} />
         </Section>
         <Section>
             {/* This is the "Save Files" section. Intended to back-up and restore saves. */}
