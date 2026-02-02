@@ -10,7 +10,7 @@ function getActiveNow() {
  * Tells whether the app is active or not.
  * @returns {*}
  */
-export function useAppActive() {
+export function useActive() {
     const [active, setActive] = useState(() => getActiveNow());
 
     useEffect(() => {
