@@ -89,8 +89,9 @@ export function getDiscreteAxisStates(value) {
  * @param interval The interval.
  * @param func The callback function.
  * @param delay An optional delay (for if we don't want the press effect to be available immediately).
+ * @param deps Extra dependencies.
  */
-export function usePressEffect(pressed, interval, func, delay = 0) {
+export function usePressEffect(pressed, interval, func, delay = 0, deps = null) {
     // A non-reactivizator ref.
     const ref = useRef(() => {});
     ref.current = func;
@@ -125,5 +126,5 @@ export function usePressEffect(pressed, interval, func, delay = 0) {
             // Do nothing.
             return () => {}
         }
-    }, [pressed, interval, ref, ready]);
+    }, [pressed, interval, ref, ready, ...(deps || [])]);
 }
