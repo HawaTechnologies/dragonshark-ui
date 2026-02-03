@@ -1,10 +1,11 @@
 import * as React from "react";
 import {useNavigate, useParams} from "react-router-dom";
 import BaseActivitySection from "../../BaseActivitySection.jsx";
-import {useEffect, useMemo, useRef, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
 import {BDown, BRight, BLeft} from "../../../common/icons/RightPanelButton.jsx";
-import {getDiscreteAxisStates, useGamepad, usePressEffect} from "../../../hooks/gamepad";
+import {useGamepad, usePressEffect} from "../../../hooks/gamepad";
 import ProgressText from "../../../common/ProgressText.jsx";
+import Select from "../../../common/Select.jsx";
 
 const network = window.dragonSharkAPI.network;
 
@@ -55,7 +56,17 @@ export default function ViewInterface() {
     }, [interface_]);
 
     // Destructuring the members of the network data.
-    const {status, stderr, networks, currentNetwork} = currentNetworkData;
+    const {status, networks, currentNetwork} = currentNetworkData;
+
+    // The network options for selection.
+    const networkOptions = useMemo(() => {
+        return (networks || []).map((e, index) => {
+            return {
+                label: `${e[1]} - ${e[2]}%`,
+                value: index
+            }
+        });
+    }, [networks]);
 
     // We're also keeping the current ssid to be selected.
     const [currentSSIDIndex, setCurrentSSIDIndex] = useState(0);
@@ -65,20 +76,8 @@ export default function ViewInterface() {
 
     // Also, this intends to select one of the networks.
     const {
-        joystick: [leftRightAxis, _],
         buttonA: keyAPressed, buttonB: keyBPressed, buttonX: keyXPressed
     } = useGamepad();
-    const {down: leftPressed, up: rightPressed} = getDiscreteAxisStates(leftRightAxis);
-    usePressEffect(leftPressed, 500, () => {
-        if (!networks.length) return;
-        const l = networks.length;
-        setCurrentSSIDIndex(effectiveCurrentSSIDIndex === 0 ? l - 1 : effectiveCurrentSSIDIndex - 1);
-    });
-    usePressEffect(rightPressed, 500, () => {
-        if (!networks.length) return;
-        const l = networks.length;
-        setCurrentSSIDIndex(effectiveCurrentSSIDIndex === l - 1 ? 0 : effectiveCurrentSSIDIndex + 1);
-    });
     usePressEffect(keyAPressed, 500, () => {
         if (!networks.length) return;
         navigate(`/connectivity/network/interfaces/${interface_}/connect/${encodeURIComponent(networks[effectiveCurrentSSIDIndex][1])}`);
@@ -115,11 +114,8 @@ export default function ViewInterface() {
             );
             let component2 = networks && networks.length ? <div>
                 <div>
-                    Choose a network: <span className="text-red">⮜</span>
-                    <div style={{display: "inline-block", padding: "0 8px"}}>
-                        {networks[effectiveCurrentSSIDIndex][1]} ({networks[effectiveCurrentSSIDIndex][2]}%)
-                    </div>
-                    <span className="text-blue">⮞</span>
+                    Choose a network: <Select value={currentSSIDIndex} onChange={setCurrentSSIDIndex}
+                                              options={networkOptions} />
                 </div>
                 <div>Press <BDown/> to to connect to this network.</div>
                 {currentNetwork && <div>Press <BLeft/> to disconnect from the current network.</div>}

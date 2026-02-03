@@ -5,6 +5,7 @@ import * as React from "react";
 import {BDown} from "../../../common/icons/RightPanelButton.jsx";
 import BaseActivitySection from "../../BaseActivitySection.jsx";
 import ProgressText from "../../../common/ProgressText.jsx";
+import Select from "../../../common/Select.jsx";
 
 const network = window.dragonSharkAPI.network;
 
@@ -65,16 +66,8 @@ export default function ChooseInterface() {
 
     // Finally, also only meaningful for "success", we have the
     // setup of keys:
-    const {joystick: [leftRightAxis, _], buttonA: keyPressed} = useGamepad();
-    const {down: leftPressed, up: rightPressed} = getDiscreteAxisStates(leftRightAxis);
-    usePressEffect(leftPressed, 500, () => {
-        const l = interfaceFetchData.interfaces.length;
-        setSelectedInterface(selectedInterface === 0 ? l - 1 : selectedInterface - 1);
-    });
-    usePressEffect(rightPressed, 500, () => {
-        const l = interfaceFetchData.interfaces.length;
-        setSelectedInterface(selectedInterface === l - 1 ? 0 : selectedInterface + 1);
-    });
+    const {buttonA: keyPressed} = useGamepad();
+
     usePressEffect(keyPressed, 500, () => {
         navigate("/connectivity/network/interfaces/" + selectedInterfaceName);
     }, 1000);
@@ -116,9 +109,8 @@ export default function ChooseInterface() {
                 textAlign: "center", position: "absolute", left: "50%", top: "50%", transform: "translate(-50%, -50%)"
             }}>
                 <div>
-                    <span className="text-red">⮜</span>
-                    <div style={{display: "inline-block", padding: "0 8px"}}>{selectedInterfaceName}</div>
-                    <span className="text-blue">⮞</span>
+                    <Select value={selectedInterface} onChange={setSelectedInterface}
+                            options={interfaceFetchData.interfaces} />
                 </div>
                 <div>
                     Press <BDown /> to select this interface.

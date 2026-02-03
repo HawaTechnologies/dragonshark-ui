@@ -72,6 +72,9 @@ export default function Select({
             }
         } else {
             setSelectedIndex(index);
+            if (value !== getValue(options[0])) {
+                onChange(getValue(options[0]));
+            }
         }
     }, [options, value]);
 
