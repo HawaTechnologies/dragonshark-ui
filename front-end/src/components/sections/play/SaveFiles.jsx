@@ -68,18 +68,10 @@ export default function SaveFiles() {
     }, 1000);
     useEffect(() => {
         refreshExternalDevices();
+        let _ = games.setupSavesDirs();
     }, []);
 
     return <BaseActivitySection caption="Save Files" backPath="/play">
-        {/*
-          * Managing the saves file involves:
-          * - Ensuring the saves layout is present - games.setupSavesDirs().
-          * - Refreshing the list of available units - games.listExternalDeviceDirs().
-          * - Backup to a certain directory - games.backupSavesDirs(dir).
-          * - Restore from a certain directory - games.restoreSavesDirs(dir).
-          * The directory in the parameters is a directory among the ones
-          * returned by games.listExternalDeviceDirs().
-          */}
         <div className="text-bigger" style={{
             position: "absolute",
             left: "50%", top: "50%", width: "80%",
