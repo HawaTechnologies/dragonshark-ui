@@ -56,6 +56,7 @@ export default function Configuration() {
     } = useGamepad();
 
     usePressEffect(keyAPressed, 500, () => {
+        if (!externalDevices || !externalDevices.length) return;
         setMessage("Setting ROMs directory...");
         (async() => {
             try {
@@ -98,10 +99,12 @@ export default function Configuration() {
             left: "50%", top: "50%", width: "80%",
             transform: "translate(-50%, -50%)"
         }}>
-            <div>
-                Storage unit: <Select value={romsDirectory} onChange={setRomsDirectory} options={externalDevices}/>
-            </div>
-            <div>Press <BDown/> to choose the current storage unit.</div>
+            {(externalDevices?.length) ? (<>
+                <div>
+                    Storage unit: <Select value={romsDirectory} onChange={setRomsDirectory} options={externalDevices}/>
+                </div>
+                <div>Press <BDown/> to choose the current storage unit.</div>
+            </>) : null}
             <div>Press <BLeft/> to refresh the list of storage units.</div>
             {message && <div>{message}</div>}
         </div>

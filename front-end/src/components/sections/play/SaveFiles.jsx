@@ -42,8 +42,10 @@ export default function SaveFiles() {
         buttonA: keyAPressed, buttonB: keyBPressed, buttonX: keyXPressed
     } = useGamepad();
     usePressEffect(keyAPressed, 500, () => {
+        if (!externalDevices || !externalDevices.length) return;
         setMessage("Making backup.zip file...");
         games.backupSavesDirs(backupDevice).catch(() => {
+            refreshExternalDevices();
             setMessage("Error creating backup.zip file.");
         }).then(() => {
             setMessage("Backup created successfully.");
@@ -53,8 +55,10 @@ export default function SaveFiles() {
         });
     }, 1000);
     usePressEffect(keyBPressed, 500, () => {
+        if (!externalDevices || !externalDevices.length) return;
         setMessage("Restoring backup.zip file...");
         games.restoreSavesDirs(backupDevice).catch(() => {
+            refreshExternalDevices();
             setMessage("Error restoring backup.zip file (perhaps does not exist).");
         }).then(() => {
             setMessage("Restore performed successfully.");
@@ -77,12 +81,14 @@ export default function SaveFiles() {
             left: "50%", top: "50%", width: "80%",
             transform: "translate(-50%, -50%)"
         }}>
-            <div>
-                Storage unit: <Select value={backupDevice} onChange={setBackupDevice} options={externalDevices} />
-            </div>
-            <div>Press <BDown /> to do a saves backup to the storage unit.</div>
-            <div>Press <BRight /> to do a saves restore from the storage unit.</div>
-            <div>Press <BLeft /> to refresh the list of storage units.</div>
+            {(externalDevices?.length) ? (<>
+                <div>
+                    Storage unit: <Select value={backupDevice} onChange={setBackupDevice} options={externalDevices}/>
+                </div>
+                <div>Press <BDown/> to do a saves backup to the storage unit.</div>
+                <div>Press <BRight/> to do a saves restore from the storage unit.</div>
+            </>) : null}
+            <div>Press <BLeft/> to refresh the list of storage units.</div>
             {message && <div>{message}</div>}
         </div>
     </BaseActivitySection>;
