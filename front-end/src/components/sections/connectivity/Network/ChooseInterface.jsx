@@ -109,8 +109,8 @@ export default function ChooseInterface() {
                 textAlign: "center", position: "absolute", left: "50%", top: "50%", transform: "translate(-50%, -50%)"
             }}>
                 <div>
-                    <Select value={selectedInterface} onChange={setSelectedInterface}
-                            options={interfaceFetchData.interfaces} />
+                    Network interface: <Select value={selectedInterface} onChange={setSelectedInterface}
+                                               options={interfaceFetchData.interfaces} />
                 </div>
                 <div>
                     Press <BDown /> to select this interface.
