@@ -50,6 +50,12 @@ export function useGamepad() {
         }
     };
 
+    const {
+        connected, buttonA, buttonB, buttonX, buttonY,
+        joystickRight, joystick, LT, RT, LB, RB,
+        start, select, up, down, left, right
+    } = gamepadInfo;
+
     useEffect(() => {
         if (active) {
             window.addEventListener('gamepadconnected', updateGamepadState);
@@ -67,7 +73,11 @@ export function useGamepad() {
 
             return () => {};
         }
-    }, [gamepadInfo, active]);
+    }, [
+        // connected, buttonA, buttonB, buttonX, buttonY, joystickRight[0], joystickRight[1],
+        // joystick[0], joystick[1], LT, RT, LB, RB, start, select, up, down, left, right,
+        active
+    ]);
 
     return gamepadInfo;
 }
