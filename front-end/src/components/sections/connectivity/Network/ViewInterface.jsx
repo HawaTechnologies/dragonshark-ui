@@ -89,7 +89,7 @@ export default function ViewInterface() {
     usePressEffect(keyXPressed, 500, () => {
         if (!currentNetwork) return;
         navigate(`/connectivity/network/interfaces/${interface_}/disconnect`);
-    });
+    }, 1000);
 
     // 3. Now, the users will have options:
     // 3.1. Which network is it connected to?
