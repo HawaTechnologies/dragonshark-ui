@@ -47,8 +47,24 @@ async function getRomsDir() {
 }
 
 /**
+ * Initializes the ROMs directories.
+ * @param dir The parent directory.
+ * @returns {Promise<{code: number, stdout: string, stderr: string}>} The process code and empty output data.
+ */
+async function setupRomsDirs(dir) {
+    // Run the process.
+    const {stdout, stderr, result} = await exec(`dragonshark-games-roms-setup ${escapeShellArg(dir)}`);
+
+    // Get the code.
+    const code = result?.code || 0;
+
+    // Return the results.
+    return {code, stdout, stderr};
+}
+
+/**
  * Initializes the save directories.
- * @returns {Promise<{code: number, stdout: string, stderr: string}>}
+ * @returns {Promise<{code: number, stdout: string, stderr: string}>} The process code and empty output data.
  */
 async function setupSavesDirs() {
     // Run the process.
@@ -143,5 +159,5 @@ async function launchEmulationStation() {
 
 module.exports = {
     listExternalDeviceDirs, setRomsDir, getRomsDir, setupSavesDirs, backupSavesDirs, restoreSavesDirs,
-    launchGame, launchEmulationStation
+    launchGame, launchEmulationStation, setupRomsDirs
 }

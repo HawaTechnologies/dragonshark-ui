@@ -59,6 +59,7 @@ app.whenReady().then(() => {
   ipcMain.handle("games.listExternalDeviceDirs", (_) => games.listExternalDeviceDirs());
   ipcMain.handle("games.setRomsDir", (_, dir) => games.setRomsDir(dir));
   ipcMain.handle("games.getRomsDir", (_) => games.getRomsDir());
+  ipcMain.handle("games.setupRomsDirs", (_, dir) => games.setupRomsDirs(dir));
   ipcMain.handle("games.setupSavesDirs", (_) => games.setupSavesDirs());
   ipcMain.handle("games.backupSavesDirs", (_, dir) => games.backupSavesDirs(dir));
   ipcMain.handle("games.restoreSavesDirs", (_, dir) => games.restoreSavesDirs(dir));
