@@ -23,7 +23,7 @@ contextBridge.exposeInMainWorld('dragonSharkAPI', {
         listExternalDeviceDirs: () => ipcRenderer.invoke("games.listExternalDeviceDirs"),
         setRomsDir: (dir) => ipcRenderer.invoke("games.setRomsDir", dir),
         getRomsDir: () => ipcRenderer.invoke("games.getRomsDir"),
-        setupRomsDirs: (dir) => ipcRenderer.invoke("games.setupSavesDirs", dir),
+        setupRomsDirs: (dir) => ipcRenderer.invoke("games.setupRomsDirs", dir),
         setupSavesDirs: () => ipcRenderer.invoke("games.setupSavesDirs"),
         backupSavesDirs: (dir) => ipcRenderer.invoke("games.backupSavesDirs", dir),
         restoreSavesDirs: (dir) => ipcRenderer.invoke("games.restoreSavesDirs", dir),
