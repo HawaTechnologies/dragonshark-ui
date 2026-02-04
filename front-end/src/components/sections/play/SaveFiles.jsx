@@ -3,7 +3,7 @@ import BaseActivitySection from "../BaseActivitySection.jsx";
 import {useState, useEffect} from "react";
 import {BDown, BLeft, BRight} from "../../common/icons/RightPanelButton.jsx";
 import Select from "../../common/Select.jsx";
-import {useGamepad, usePressEffect} from "../../hooks/gamepad";
+import {useGamepad, usePressEffect} from "../../hooks/gamepad.js";
 
 const games = window.dragonSharkAPI.games;
 
@@ -82,7 +82,7 @@ export default function SaveFiles() {
             </div>
             <div>Press <BDown /> to do a saves backup to the storage unit.</div>
             <div>Press <BRight /> to do a saves restore from the storage unit.</div>
-            <div>Press <BLeft /> to refresh the list of storage networks.</div>
+            <div>Press <BLeft /> to refresh the list of storage units.</div>
             {message && <div>{message}</div>}
         </div>
     </BaseActivitySection>;
