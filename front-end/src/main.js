@@ -1,4 +1,5 @@
-const { app, BrowserWindow, screen, ipcMain } = require('electron');
+const { protocol, app, BrowserWindow, screen, ipcMain } = require('electron');
+const fs = require("node:fs");
 const path = require('node:path');
 const {
   virtualpad, games, network, datetime, sound
@@ -9,7 +10,93 @@ if (require('electron-squirrel-startup')) {
   app.quit();
 }
 
-const createWindow = () => {
+/**
+ * Trim slashes on a path, on both sides.
+ * @param path The path to trim.
+ * @returns {*} The trimmed path.
+ */
+function trimSlash(path) {
+  let found = true;
+  while(found) {
+    // First, deactivate the condition.
+    found = false;
+
+    // Then, check and activate the condition,
+    // after trimming.
+    if (path.startsWith("/")) {
+      path = path.substring(1);
+      found = true;
+    }
+    if (path.endsWith("/")) {
+      path = path.substring(0, path.length - 1);
+      found = true;
+    }
+  }
+  return path;
+}
+
+/**
+ * Registers the game-image:// protocol.
+ */
+function registerGameImageProtocol() {
+  protocol.handle('game-image', async (request) => {
+    // First, get the path.
+    const url = new URL(request.url);
+    let filePath = trimSlash(url.pathname);
+
+    // Then, the path must have this format:
+    //     {gameDirectory}/[{subdir(s)}/]{filename}
+    // It's an error if the path doesn't have at least one slash.
+    // Also, it won't happen that a game's image is outside the
+    // directory that declares its manifest. By this point, that
+    // one is a safe assumption.
+    const { code, dir } = await games.getRomsDir();
+    const { code: code2, dirs } = await games.listExternalDeviceDirs();
+    if (code !== 0 || code2 !== 0 || !dirs.includes(dir)) {
+      return new Response(null, {
+        status: 404,
+        statusText: "File not found"
+      });
+    }
+
+    // Split the file path. I'll not use this, but the original
+    // filepath. But, still, this needs to be validated.
+    let [_, ...subPath] = filePath.split("/");
+    subPath = subPath.join("/");
+    if (!subPath) {
+      // No sub-path means: the image does not belong to a game.
+      // This is an error.
+      return new Response(null, {
+        status: 404,
+        statusText: "File not found"
+      });
+    }
+
+    // Finally, load the image.
+    const fullPath = path.join(dir, "dragonshark", filePath);
+    if (!fs.existsSync(fullPath)) {
+      return new Response(null, {
+        status: 404,
+        statusText: "File not found"
+      });
+    } else {
+      try {
+        return new Response(fs.createReadStream(filePath));
+      } catch(e) {
+        console.error(`Error loading file ${fullPath}`, e);
+        return new Response(null, {
+          status: 500,
+          statusText: "Error loading file"
+        });
+      }
+    }
+  });
+}
+
+/**
+ * Creates the main window.
+ */
+function createWindow() {
   const { width, height } = screen.getPrimaryDisplay().workAreaSize;
 
   // Create the browser window.
@@ -44,12 +131,13 @@ const createWindow = () => {
 
   // Open the DevTools.
   // mainWindow.webContents.openDevTools();
-};
+}
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
+  registerGameImageProtocol();
   createWindow();
   ipcMain.handle("network.listIPv4Interfaces", (_) => network.listIPv4Interfaces());
   ipcMain.handle("network.listWLANInterfaces", (_) => network.listWLANInterfaces());
