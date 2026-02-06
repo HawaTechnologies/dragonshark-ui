@@ -86,7 +86,7 @@ async function fileExists(p) {
  * Parses and validates a hawa-game manifest.xml. Returns the whole
  * manifest contents.
  * @param {string} manifestPath absolute or relative path to manifest.xml
- * @returns {Promise<GameManifest>}
+ * @returns {Promise<GameManifest>} The manifest contents.
  */
 async function readGameManifest(manifestPath) {
     // Load the manifest file and expect a root <hawa-game />
