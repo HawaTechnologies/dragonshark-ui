@@ -1,4 +1,7 @@
 const { exec, spawn, escapeShellArg } = require("./processes");
+const { readGameManifest } = require("./manifest");
+const path = require("node:path");
+const fs = require("node:fs");
 
 /**
  * Lists the available external devices' directories.
@@ -157,7 +160,47 @@ async function launchEmulationStation() {
     return child.pid;
 }
 
+/**
+ * Enumerates the available games, with metadata and image.
+ * @returns {Promise<*[]>} The list of elements.
+ */
+async function enumerateGames() {
+    // First, get the ROMS directory and external devices.
+    // If the directory is not valid, then abort.
+    const { code, dir } = await getRomsDir();
+    const { code: code2, dirs } = await listExternalDeviceDirs();
+    if (code !== 0 || code2 !== 0 || !dirs.includes(dir)) {
+        return [];
+    }
+
+    // Get the directory that will hold all the games.
+    // Then, get the list of subdirectories.
+    const dragonsharkSubdir = path.join(dir, "dragonshark");
+    let subdirs = fs.readdirSync(dragonsharkSubdir, { withFileTypes: true }).filter(
+        dirent => dirent.isDirectory()
+    ).map(dirent => dirent.name);
+
+    // Generate the final entries.
+    let finalEntries = [];
+    for(let subdir of subdirs) {
+        // First, assemble the subdir, and check it exists + is a file.
+        const manifest = path.join(dragonsharkSubdir, subdir, "manifest.xml");
+        if (!fs.existsSync(manifest) || !fs.statSync(manifest).isFile()) {
+            continue;
+        }
+
+        // Then, open it as XML and extract the data.
+        try {
+            const obj = await readGameManifest(manifest);
+            finalEntries.push(obj);
+        } catch(e) {
+            console.error("Error loading manifest:", manifest);
+        }
+    }
+    return finalEntries;
+}
+
 module.exports = {
     listExternalDeviceDirs, setRomsDir, getRomsDir, setupSavesDirs, backupSavesDirs, restoreSavesDirs,
-    launchGame, launchEmulationStation, setupRomsDirs
+    launchGame, launchEmulationStation, setupRomsDirs, enumerateGames
 }
