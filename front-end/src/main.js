@@ -2,37 +2,12 @@ const { protocol, app, BrowserWindow, screen, ipcMain } = require('electron');
 const fs = require("node:fs");
 const path = require('node:path');
 const {
-  virtualpad, games, network, datetime, sound
+  virtualpad, games, network, datetime, sound, manifest
 } = require("./main_utils");
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
   app.quit();
-}
-
-/**
- * Trim slashes on a path, on both sides.
- * @param path The path to trim.
- * @returns {*} The trimmed path.
- */
-function trimSlash(path) {
-  let found = true;
-  while(found) {
-    // First, deactivate the condition.
-    found = false;
-
-    // Then, check and activate the condition,
-    // after trimming.
-    if (path.startsWith("/")) {
-      path = path.substring(1);
-      found = true;
-    }
-    if (path.endsWith("/")) {
-      path = path.substring(0, path.length - 1);
-      found = true;
-    }
-  }
-  return path;
 }
 
 /**
@@ -42,7 +17,7 @@ function registerGameImageProtocol() {
   protocol.handle('game-image', async (request) => {
     // First, get the path.
     const url = new URL(request.url);
-    let filePath = trimSlash(url.pathname);
+    let filePath = manifest.trimSlash(url.pathname);
 
     // Then, the path must have this format:
     //     {gameDirectory}/[{subdir(s)}/]{filename}

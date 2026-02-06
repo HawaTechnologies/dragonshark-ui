@@ -74,11 +74,37 @@ async function fileExists(p) {
 }
 
 /**
+ * Trim slashes on a path, on both sides.
+ * @param path The path to trim.
+ * @returns {*} The trimmed path.
+ */
+function trimSlash(path) {
+    let found = true;
+    while(found) {
+        // First, deactivate the condition.
+        found = false;
+
+        // Then, check and activate the condition,
+        // after trimming.
+        if (path.startsWith("/")) {
+            path = path.substring(1);
+            found = true;
+        }
+        if (path.endsWith("/")) {
+            path = path.substring(0, path.length - 1);
+            found = true;
+        }
+    }
+    return path;
+}
+
+/**
  * @typedef {{
+ *   gameDir: string,
  *   gameId: { package: string, app: string },
  *   command: string,
  *   gameData: { author: string, year: string, title: string, image?: string },
- *   paths: { commandAbs: string, imageAbs?: string }
+ *   paths: { command: string, image?: string }
  * }} GameManifest
  */
 
@@ -151,12 +177,17 @@ async function readGameManifest(manifestPath) {
     }
 
     // Return everything by the end.
+    const gameDirParts = trimSlash(baseDir).split("/");
     return {
+        gameDir: gameDirParts[gameDirParts.length - 1],
         gameId: { package: pkg, app },
         command: cmdText,
         gameData: { author, year: String(year), title, ...(imageAbs ? { image: String(image) } : {}) },
-        paths: { commandAbs, ...(imageAbs ? { imageAbs } : {}) },
+        paths: {
+            command: trimSlash(commandAbs.substring(baseDir.length)),
+            ...(imageAbs ? { image: trimSlash(imageAbs.substring(baseDir.length)) } : {})
+        },
     };
 }
 
-module.exports = { readGameManifest }
+module.exports = { readGameManifest, trimSlash };

@@ -3,6 +3,7 @@ const games = require("./games");
 const datetime = require("./datetime");
 const virtualpad = require("./virtualpad");
 const sound = require("./sound");
+const manifest = require("./manifest");
 
 
 module.exports = {
@@ -10,5 +11,6 @@ module.exports = {
     games,
     datetime,
     virtualpad,
-    sound
+    sound,
+    manifest
 }
