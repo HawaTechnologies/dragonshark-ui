@@ -2,6 +2,7 @@ import * as React from 'react';
 import {useState, useEffect, useMemo} from "react";
 import {getDiscreteAxisStates, useGamepad, usePressEffect} from "../../hooks/gamepad.js";
 import BaseActivitySection from "../BaseActivitySection.jsx";
+import {useResizeObserver} from "../../hooks/resize.js";
 
 const games = window.dragonSharkAPI.games;
 
@@ -19,6 +20,49 @@ function GamePreview({ currentGame }) {
 const TAIL_SIZE = 10;
 
 /**
+ * A game entry is rendered here.
+ * @param isSelected Whether it's selected or not.
+ * @param padding The padding.
+ * @param fontSize The font size.
+ * @param title The title.
+ * @constructor
+ */
+function GameEntry({
+    isSelected, padding, fontSize, title
+}) {
+    return <div
+        key={fullPath}
+        style={{
+            width: "100%",
+            height: padding * 2 + fontSize,
+            display: "flex",
+            alignItems: "center",
+            padding: `${padding}px`,
+            boxSizing: "border-box",
+            overflow: "hidden",
+            backgroundColor: isSelected ? "rgba(0, 0, 0, 0.06)" : "transparent",
+            color: isSelected ? "#111" : "gray",
+            fontWeight: isSelected ? 700 : 500,
+            borderBottom: "1px dashed gray"
+        }}
+        title={title}
+    >
+        <span
+            style={{
+                display: "block",
+                width: "100%",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                fontSize: `${fontSize}px`,
+                whiteSpace: "nowrap",
+                lineHeight: 1.1,
+            }}
+        >
+          {title}
+        </span>
+    </div>;
+}
+/**
  * The list of games.
  * @param value The current game index.
  * @param onChange A setter for the current game index.
@@ -30,6 +74,10 @@ function GamesList({
 }) {
     const {joystick: [_, upDownAxis]} = useGamepad();
     const {down: upPressed, up: downPressed} = getDiscreteAxisStates(upDownAxis);
+    const [ref, {height}] = useResizeObserver();
+    const rowHeight = height / TAIL_SIZE;
+    const padding = rowHeight * 0.2;
+    const fontSize = rowHeight * 0.6;
     usePressEffect(upPressed, 500, async function () {
         if (options?.length) {
             onChange(value === 0 ? options.length - 1 : value - 1);
@@ -59,12 +107,23 @@ function GamesList({
         }
     }, [value, options]);
 
-    return <div style={{
+    return <div ref={ref} style={{
         flexBasis: 0, flexGrow: 1, position: "relative",
         backgroundColor: "white", color: "gray", overflow: "hidden"
     }}>
-        {gamesViewport.length ? <div>
-            {/* TODO game titles are rendered here. */}
+        {gamesViewport.length ? <div style={{
+            width: "100%", height: "100%", display: "flex",
+            flexDirection: "column"
+        }}>
+            {gamesViewport.map((entry, i) => {
+                const isSelected = visualIndex === i;
+                const fullPath = `${entry.gameId.package}.${entry.gameId.app}`;
+                const title = entry.gameData.title ?? "(no title)";
+                return <GameEntry
+                    key={fullPath} isSelected={isSelected} title={title}
+                    padding={padding} fontSize={fontSize}
+                />;
+            })}
         </div> : <div style={{
             width: "100%", height: "100%", display: "flex",
             justifyContent: "center", alignItems: "center"
@@ -100,7 +159,7 @@ export default function InstalledGames() {
         setGamesList(games_);
         setCurrentIndex(Math.min(currentIndex, games_.length));
     }, 1000);
-    usePressEffect(keyAPressed, 500, async function() {
+    usePressEffect(keyAPressed, 500, async function () {
         if (currentGame) {
             // TODO launch the game.
         }
