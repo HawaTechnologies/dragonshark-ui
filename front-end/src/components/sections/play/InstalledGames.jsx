@@ -7,31 +7,18 @@ import {useResizeObserver} from "../../hooks/resize.js";
 const games = window.dragonSharkAPI.games;
 
 /**
- * A preview of a single game data.
- * @param currentGame The data of the current game.
- * @constructor
- */
-function GamePreview({ currentGame }) {
-    return <div style={{flexBasis: 0, flexGrow: 2}}>
-        {/* TODO implement this. */}
-    </div>;
-}
-
-const TAIL_SIZE = 10;
-
-/**
  * A game entry is rendered here.
  * @param isSelected Whether it's selected or not.
  * @param padding The padding.
  * @param fontSize The font size.
  * @param title The title.
+ * @param dashed Whether to use a dashed separator.
  * @constructor
  */
-function GameEntry({
-    isSelected, padding, fontSize, title
+function GameRow({
+    isSelected, padding, fontSize, title, dashed
 }) {
     return <div
-        key={fullPath}
         style={{
             width: "100%",
             height: padding * 2 + fontSize,
@@ -43,7 +30,7 @@ function GameEntry({
             backgroundColor: isSelected ? "rgba(0, 0, 0, 0.06)" : "transparent",
             color: isSelected ? "#111" : "gray",
             fontWeight: isSelected ? 700 : 500,
-            borderBottom: "1px dashed gray"
+            borderBottom: dashed ? "1px dashed gray" : ""
         }}
         title={title}
     >
@@ -62,6 +49,39 @@ function GameEntry({
         </span>
     </div>;
 }
+
+/**
+ * A preview of a single game data.
+ * @param currentGame The data of the current game.
+ * @constructor
+ */
+function GamePreview({ currentGame }) {
+    const [ref, {height}] = useResizeObserver();
+    const rowHeight = height / 2;
+    const padding = rowHeight * 0.2;
+    const fontSize = rowHeight * 0.6;
+    const title = currentGame.gameData.title ?? "(no title)";
+    const author = `${currentGame.gameData.year ?? "????"} - ${currentGame.gameData.author}`
+
+    return <div style={{
+        flexBasis: 0, flexGrow: 1, display: "flex",
+        flexDirection: "column"
+    }}>
+        <div style={{
+            flexGrow: 4, flexBasis: 0
+        }} />
+        <div ref={ref} style={{
+            flexGrow: 1, flexBasis: 0,
+            lineHeight: 1.1, backgroundColor: "white", color: "#111"
+        }}>
+            <GameRow isSelected={false} padding={padding} fontSize={fontSize} title={title} dashed={false} />
+            <GameRow isSelected={false} padding={padding} fontSize={fontSize} title={author} dashed={false} />
+        </div>
+    </div>;
+}
+
+const TAIL_SIZE = 10;
+
 /**
  * The list of games.
  * @param value The current game index.
@@ -119,9 +139,9 @@ function GamesList({
                 const isSelected = visualIndex === i;
                 const fullPath = `${entry.gameId.package}.${entry.gameId.app}`;
                 const title = entry.gameData.title ?? "(no title)";
-                return <GameEntry
+                return <GameRow
                     key={fullPath} isSelected={isSelected} title={title}
-                    padding={padding} fontSize={fontSize}
+                    padding={padding} fontSize={fontSize} dashed={true}
                 />;
             })}
         </div> : <div style={{
