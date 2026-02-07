@@ -26,6 +26,35 @@ const TAIL_SIZE = 10;
 function GamesList({
     value, onChange, options
 }) {
+    const {joystick: [_, upDownAxis]} = useGamepad();
+    const {down: upPressed, up: downPressed} = getDiscreteAxisStates(upDownAxis);
+    usePressEffect(upPressed, 500, async function () {
+        if (options?.length) {
+            onChange(value === 0 ? options.length - 1 : value - 1);
+        }
+    }, 1000);
+    usePressEffect(downPressed, 500, async function () {
+        if (options?.length) {
+            onChange(value === options.length - 1 ? 0 : value + 1);
+        }
+    }, 1000);
+    const gamesViewport = useMemo(() => {
+        if (!options?.length) {
+            return [];
+        }
+
+        if (value <= options.length - TAIL_SIZE) {
+            return options.slice(value, value + TAIL_SIZE);
+        } else {
+            const nStraight = options.length - value;
+            const nWrap = TAIL_SIZE - nStraight;
+            return [
+                ...options.slice(value, value + nStraight),
+                ...options.slice(0, nWrap)
+            ];
+        }
+    }, [value, options]);
+
     return <></>;
 }
 
@@ -55,6 +84,11 @@ export default function InstalledGames() {
         setGamesList(games_);
         setCurrentIndex(Math.min(currentIndex, games_.length));
     }, 1000);
+    usePressEffect(keyAPressed, 500, async function() {
+        if (currentGame) {
+            // TODO launch the game.
+        }
+    });
 
     return <BaseActivitySection caption="Installed Games" backPath="/play">
         <div style={{position: "absolute", left: "5%", top: "5%", right: "5%", bottom: "5%",
