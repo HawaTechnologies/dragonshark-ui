@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from "react";
  */
 export function useResizeObserver() {
     const ref = useRef(null);
-    const [rect, setRect] = useState(null);
+    const [rect, setRect] = useState({width: 0, height: 0});
 
     useEffect(() => {
         if (!ref.current) return;
