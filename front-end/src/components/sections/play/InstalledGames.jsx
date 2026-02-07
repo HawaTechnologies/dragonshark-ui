@@ -11,7 +11,9 @@ const games = window.dragonSharkAPI.games;
  * @constructor
  */
 function GamePreview({ currentGame }) {
-    return <></>;
+    return <div style={{flexBasis: 0, flexGrow: 2}}>
+        {/* TODO implement this. */}
+    </div>;
 }
 
 const TAIL_SIZE = 10;
@@ -38,24 +40,38 @@ function GamesList({
             onChange(value === options.length - 1 ? 0 : value + 1);
         }
     }, 1000);
-    const gamesViewport = useMemo(() => {
+    const [gamesViewport, visualIndex] = useMemo(() => {
         if (!options?.length) {
-            return [];
-        }
-
-        if (value <= options.length - TAIL_SIZE) {
-            return options.slice(value, value + TAIL_SIZE);
+            return [[], null];
+        } else if (options.length < TAIL_SIZE) {
+            return [options, value];
         } else {
-            const nStraight = options.length - value;
-            const nWrap = TAIL_SIZE - nStraight;
-            return [
-                ...options.slice(value, value + nStraight),
-                ...options.slice(0, nWrap)
-            ];
+            if (value <= options.length - TAIL_SIZE) {
+                return [options.slice(value, value + TAIL_SIZE), 0];
+            } else {
+                const nStraight = options.length - value;
+                const nWrap = TAIL_SIZE - nStraight;
+                return [[
+                    ...options.slice(value, value + nStraight),
+                    ...options.slice(0, nWrap)
+                ], 0];
+            }
         }
     }, [value, options]);
 
-    return <></>;
+    return <div style={{
+        flexBasis: 0, flexGrow: 1, position: "relative",
+        backgroundColor: "white", color: "gray", overflow: "hidden"
+    }}>
+        {gamesViewport.length ? <div>
+            {/* TODO game titles are rendered here. */}
+        </div> : <div style={{
+            width: "100%", height: "100%", display: "flex",
+            justifyContent: "center", alignItems: "center"
+        }}>
+            There are no games.
+        </div>}
+    </div>;
 }
 
 /**
@@ -92,7 +108,7 @@ export default function InstalledGames() {
 
     return <BaseActivitySection caption="Installed Games" backPath="/play">
         <div style={{position: "absolute", left: "5%", top: "5%", right: "5%", bottom: "5%",
-                     display: "flex", flexDirection: "row"}}>
+                     display: "flex", flexDirection: "row", gap: "16px"}}>
             <GamePreview currentGame={currentGame} />
             <GamesList value={currentIndex} onChange={setCurrentIndex} options={gamesList} />
         </div>
