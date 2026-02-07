@@ -181,7 +181,6 @@ async function readGameManifest(manifestPath) {
     return {
         gameDir: gameDirParts[gameDirParts.length - 1],
         gameId: { package: pkg, app },
-        command: cmdText,
         gameData: { author, year: String(year), title, ...(imageAbs ? { image: String(image) } : {}) },
         paths: {
             command: trimSlash(commandAbs.substring(baseDir.length)),

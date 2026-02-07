@@ -128,6 +128,7 @@ app.whenReady().then(() => {
   ipcMain.handle("games.restoreSavesDirs", (_, dir) => games.restoreSavesDirs(dir));
   ipcMain.handle("games.launchGame", (_, manifest) => games.launchGame(manifest));
   ipcMain.handle("games.launchEmulationStation", (_) => games.launchEmulationStation());
+  ipcMain.handle("games.enumerateGames", (_) => games.enumerateGames());
   ipcMain.handle("virtualpad.startServer", (_) => virtualpad.startServer());
   ipcMain.handle("virtualpad.stopServer", (_) => virtualpad.stopServer());
   ipcMain.handle("virtualpad.checkServer", (_) => virtualpad.checkServer());
