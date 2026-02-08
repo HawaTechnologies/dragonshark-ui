@@ -205,7 +205,10 @@ export default function InstalledGames() {
     }, 1000);
     usePressEffect(keyAPressed, 500, async function () {
         if (currentGame) {
-            // TODO launch the game.
+            const {status, dump} = await games.launchGame(currentGame.gameDir);
+            if (status === "error") {
+                console.error("Error launching manifest file:", currentGame.gameDir, dump);
+            }
         }
     });
 
