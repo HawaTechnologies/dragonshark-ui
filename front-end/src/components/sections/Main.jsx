@@ -25,8 +25,8 @@ export default function Main() {
             <Option caption="Play" image={play} callback={() => navigate("/play")} />
 
             {/* This is the "Marketplace" section. The last thing I'll ever implement. */}
-            <Option caption="Marketplace" image={marketplace}
-                    callback={() => navigate("/marketplace")}/>
+            {/* <Option caption="Marketplace" image={marketplace}
+                        callback={() => navigate("/marketplace")}/> */}
 
             {/* This is the "Connectivity" section. Intended to configure network and VirtualPad. */}
             <Option caption="Connectivity" image={connectivity}
