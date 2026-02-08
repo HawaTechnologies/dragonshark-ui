@@ -14,17 +14,13 @@ module.exports = {
     {
       name: '@electron-forge/maker-zip',
       config: {
-        options: {
-          arch: ["arm64", "x64"]
-        }
+        arch: ["arm64", "x64"]
       }
     },
     {
       name: '@electron-forge/maker-deb',
       config: {
-        options: {
-          arch: ["arm64", "x64"]
-        }
+        arch: ["arm64", "x64"]
       }
     },
   ],
