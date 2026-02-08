@@ -1,8 +1,11 @@
 import * as React from 'react';
 import {useState, useEffect, useMemo} from "react";
 import {getDiscreteAxisStates, useGamepad, usePressEffect} from "../../hooks/gamepad.js";
+import {BDown, BLeft} from "../../common/icons/RightPanelButton.jsx";
 import BaseActivitySection from "../BaseActivitySection.jsx";
 import {useResizeObserver} from "../../hooks/resize.js";
+import imageNotAvailable from "../../../images/image-not-available.png";
+import selectAGame from "../../../images/select-a-game.png";
 
 const games = window.dragonSharkAPI.games;
 
@@ -60,18 +63,32 @@ function GamePreview({ currentGame }) {
     const rowHeight = height / 2;
     const padding = rowHeight * 0.2;
     const fontSize = rowHeight * 0.6;
-    const title = currentGame.gameData.title ?? "(no title)";
-    const author = `${currentGame.gameData.year ?? "????"} - ${currentGame.gameData.author}`
+    const title = currentGame
+        ? (currentGame.gameData.title ?? "(no title)")
+        : "Select a game to continue";
+    const author = currentGame
+        ? `${currentGame?.gameData.year ?? "????"} - ${currentGame?.gameData.author}`
+        : "";
+
+    const image = currentGame
+        ? (currentGame.paths?.image
+            ? `game-image:///${currentGame.gameDir}/${currentGame.paths.image}`
+            : imageNotAvailable)
+        : selectAGame;
 
     return <div style={{
         flexBasis: 0, flexGrow: 1, display: "flex",
-        flexDirection: "column"
+        flexDirection: "column",  overflow: "hidden"
     }}>
-        <div style={{
-            flexGrow: 4, flexBasis: 0
-        }} />
+        <img style={{
+            flexGrow: 4, flexBasis: 0, objectFit: "contain", aspectRatio: "4 / 3"
+        }} src={image}
+           onError={(e) => {
+               e.target.onerror = null;
+               e.target.src = './path/to/default-image.png';
+           }} />
         <div ref={ref} style={{
-            flexGrow: 1, flexBasis: 0,
+            flexGrow: 1, flexBasis: 0,  overflow: "hidden",
             lineHeight: 1.1, backgroundColor: "white", color: "#111"
         }}>
             <GameRow isSelected={false} padding={padding} fontSize={fontSize} title={title} dashed={false} />
@@ -185,11 +202,14 @@ export default function InstalledGames() {
         }
     });
 
-    return <BaseActivitySection caption="Installed Games" backPath="/play">
-        <div style={{position: "absolute", left: "5%", top: "5%", right: "5%", bottom: "5%",
-                     display: "flex", flexDirection: "row", gap: "16px"}}>
-            <GamePreview currentGame={currentGame} />
-            <GamesList value={currentIndex} onChange={setCurrentIndex} options={gamesList} />
+    return <BaseActivitySection caption="" backPath="/play">
+        <div style={{position: "absolute", left: "5%", top: "10%", right: "5%", bottom: "5%",
+                     display: "flex", flexDirection: "column", gap: "16px"}}>
+            <div style={{width: "100%", flexBasis: 0, flexGrow: 1, display: "flex", flexDirection: "row", gap: "16px"}}>
+                <GamePreview currentGame={currentGame} />
+                <GamesList value={currentIndex} onChange={setCurrentIndex} options={gamesList} />
+            </div>
+            <div className="text-bigger">Press <BLeft /> to refresh the list, <BDown /> to select a game.</div>
         </div>
     </BaseActivitySection>;
 }
