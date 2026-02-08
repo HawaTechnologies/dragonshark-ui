@@ -80,16 +80,23 @@ function GamePreview({ currentGame }) {
         flexBasis: 0, flexGrow: 1, display: "flex",
         flexDirection: "column",  overflow: "hidden"
     }}>
-        <img style={{
-            flexGrow: 4, flexBasis: 0, objectFit: "contain", aspectRatio: "4 / 3"
-        }} src={image}
-           onError={(e) => {
-               e.target.onerror = null;
-               e.target.src = './path/to/default-image.png';
-           }} />
+        <div style={{
+            flexGrow: 4, flexShrink: 4, flexBasis: 0, position: "relative",
+            minHeight: 0
+        }}>
+            <img style={{
+                objectFit: "cover", aspectRatio: "4 / 3",
+                width: "100%", height: "100%"
+            }} src={image}
+                 onError={(e) => {
+                     e.target.onerror = null;
+                     e.target.src = './path/to/default-image.png';
+                 }}/>
+        </div>
         <div ref={ref} style={{
-            flexGrow: 1, flexBasis: 0,  overflow: "hidden",
-            lineHeight: 1.1, backgroundColor: "white", color: "#111"
+            flexGrow: 1, flexShrink: 1, flexBasis: 0, overflow: "hidden",
+            lineHeight: 1.1, backgroundColor: "white", color: "#111",
+            minHeight: 0
         }}>
             <GameRow isSelected={false} padding={padding} fontSize={fontSize} title={title} dashed={false} />
             <GameRow isSelected={false} padding={padding} fontSize={fontSize} title={author} dashed={false} />
@@ -111,7 +118,7 @@ function GamesList({
 }) {
     const {joystick: [_, upDownAxis]} = useGamepad();
     const {down: upPressed, up: downPressed} = getDiscreteAxisStates(upDownAxis);
-    const [ref, {height}] = useResizeObserver();
+    const [ref, {height, width}] = useResizeObserver();
     const rowHeight = height / TAIL_SIZE;
     const padding = rowHeight * 0.2;
     const fontSize = rowHeight * 0.6;
@@ -205,7 +212,11 @@ export default function InstalledGames() {
     return <BaseActivitySection caption="" backPath="/play">
         <div style={{position: "absolute", left: "5%", top: "10%", right: "5%", bottom: "5%",
                      display: "flex", flexDirection: "column", gap: "16px"}}>
-            <div style={{width: "100%", flexBasis: 0, flexGrow: 1, display: "flex", flexDirection: "row", gap: "16px"}}>
+            <div style={{
+                width: "100%", flexBasis: 0, flexGrow: 1,
+                display: "flex", flexDirection: "row", gap: "16px",
+                overflow: "hidden", minHeight: 0,
+            }}>
                 <GamePreview currentGame={currentGame} />
                 <GamesList value={currentIndex} onChange={setCurrentIndex} options={gamesList} />
             </div>
