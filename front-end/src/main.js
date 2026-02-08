@@ -11,6 +11,24 @@ if (require('electron-squirrel-startup')) {
 }
 
 /**
+ * Declares a privileged protocol.
+ */
+function declareGameImageProtocol() {
+  protocol.registerSchemesAsPrivileged([
+    {
+      scheme: 'game-image',
+      privileges: {
+        secure: true,
+        supportFetchAPI: true,
+        corsEnabled: true,
+        // Add this if you want to bypass CSP entirely for this protocol:
+        bypassCSP: true
+      }
+    }
+  ]);
+}
+
+/**
  * Registers the game-image:// protocol.
  */
 function registerGameImageProtocol() {
@@ -56,7 +74,7 @@ function registerGameImageProtocol() {
       });
     } else {
       try {
-        return new Response(fs.createReadStream(filePath));
+        return new Response(fs.createReadStream(fullPath));
       } catch(e) {
         console.error(`Error loading file ${fullPath}`, e);
         return new Response(null, {
@@ -111,6 +129,7 @@ function createWindow() {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
+declareGameImageProtocol();
 app.whenReady().then(() => {
   registerGameImageProtocol();
   createWindow();
