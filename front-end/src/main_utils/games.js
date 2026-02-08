@@ -125,18 +125,30 @@ async function restoreSavesDirs(dir) {
  * 6. {code: 0, status: "error", hint: "command:game-already-running"}
  * 7. {code: 0, status: "error", hint: "unknown", "type": "SomeException", "traceback": "..."}
  * 8. {code: 0, status: "ok", hint: "command:success"}
- * @param manifest The path to the game's XML manifest.
+ * @param gameDir The directory of the game.
  * @returns {Promise<{code: number, hint: string, status: string, type?: string, traceback?: string}>}
  * The execution result (async function).
  */
-async function launchGame(manifest) {
-    // Run the process.
+async function launchGame(gameDir) {
+    // First, get the ROMS directory and external devices.
+    // If the directory is not valid, then abort.
+    const { code: code1, dir } = await getRomsDir();
+    const { code: code2, dirs } = await listExternalDeviceDirs();
+    if (code1 !== 0 || code2 !== 0 || !dirs.includes(dir)) {
+        return {
+            code: code1 || code2,
+            status: "error",
+            hint: "roms-dir:invalid"
+        };
+    }
+
+    // Get the full manifest path, run the process, and get the code.
+    const manifest = `${dir}/dragonshark/${gameDir}/manifest.xml`;
     const {stdout, stderr, result} = await exec(`launch-game ${escapeShellArg(manifest)}`);
     const output = (stdout || "").trim();
-
-    // Get the code.
     const code = result?.code || 0;
 
+    // Return the result.
     if (code) {
         return {
             code, status: "error", hint: "unknown", dump: stderr
