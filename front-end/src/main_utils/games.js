@@ -194,7 +194,7 @@ async function enumerateGames() {
             const obj = await readGameManifest(manifest);
             finalEntries.push(obj);
         } catch(e) {
-            console.error("Error loading manifest:", manifest);
+            console.error("Error loading manifest:", manifest, e);
         }
     }
     return finalEntries;
