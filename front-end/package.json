@@ -1,8 +1,8 @@
 {
-  "name": "front-end",
-  "productName": "front-end",
+  "name": "dragonshark-ui",
+  "productName": "dragonshark-ui",
   "version": "1.0.0",
-  "description": "My Electron application description",
+  "description": "Hawa DragonHark UI",
   "main": ".webpack/main",
   "scripts": {
     "start": "electron-forge start",

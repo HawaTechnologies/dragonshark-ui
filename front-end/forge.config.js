@@ -4,6 +4,8 @@ const { FuseV1Options, FuseVersion } = require('@electron/fuses');
 module.exports = {
   packagerConfig: {
     asar: true,
+    name: "Hawa DragonShark UI",
+    executableName: "dragonshark-ui"
   },
   rebuildConfig: {},
   makers: [
@@ -20,7 +22,13 @@ module.exports = {
     {
       name: '@electron-forge/maker-deb',
       config: {
-        arch: ["arm64", "x64"]
+        arch: ["arm64", "x64"],
+        options: {
+          name: 'dragonshark-ui',
+          productName: 'Hawa DragonShark UI',
+          categories: ['Utility'],
+          section: 'utils'
+        }
       }
     },
   ],
