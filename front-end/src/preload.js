@@ -48,5 +48,8 @@ contextBridge.exposeInMainWorld('dragonSharkAPI', {
     sound: {
         setVolume: (volume) => ipcRenderer.invoke("sound.setVolume", volume),
         getVolume: () => ipcRenderer.invoke("sound.getVolume")
+    },
+    system: {
+        restartInDebugMode: () => ipcRenderer.invoke("system.restartInDebugMode")
     }
 });

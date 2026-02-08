@@ -2,7 +2,8 @@ const { protocol, app, BrowserWindow, screen, ipcMain } = require('electron');
 const fs = require("node:fs");
 const path = require('node:path');
 const {
-  virtualpad, games, network, datetime, sound, manifest
+  virtualpad, games, network, datetime, sound, manifest,
+  system
 } = require("./main_utils");
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -160,6 +161,7 @@ app.whenReady().then(() => {
   ipcMain.handle("datetime.setTimezone", (_, tz) => datetime.setTimezone(tz));
   ipcMain.handle("sound.setVolume", (_, volume) => sound.setVolume(volume));
   ipcMain.handle("sound.getVolume", (_) => sound.getVolume());
+  ipcMain.handle("system.restartInDebugMode", (_) => system.restartInDebugMode());
   // TODO The broadcast server (127.0.0.1:2358) should always
   // TODO be considered as active. So this app should connect
   // TODO to it and listen for all their messages and then
