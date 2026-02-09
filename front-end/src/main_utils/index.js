@@ -13,5 +13,6 @@ module.exports = {
     datetime,
     virtualpad,
     sound,
-    manifest
+    manifest,
+    system
 }
