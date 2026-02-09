@@ -36,23 +36,18 @@ export default function Sound() {
         })();
     }, []);
 
-    useEffect(() => {
-        refDown.current = () => {
-            const newVolume = clampVolume(volume - 5);
-            console.log("Setting the new volume:", newVolume);
-            setVolume(newVolume);
-            sound.setVolume(newVolume);
-        }
-        refUp.current = () => {
-            const newVolume = clampVolume(volume + 5);
-            console.log("Setting the new volume:", newVolume);
-            setVolume(newVolume);
-            sound.setVolume(newVolume);
-        }
-    }, [volume]);
-
-    usePressEffect(leftPressed, 500, refDown);
-    usePressEffect(rightPressed, 500, refUp);
+    usePressEffect(leftPressed, 500, () => {
+        const newVolume = clampVolume(volume - 5);
+        console.log("Setting the new volume:", newVolume);
+        setVolume(newVolume);
+        sound.setVolume(newVolume);
+    });
+    usePressEffect(rightPressed, 500, () => {
+        const newVolume = clampVolume(volume + 5);
+        console.log("Setting the new volume:", newVolume);
+        setVolume(newVolume);
+        sound.setVolume(newVolume);
+    });
 
     return <BaseActivitySection caption="Sound" backPath="/user-experience">
         <div style={{
