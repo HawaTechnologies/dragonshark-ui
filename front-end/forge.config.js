@@ -27,7 +27,8 @@ module.exports = {
           name: 'dragonshark-ui',
           productName: 'Hawa DragonShark UI',
           categories: ['Utility'],
-          section: 'utils'
+          section: 'utils',
+          compression: 'xz'
         }
       }
     },
