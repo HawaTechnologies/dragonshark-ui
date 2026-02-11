@@ -164,7 +164,7 @@ function GamesList({
                 const fullPath = `${entry.gameId.package}.${entry.gameId.app}`;
                 const title = entry.gameData.title ?? "(no title)";
                 return <GameRow
-                    key={fullPath} isSelected={isSelected} title={title}
+                    key={entry.gameDir + ":" + fullPath} isSelected={isSelected} title={title}
                     padding={padding} fontSize={fontSize} dashed={true}
                 />;
             })}
