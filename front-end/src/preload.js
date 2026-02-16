@@ -19,6 +19,12 @@ contextBridge.exposeInMainWorld('dragonSharkAPI', {
             "network.disconnectFromNetwork", interfaceName
         ),
     },
+    bluetooth: {
+        listPairedDevices: () => ipcRenderer.invoke("bluetooth.listPairedDevices"),
+        listUnpairedDevices: (time) => ipcRenderer.invoke("bluetooth.listUnpairedDevices", time),
+        pairDevice: (device) => ipcRenderer.invoke("bluetooth.pairDevice", device),
+        unpairDevice: (device) => ipcRenderer.invoke("bluetooth.unpairDevice", device)
+    },
     games: {
         listExternalDeviceDirs: () => ipcRenderer.invoke("games.listExternalDeviceDirs"),
         setRomsDir: (dir) => ipcRenderer.invoke("games.setRomsDir", dir),

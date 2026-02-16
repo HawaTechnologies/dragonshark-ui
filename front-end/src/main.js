@@ -3,7 +3,7 @@ const fs = require("node:fs");
 const path = require('node:path');
 const {
   virtualpad, games, network, datetime, sound, manifest,
-  system
+  system, bluetooth
 } = require("./main_utils");
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -162,6 +162,10 @@ app.whenReady().then(() => {
   ipcMain.handle("sound.setVolume", (_, volume) => sound.setVolume(volume));
   ipcMain.handle("sound.getVolume", (_) => sound.getVolume());
   ipcMain.handle("system.restartInDebugMode", (_) => system.restartInDebugMode());
+  ipcMain.handle("bluetooth.listPairedDevices", (_) => bluetooth.listPairedDevices());
+  ipcMain.handle("bluetooth.listUnpairedDevices", (_, time) => bluetooth.listUnpairedDevices(time));
+  ipcMain.handle("bluetooth.pairDevice", (_, device) => bluetooth.pairDevice(device));
+  ipcMain.handle("bluetooth.unpairDevice", (_, device) => bluetooth.unpairDevice(device));
   // TODO The broadcast server (127.0.0.1:2358) should always
   // TODO be considered as active. So this app should connect
   // TODO to it and listen for all their messages and then
