@@ -8,7 +8,19 @@ const {exec, escapeShellArg} = require("./processes");
  * @returns {Promise<{mac: string, name: string}[]>} The list of paired devices.
  */
 async function listPairedDevices() {
-    // dragonshark-bluetooth-list-paired-devices
+    // Run the process.
+    const {stdout, result} = await exec("dragonshark-bluetooth-list-paired-devices");
+
+    // Get the code.
+    const code = result?.code || 0;
+
+    // Parse the results.
+    return {code, data: code ? null : (() => {
+        return stdout.trim().split("\n").map(line => {
+            const [mac, name] = line.split(/\s+/);
+            return {mac, name};
+        });
+    })()};
 }
 
 /**
@@ -16,10 +28,23 @@ async function listPairedDevices() {
  * devices that are currently unpaired. Scanning for these
  * devices is time-consuming (the time is passed as argument).
  * @param time The time, in seconds. An integer value.
- * @returns {Promise<{mac: string, name: string}[]>} The list of unpaired devices.
+ * @returns {Promise<{code: number, data: null | {mac: string, name: string}[]}>} The list of unpaired devices.
  */
 async function listUnpairedDevices(time) {
-    // dragonshark-bluetooth-list-unpaired-devices <max(3, int(time))>
+    // Run the process.
+    time = Math.max(3, Math.floor(parseFloat(time) || 0));
+    const {stdout, result} = await exec(`dragonshark-bluetooth-list-unpaired-devices ${escapeShellArg(time.toString())}`);
+
+    // Get the code.
+    const code = result?.code || 0;
+
+    // Parse the results.
+    return {code, data: code ? null : (() => {
+        return stdout.trim().split("\n").map(line => {
+            const [mac, name] = line.split(/\s+/);
+            return {mac, name};
+        });
+    })()};
 }
 
 /**
