@@ -5,7 +5,7 @@ const {exec, escapeShellArg} = require("./processes");
  * devices that are currently paired. These devices are
  * typically trusted as well (if untrusted, they can be
  * made trusted again by unpairing and re-pairing).
- * @returns {Promise<{mac: string, name: string}[]>} The list of paired devices.
+ * @returns {Promise<{code: number, data: null | {mac: string, name: string}[]}>} The list of paired devices.
  */
 async function listPairedDevices() {
     // Run the process.
