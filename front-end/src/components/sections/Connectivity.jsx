@@ -5,9 +5,9 @@ import Section from "../common/Menu/Section.jsx";
 import Option from "../common/Menu/Option.jsx";
 // Images
 import network from "../../images/options/connectivity/network.png";
+import bluetooth from "../../images/options/connectivity/bluetooth.png";
 import virtualpad from "../../images/options/connectivity/virtualpad.png";
 import {useGamepad, usePressEffect} from "../hooks/gamepad";
-import {useRef} from "react";
 
 /**
  * The connectivity section.
@@ -25,6 +25,9 @@ export default function Connectivity() {
         <Section>
             {/* This is the "Wi-Fi" section. Intended to manage the current Wi-Fi network(s). */}
             <Option caption="Network" image={network} callback={() => navigate("/connectivity/network")} />
+
+            {/* This is the "Bluetooth" section. Intended to manage connected devices. */}
+            <Option caption="Bluetooth" image={bluetooth} callback={() => navigate("/connectivity/bluetooth")} />
 
             {/* This is the "VirtualPad" section. Intended to configure VirtualPad. */}
             <Option caption="VirtualPad" image={virtualpad} callback={() => navigate("/connectivity/virtualpad")} />
