@@ -38,7 +38,16 @@ export default function ManagePairedDevices() {
     }, null, 1000);
     usePressEffect(buttonYPressed, 500, async (first) => {
         if (!first) return;
-        // TODO process.
+        setStatus({
+            status: "refreshing"
+        });
+        const {code, data: devices} = await bluetooth.listPairedDevices();
+        if (code === 0) {
+            const newPairedDevices = devices.map(({name, mac}) => ({label: `${name} (${mac})`, value: mac}));
+            setPairedDevices(newPairedDevices);
+            setSelectedPairedDevice(newPairedDevices.length ? newPairedDevices[0].value : null);
+        }
+        setStatus(null);
     }, null, 1000);
 
     // The content to show as per the status.
