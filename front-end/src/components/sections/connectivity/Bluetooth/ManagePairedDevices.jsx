@@ -1,6 +1,6 @@
 import {useNavigate} from "react-router-dom";
-import {useEffect, useMemo, useRef, useState} from "react";
-import {getDiscreteAxisStates, useGamepad, usePressEffect} from "../../../hooks/gamepad";
+import {useEffect, useState} from "react";
+import {useGamepad, usePressEffect} from "../../../hooks/gamepad";
 import * as React from "react";
 import {BDown, BLeft, BRight, BUp} from "../../../common/icons/RightPanelButton.jsx";
 import BaseActivitySection from "../../BaseActivitySection.jsx";
@@ -14,6 +14,9 @@ const bluetooth = window.dragonSharkAPI.bluetooth;
  * and eventually unpair one or more of those devices.
  */
 export default function ManagePairedDevices() {
+    // The navigator.
+    const navigate = useNavigate();
+
     // The currently selected paired device, and list of paired devices.
     const [selectedPairedDevice, setSelectedPairedDevice] = useState(null);
     const [pairedDevices, setPairedDevices] = useState([]);
@@ -27,13 +30,15 @@ export default function ManagePairedDevices() {
     } = useGamepad();
 
     usePressEffect(buttonAPressed, 500, () => {
-
+        navigate("/connectivity/bluetooth/pair");
     }, null, 1000);
-    usePressEffect(buttonXPressed && buttonBPressed, 500, () => {
-
+    usePressEffect(buttonXPressed && buttonBPressed, 500, async (first) => {
+        if (!first) return;
+        // TODO process.
     }, null, 1000);
-    usePressEffect(buttonYPressed, 500, async () => {
-
+    usePressEffect(buttonYPressed, 500, async (first) => {
+        if (!first) return;
+        // TODO process.
     }, null, 1000);
 
     // The content to show as per the status.
