@@ -104,7 +104,7 @@ export function getDiscreteAxisStates(value) {
  */
 export function usePressEffect(pressed, interval, funcDown, funcUp, delay = 0, deps = null) {
     // A non-reactivizator ref.
-    const ref = useRef(() => {});
+    const ref = useRef({funcDown: () => {}, funcUp: () => {}});
     ref.current = {
         funcDown, funcUp
     };
@@ -126,7 +126,7 @@ export function usePressEffect(pressed, interval, funcDown, funcUp, delay = 0, d
 
     useEffect(() => {
         const callbackDown = () => (ref.current.funcDown || (() => {}))();
-        const callbackUp = () => (ref.current.funcDown || (() => {}))();
+        const callbackUp = () => (ref.current.funcUp || (() => {}))();
         if (pressed && ready) {
             // Trigger as immediately as possible.
             setTimeout(callbackDown, 0);
