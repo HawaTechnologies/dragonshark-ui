@@ -18,10 +18,13 @@ function getLabel(e) {
  * @param disabled Whether it is disabled or not (disabled select
  * does not change the selected option with the d-pad).
  * @param emptyLabel The empty label to show.
+ * @param invalidLabel The invalid label to show.
  * @constructor
  */
 export default function Select({
-    options, value, onChange, emptyLabel = "(no options)",
+    options, value, onChange,
+    emptyLabel = "(no options)",
+    invalidLabel = "(select an option)",
     disabled = false
 }) {
     // First, a state here. Not for the options, but for the current index.
@@ -30,8 +33,10 @@ export default function Select({
 
     // Then, compute the selected label.
     const selectedLabel = useMemo(() => {
-        if (!options || !options.length || selectedIndex === -1) {
+        if (!options || !options.length) {
             return emptyLabel;
+        } else if (selectedIndex === -1) {
+            return invalidLabel;
         } else {
             return getLabel(options[selectedIndex]);
         }
