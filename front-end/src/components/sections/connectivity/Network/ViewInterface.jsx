@@ -81,15 +81,15 @@ export default function ViewInterface() {
     usePressEffect(keyAPressed, 500, () => {
         if (!networks.length) return;
         navigate(`/connectivity/network/interfaces/${interface_}/connect/${encodeURIComponent(networks[effectiveCurrentSSIDIndex][1])}`);
-    }, 1000);
+    }, null, 1000);
     usePressEffect(keyBPressed, 500, () => {
         if (!networks.length) return;
         navigate(`/connectivity/network/interfaces/${interface_}/specify-hidden-network`);
-    }, 1000);
+    }, null, 1000);
     usePressEffect(keyXPressed, 500, () => {
         if (!currentNetwork) return;
         navigate(`/connectivity/network/interfaces/${interface_}/disconnect`);
-    }, 1000);
+    }, null, 1000);
 
     // 3. Now, the users will have options:
     // 3.1. Which network is it connected to?

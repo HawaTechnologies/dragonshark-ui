@@ -143,7 +143,7 @@ export default function Menu({ style, children, selectedIndex = 0}) {
     });
     usePressEffect(menuPressed, 500, () => {
         if (menuCallback?.func) menuCallback.func();
-    }, 1000);
+    }, null, 1000);
 
     return <Panel style={{...(style || {})}}>
         {filteredChildren}

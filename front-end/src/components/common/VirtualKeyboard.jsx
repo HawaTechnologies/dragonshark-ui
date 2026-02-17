@@ -224,7 +224,7 @@ function VirtualKeyboardLayout({append, backspace, confirm}) {
                 const keys = LAYOUTS[layoutIndex].keys;
                 append(keys[y][x]);
         }
-    }, 1000);
+    }, null, 1000);
 
     return <div className="keyboard">
         <div className="key">{LAYOUTS[layoutIndex].name}</div>

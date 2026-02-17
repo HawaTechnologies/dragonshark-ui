@@ -97,14 +97,17 @@ export function getDiscreteAxisStates(value) {
  * was occurred.
  * @param pressed The pressed state (true=pressed, false=released).
  * @param interval The interval.
- * @param func The callback function.
+ * @param funcDown The callback function for when the button is pressed.
+ * @param funcUp The callback function for when the button is released.
  * @param delay An optional delay (for if we don't want the press effect to be available immediately).
  * @param deps Extra dependencies.
  */
-export function usePressEffect(pressed, interval, func, delay = 0, deps = null) {
+export function usePressEffect(pressed, interval, funcDown, funcUp, delay = 0, deps = null) {
     // A non-reactivizator ref.
     const ref = useRef(() => {});
-    ref.current = func;
+    ref.current = {
+        funcDown, funcUp
+    };
 
     // Flag to account for the delay.
     const [ready, setReady] = useState(delay === 0);
@@ -122,14 +125,16 @@ export function usePressEffect(pressed, interval, func, delay = 0, deps = null) 
     }, []);
 
     useEffect(() => {
-        const callback = () => (ref.current || (() => {}))();
+        const callbackDown = () => (ref.current.funcDown || (() => {}))();
+        const callbackUp = () => (ref.current.funcDown || (() => {}))();
         if (pressed && ready) {
             // Trigger as immediately as possible.
-            setTimeout(callback, 0);
+            setTimeout(callbackDown, 0);
             // Also trigger after the interval, each time.
-            const id = setInterval(callback, interval);
+            const id = setInterval(callbackDown, interval);
             // Also, clear the state.
             return () => {
+                callbackUp();
                 clearInterval(id);
             }
         } else {

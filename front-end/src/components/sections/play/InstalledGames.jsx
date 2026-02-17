@@ -126,12 +126,12 @@ function GamesList({
         if (options?.length) {
             onChange(value === 0 ? options.length - 1 : value - 1);
         }
-    }, 1000);
+    }, null, 1000);
     usePressEffect(downPressed, 500, async function () {
         if (options?.length) {
             onChange(value === options.length - 1 ? 0 : value + 1);
         }
-    }, 1000);
+    }, null, 1000);
     const [gamesViewport, visualIndex] = useMemo(() => {
         if (!options?.length) {
             return [[], null];
@@ -202,7 +202,7 @@ export default function InstalledGames() {
         const games_ = await games.enumerateGames();
         setGamesList(games_);
         setCurrentIndex(Math.min(currentIndex, games_.length));
-    }, 1000);
+    }, null, 1000);
     usePressEffect(keyAPressed, 500, async function () {
         if (currentGame) {
             const {status, dump} = await games.launchGame(currentGame.gameDir);

@@ -20,6 +20,22 @@ export default function ManagePairedDevices() {
     // The current status.
     const [status, setStatus] = useState(null);
 
+    // The joypad status.
+    const {
+        buttonA: buttonAPressed, buttonB: buttonBPressed,
+        buttonX: buttonXPressed, buttonY: buttonYPressed
+    } = useGamepad();
+
+    usePressEffect(buttonAPressed, 500, () => {
+
+    }, null, 1000);
+    usePressEffect(buttonXPressed && buttonBPressed, 500, () => {
+
+    }, null, 1000);
+    usePressEffect(buttonYPressed, 500, async () => {
+
+    }, null, 1000);
+
     // The content to show as per the status.
     let content;
     switch(status?.code) {

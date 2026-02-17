@@ -52,7 +52,7 @@ export default function Select({
         const newIndex = selectedIndex <= 0 ? l - 1 : selectedIndex - 1;
         setSelectedIndex(newIndex);
         onChange(options[newIndex]);
-    }, 1000, [options, disabled]);
+    }, null, 1000, [options, disabled]);
     usePressEffect(rightPressed, 500, () => {
         if (disabled) return;
         const l = options?.length;
@@ -60,7 +60,7 @@ export default function Select({
         const newIndex = selectedIndex >= l - 1 ? 0 : selectedIndex + 1;
         setSelectedIndex(newIndex);
         onChange(options[newIndex]);
-    }, 1000, [options, disabled]);
+    }, null, 1000, [options, disabled]);
 
     // On mount, understand the current value and translate it to an index.
     // Technically, this runs on mount or when the options / value change.

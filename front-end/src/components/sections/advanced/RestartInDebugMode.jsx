@@ -14,7 +14,7 @@ const system = window.dragonSharkAPI.system;
 export default function RestartInDebugMode() {
     // First, get joystick status. Then, capture the buttons.
     const {buttonX, buttonB} = useGamepad();
-    usePressEffect(buttonX && buttonB, 500, function() {
+    usePressEffect(buttonX && buttonB, 500, function(pressed) {
         system.restartInDebugMode();
     });
 

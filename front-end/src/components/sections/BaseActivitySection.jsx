@@ -23,7 +23,7 @@ export default function BaseActivitySection({ caption, children, backPath, backT
     });
     usePressEffect(LB, backTimeout, () => {
         if (backPath) navigate(backPath);
-    }, 1000);
+    }, null, 1000);
 
     return <Panel style={{position: "absolute", left: "48px", right: "48px", bottom: "208px", top: "288px"}}>
         <div className="text-red" style={{position: "absolute", left: "48px"}}>Press <L1/> to leave</div>

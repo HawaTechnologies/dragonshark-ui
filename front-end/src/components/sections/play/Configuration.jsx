@@ -84,10 +84,10 @@ export default function Configuration() {
                 setMessage("");
             }, 2000);
         })();
-    }, 1000);
+    }, null, 1000);
     usePressEffect(keyXPressed, 500, () => {
         refreshExternalDevices();
-    }, 1000);
+    }, null, 1000);
     useEffect(() => {
         refreshExternalDevices();
         refreshCurrentRomsDir();

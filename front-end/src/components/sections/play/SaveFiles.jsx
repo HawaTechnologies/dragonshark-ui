@@ -53,7 +53,7 @@ export default function SaveFiles() {
                 setMessage("");
             }, 2000);
         });
-    }, 1000);
+    }, null, 1000);
     usePressEffect(keyBPressed, 500, () => {
         if (!externalDevices || !externalDevices.length) return;
         setMessage("Restoring backup.zip file...");
@@ -66,10 +66,10 @@ export default function SaveFiles() {
                 setMessage("");
             }, 2000);
         });
-    }, 1000);
+    }, null, 1000);
     usePressEffect(keyXPressed, 500, () => {
         refreshExternalDevices();
-    }, 1000);
+    }, null, 1000);
     useEffect(() => {
         refreshExternalDevices();
         let _ = games.setupSavesDirs();

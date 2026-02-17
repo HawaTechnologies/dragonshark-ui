@@ -70,7 +70,7 @@ export default function ChooseInterface() {
 
     usePressEffect(keyPressed, 500, () => {
         navigate("/connectivity/network/interfaces/" + selectedInterfaceName);
-    }, 1000);
+    }, null, 1000);
 
     // Launch the refresh for the first time. This first time is always
     // given when this component loads.
