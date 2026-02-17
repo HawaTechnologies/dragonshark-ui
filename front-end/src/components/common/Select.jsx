@@ -17,10 +17,11 @@ function getLabel(e) {
  * @param onChange The callback to update the value.
  * @param disabled Whether it is disabled or not (disabled select
  * does not change the selected option with the d-pad).
+ * @param emptyLabel The empty label to show.
  * @constructor
  */
 export default function Select({
-    options, value, onChange,
+    options, value, onChange, emptyLabel = "(no options)",
     disabled = false
 }) {
     // First, a state here. Not for the options, but for the current index.
@@ -30,11 +31,11 @@ export default function Select({
     // Then, compute the selected label.
     const selectedLabel = useMemo(() => {
         if (!options || !options.length || selectedIndex === -1) {
-            return "";
+            return emptyLabel;
         } else {
             return getLabel(options[selectedIndex]);
         }
-    }, [options, selectedIndex]);
+    }, [options, selectedIndex, emptyLabel]);
 
     // Then, the gamepad effects go here.
     const {joystick: [leftRightAxis, _], buttonA: keyPressed} = useGamepad();
