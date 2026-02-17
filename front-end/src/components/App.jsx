@@ -32,6 +32,7 @@ import ConnectInterfaceToSpecifiedNetworkWithPassword from
 import SpecifyHiddenNetwork from "./sections/connectivity/Network/SpecifyHiddenNetwork.jsx";
 import DisconnectInterface from "./sections/connectivity/Network/DisconnectInterface.jsx";
 import ManagePairedDevices from "./sections/connectivity/Bluetooth/ManagePairedDevices.jsx";
+import PairNewDevice from "./sections/connectivity/Bluetooth/PairNewDevice.jsx";
 
 export default function App() {
     return <>
@@ -73,6 +74,7 @@ export default function App() {
                     <Route path="/connectivity/network/interfaces/:interface/disconnect"
                            Component={DisconnectInterface} />
                     <Route path="/connectivity/bluetooth" Component={ManagePairedDevices} />
+                    <Route path="/connectivity/bluetooth/pair" Component={PairNewDevice} />
                     <Route path="/connectivity/virtualpad" Component={VirtualPad} />
                     <Route path="/user-experience" Component={UserExperience} />
                     <Route path="/user-experience/sound" Component={Sound} />
