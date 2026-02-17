@@ -1,5 +1,5 @@
 import {useNavigate} from "react-router-dom";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import {useGamepad, usePressEffect} from "../../../hooks/gamepad";
 import * as React from "react";
 import {BDown, BLeft, BRight, BUp} from "../../../common/icons/RightPanelButton.jsx";
@@ -22,6 +22,8 @@ export default function ManagePairedDevices() {
     const [pairedDevices, setPairedDevices] = useState([]);
     // The current status.
     const [status, setStatus] = useState(null);
+    // The process error.
+    const [processError, setProcessError] = useState(null);
 
     // The joypad status.
     const {
@@ -33,10 +35,25 @@ export default function ManagePairedDevices() {
         navigate("/connectivity/bluetooth/pair");
     }, null, 1000);
     usePressEffect(buttonXPressed && buttonBPressed, 500, async (first) => {
-        if (!first) return;
-        // TODO process.
-    }, null, 1000);
+        setProcessError(null);
+        if (!first || !selectedPairedDevice) return;
+        const name = pairedDevices.find(({mac, name}) => mac === selectedPairedDevice)?.name;
+        setStatus({
+            status: "unpairing",
+            device: {
+                mac: selectedPairedDevice,
+                name
+            }
+        });
+        const {code} = await bluetooth.unpairDevice(selectedPairedDevice);
+        if (code !== 0) {
+            setProcessError("Error unpairing a device");
+            setTimeout(() => setProcessError(null), 3000);
+        }
+        setStatus(null);
+    }, null, 1000, [selectedPairedDevice, pairedDevices]);
     usePressEffect(buttonYPressed, 500, async (first) => {
+        setProcessError(null);
         if (!first) return;
         setStatus({
             status: "refreshing"
@@ -46,6 +63,9 @@ export default function ManagePairedDevices() {
             const newPairedDevices = devices.map(({name, mac}) => ({label: `${name} (${mac})`, value: mac}));
             setPairedDevices(newPairedDevices);
             setSelectedPairedDevice(newPairedDevices.length ? newPairedDevices[0].value : null);
+        } else {
+            setProcessError("Error listing paired devices");
+            setTimeout(() => setProcessError(null), 3000);
         }
         setStatus(null);
     }, null, 1000);
@@ -70,6 +90,9 @@ export default function ManagePairedDevices() {
                     Press <BLeft/> + <BRight/> to unpair the selected device.
                     Press <BDown/> to pair a new device.
                 </div>
+                {processError && <div>
+                    {processError}
+                </div>}
             </>;
     }
 
