@@ -43,7 +43,7 @@ export default function PairNewDevice() {
         });
         const {code} = await bluetooth.unpairDevice(selectedUnpairedDevice);
         if (code !== 0) {
-            setProcessError("Error unpairing a device");
+            setProcessError("Error pairing a device");
             setTimeout(() => setProcessError(null), 3000);
         }
         setStatus(null);
