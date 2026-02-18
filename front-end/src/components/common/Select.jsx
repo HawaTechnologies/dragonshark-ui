@@ -43,23 +43,26 @@ export default function Select({
     }, [options, selectedIndex, emptyLabel]);
 
     // Then, the gamepad effects go here.
-    const {joystick: [leftRightAxis, _], buttonA: keyPressed} = useGamepad();
-    const {down: leftPressed, up: rightPressed} = getDiscreteAxisStates(leftRightAxis);
-    usePressEffect(leftPressed, 500, () => {
+    const {
+        joystick: [leftRightAxis, _],
+        left: leftButton, right: rightButton
+    } = useGamepad();
+    const {down: leftDiscreteAxis, up: rightDiscreteAxis} = getDiscreteAxisStates(leftRightAxis);
+    usePressEffect(leftDiscreteAxis || leftButton, 500, () => {
         if (disabled) return;
         const l = options?.length;
         if (!l) return;
         const newIndex = selectedIndex <= 0 ? l - 1 : selectedIndex - 1;
         setSelectedIndex(newIndex);
-        onChange(options[newIndex]);
+        onChange(getValue(options[newIndex]));
     }, null, 1000, [options, disabled]);
-    usePressEffect(rightPressed, 500, () => {
+    usePressEffect(rightDiscreteAxis || rightButton, 500, () => {
         if (disabled) return;
         const l = options?.length;
         if (!l) return;
         const newIndex = selectedIndex >= l - 1 ? 0 : selectedIndex + 1;
         setSelectedIndex(newIndex);
-        onChange(options[newIndex]);
+        onChange(getValue(options[newIndex]));
     }, null, 1000, [options, disabled]);
 
     // On mount, understand the current value and translate it to an index.
@@ -78,8 +81,8 @@ export default function Select({
             }
         } else {
             setSelectedIndex(index);
-            if (value !== getValue(options[0])) {
-                onChange(getValue(options[0]));
+            if (value !== getValue(options[index])) {
+                onChange(getValue(options[index]));
             }
         }
     }, [options, value]);
