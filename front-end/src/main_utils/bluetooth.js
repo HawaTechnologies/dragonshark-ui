@@ -93,6 +93,30 @@ async function unpairDevice(device, time) {
     return {code, stdout, stderr};
 }
 
+/**
+ * Connects a device. The chosen device can be a device name
+ * or a mac. In the case of a mac, it must be valid. In the
+ * case of a device name, exactly a paired device entry
+ * must exist for that device name. Resolving the name of
+ * the device is time-consuming, if using a name.
+ * @param device The mac / name of the device to connect.
+ * @param time The time, in seconds. An integer value.
+ * @returns {Promise<{code: number, stdout: string, stderr: string}>} The {code, stdout, stderr} with the result of the operation (async function).
+ */
+
+async function connectDevice(device, time) {
+    time = Math.max(3, Math.floor(parseFloat(time) || 0));
+
+    // Run the process.
+    const {stdout, result, stderr} = await exec(`dragonshark-bluetooth-connect-device ${escapeShellArg(device)} ${time}`);
+
+    // Get the code.
+    const code = result?.code || 0;
+
+    // Forward the results directly.
+    return {code, stdout, stderr};
+}
+
 module.exports = {
-    listPairedDevices, listUnpairedDevices, pairDevice, unpairDevice
+    listPairedDevices, listUnpairedDevices, pairDevice, unpairDevice, connectDevice
 }

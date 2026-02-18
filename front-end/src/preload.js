@@ -23,7 +23,8 @@ contextBridge.exposeInMainWorld('dragonSharkAPI', {
         listPairedDevices: () => ipcRenderer.invoke("bluetooth.listPairedDevices"),
         listUnpairedDevices: (time) => ipcRenderer.invoke("bluetooth.listUnpairedDevices", time),
         pairDevice: (device, time) => ipcRenderer.invoke("bluetooth.pairDevice", device, time),
-        unpairDevice: (device, time) => ipcRenderer.invoke("bluetooth.unpairDevice", device, time)
+        unpairDevice: (device, time) => ipcRenderer.invoke("bluetooth.unpairDevice", device, time),
+        connectDevice: (device, time) => ipcRenderer.invoke("bluetooth.connectDevice", device, time)
     },
     games: {
         listExternalDeviceDirs: () => ipcRenderer.invoke("games.listExternalDeviceDirs"),
