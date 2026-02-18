@@ -40,7 +40,7 @@ export default function PairNewDevice() {
                 name
             }
         });
-        const {code} = await bluetooth.pairDevice(selectedUnpairedDevice);
+        const {code} = await bluetooth.pairDevice(selectedUnpairedDevice, 6);
         if (code !== 0) {
             setProcessError("Error pairing a device");
             setTimeout(() => setProcessError(null), 3000);

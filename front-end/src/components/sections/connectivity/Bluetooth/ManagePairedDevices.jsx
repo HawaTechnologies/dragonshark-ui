@@ -45,7 +45,7 @@ export default function ManagePairedDevices() {
                 name
             }
         });
-        const {code} = await bluetooth.unpairDevice(selectedPairedDevice);
+        const {code} = await bluetooth.unpairDevice(selectedPairedDevice, 6);
         if (code !== 0) {
             setProcessError("Error unpairing a device");
             setTimeout(() => setProcessError(null), 3000);
