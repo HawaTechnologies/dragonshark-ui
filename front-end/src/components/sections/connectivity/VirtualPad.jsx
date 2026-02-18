@@ -124,7 +124,7 @@ export default function VirtualPad() {
                 </div>
                 {padStatus !== null && <div>
                     Status: {padStatus} - Password: {password} {user ? `- User: ${user}` : ""}<br />
-                    Press <BLeft /> to reset the password.
+                    Press <BLeft /> to reset the password.<br/>
                     {user && (<> Press <BRight/> to disconnect this user.</>)}
                 </div>}
             </div>}

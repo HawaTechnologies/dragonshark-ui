@@ -89,7 +89,7 @@ export default function PairNewDevice() {
                                               options={unpairedDevices}/>
                 </div>
                 <div>
-                    Press <BUp/> to refresh the list of unpaired devices.
+                    Press <BUp/> to refresh the list of unpaired devices.<br/>
                     Press <BDown/> to pair a new device.
                 </div>
                 {processError && <div>
