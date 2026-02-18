@@ -16,7 +16,7 @@ export function useGamepad() {
 
     // Function to update gamepad state
     const updateGamepadState = () => {
-        const gamepads = navigator.getGamepads ? navigator.getGamepads() : [];
+        const gamepads = (navigator.getGamepads ? navigator.getGamepads() : []).filter(gamepad => gamepad);
         const gamepad = gamepads[0]; // Assuming the first gamepad
 
         if (gamepad) {
