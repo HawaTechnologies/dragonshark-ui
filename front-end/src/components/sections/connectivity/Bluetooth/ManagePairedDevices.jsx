@@ -34,7 +34,25 @@ export default function ManagePairedDevices() {
     usePressEffect(buttonAPressed, 500, () => {
         navigate("/connectivity/bluetooth/pair");
     }, null, 1000);
-    usePressEffect(buttonXPressed && buttonBPressed, 500, async (first) => {
+    usePressEffect(buttonXPressed, 500, async (first) => {
+        setProcessError(null);
+        if (!first || !selectedPairedDevice) return;
+        const name = pairedDevices.find(({mac, name}) => mac === selectedPairedDevice)?.name;
+        setStatus({
+            code: "connecting",
+            device: {
+                mac: selectedPairedDevice,
+                name
+            }
+        });
+        const {code} = await bluetooth.connectDevice(selectedPairedDevice, 6);
+        if (code !== 0) {
+            setProcessError("Error connecting the device");
+            setTimeout(() => setProcessError(null), 3000);
+        }
+        setStatus(null);
+    }, null, 1000, [selectedPairedDevice, pairedDevices]);
+    usePressEffect(buttonBPressed, 500, async (first) => {
         setProcessError(null);
         if (!first || !selectedPairedDevice) return;
         const name = pairedDevices.find(({mac, name}) => mac === selectedPairedDevice)?.name;
@@ -47,7 +65,7 @@ export default function ManagePairedDevices() {
         });
         const {code} = await bluetooth.unpairDevice(selectedPairedDevice, 6);
         if (code !== 0) {
-            setProcessError("Error unpairing a device");
+            setProcessError("Error unpairing the device");
             setTimeout(() => setProcessError(null), 3000);
         }
         setStatus(null);
@@ -82,6 +100,9 @@ export default function ManagePairedDevices() {
         case 'unpairing':
             content = <ProgressText>Unpairing {status.device.name} ({status.device.mac})</ProgressText>
             break;
+        case 'connecting':
+            content = <ProgressText>Connecting {status.device.name} ({status.device.mac})</ProgressText>
+            break;
         case 'refreshing':
             content = <ProgressText>Refreshing</ProgressText>;
             break;
@@ -92,8 +113,9 @@ export default function ManagePairedDevices() {
                                             options={pairedDevices}/>
                 </div>
                 <div>
-                    Press <BUp/> to refresh the list of paired devices.
-                    Press <BLeft/> + <BRight/> to unpair the selected device.
+                    Press <BUp/> to refresh the list of paired devices.<br/>
+                    Press <BLeft/> to connect the selected device.<br/>
+                    Press <BRight/> to unpair the selected device.<br/>
                     Press <BDown/> to pair a new device.
                 </div>
                 {processError && <div>
