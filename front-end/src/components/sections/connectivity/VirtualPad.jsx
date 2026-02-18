@@ -18,8 +18,11 @@ export default function VirtualPad() {
     // - Y/BUp to start/stop the VirtualPad server.
     // - X/BLeft to reset the password of the current selected pad.
     // - B/BRight to kick the current selected pad, if any.
-    const {joystick: [leftRightAxis, _], buttonX, buttonB, buttonY} = useGamepad();
-    const {down: leftPressed, up: rightPressed} = getDiscreteAxisStates(leftRightAxis);
+    const {
+        joystick: [leftRightAxis, _], buttonX, buttonB, buttonY,
+        left: leftButton, right: rightButton
+    } = useGamepad();
+    const {down: leftDiscreteAxis, up: rightDiscreteAxis} = getDiscreteAxisStates(leftRightAxis);
     // States:
     // 1. The whole current status of the server.
     const [status, setStatus] = useState(null);
@@ -39,11 +42,11 @@ export default function VirtualPad() {
     const [padStatus, user] = selectedPad || [null, null];
     const password = status?.passwords ? status.passwords[selectedPadIndex] : null;
     // Handlers:
-    usePressEffect(leftPressed, 500, function() {
+    usePressEffect(leftDiscreteAxis || leftButton, 500, function() {
         if (!(status?.pads)) return;
         setSelectedPadIndex((selectedPadIndex === 0) ? (status.pads.length - 1) : (selectedPadIndex - 1));
     });
-    usePressEffect(rightPressed, 500, function() {
+    usePressEffect(rightDiscreteAxis || rightButton, 500, function() {
         if (!(status?.pads)) return;
         setSelectedPadIndex((selectedPadIndex === status.pads.length - 1) ? 0 : (selectedPadIndex + 1));
     });
@@ -115,7 +118,7 @@ export default function VirtualPad() {
                         display: "inline-block", padding: "20px", fontSize: "20px",
                         border: (e === selectedPadIndex) ? "2px solid yellow" : "2px solid gray",
                         backgroundColor: (e === selectedPadIndex) ? "#ffff0077" : "#77777777"
-                    }}>
+                    }} key={e}>
                         {(e + 1).toString()}
                     </div>)}
                 </div>
