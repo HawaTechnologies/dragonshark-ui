@@ -20,10 +20,11 @@ function clampVolume(volume) {
  */
 export default function Sound() {
     // Controls: left / right to manage volume.
-    const {joystick: [leftRightAxis, _]} = useGamepad();
-    const {down: leftPressed, up: rightPressed} = getDiscreteAxisStates(leftRightAxis);
-    const refDown = useRef(() => {});
-    const refUp = useRef(() => {});
+    const {
+        joystick: [leftRightAxis, _],
+        left: leftButton, right: rightButton
+    } = useGamepad();
+    const {down: leftDiscreteAxis, up: rightDiscreteAxis} = getDiscreteAxisStates(leftRightAxis);
     const [volume, setVolume] = useState(50);
 
     useEffect(() => {
@@ -36,15 +37,13 @@ export default function Sound() {
         })();
     }, []);
 
-    usePressEffect(leftPressed, 500, () => {
+    usePressEffect(leftDiscreteAxis || leftButton, 500, () => {
         const newVolume = clampVolume(volume - 5);
-        console.log("Setting the new volume:", newVolume);
         setVolume(newVolume);
         sound.setVolume(newVolume);
     });
-    usePressEffect(rightPressed, 500, () => {
+    usePressEffect(rightDiscreteAxis || rightButton, 500, () => {
         const newVolume = clampVolume(volume + 5);
-        console.log("Setting the new volume:", newVolume);
         setVolume(newVolume);
         sound.setVolume(newVolume);
     });
