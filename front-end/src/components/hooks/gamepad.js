@@ -7,11 +7,11 @@ import {useActive} from "./active.js";
  * @returns {{RT: boolean, select: boolean, buttonX: boolean, buttonY: boolean, LT: boolean, start: boolean, joystick: number[], right: boolean, buttonA: boolean, down: boolean, joystickRight: number[], connected: boolean, RB: boolean, buttonB: boolean, left: boolean, LB: boolean, up: boolean}}
  */
 export function useGamepad() {
-    const [gamepadInfo, setGamepadInfo] = useState({ connected: false, buttonA: false, buttonB :false, buttonX: false, buttonY:false, joystick: [0, 0], joystickRight : [0,0], RB: false, LB: false, RT: false, LT: false, start: false, select: false, up: false, down: false, left: false, right: false});
+    const [gamepadInfo, setGamepadInfo] = useState({ connected: false, buttonA: false, buttonB :false, buttonX: false, buttonY:false, joystick: [0, 0], joystickRight: [0,0], RB: false, LB: false, RT: false, LT: false, start: false, select: false, up: false, down: false, left: false, right: false});
     const active = useActive();
 
     const setEmptyPadInfo = function() {
-        setGamepadInfo({ connected: false, buttonA: false, buttonB :false, buttonX: false, buttonY:false, joystick: [0, 0], joystickRight : [0,0], RB: false, LB: false, RT: false, LT: false, start: false, select: false, up: false, down: false, left: false, right: false});
+        setGamepadInfo({ connected: false, buttonA: false, buttonB :false, buttonX: false, buttonY:false, joystick: [0, 0], joystickRight: [0,0], RB: false, LB: false, RT: false, LT: false, start: false, select: false, up: false, down: false, left: false, right: false});
     }
 
     // Function to update gamepad state
@@ -22,11 +22,16 @@ export function useGamepad() {
         if (gamepad) {
             const newGamepadInfo = {
                 connected: true,
+
+                up: gamepad.buttons[12]?.pressed || ((gamepad.axes[7] || 0) < 0) || false,
+                down: gamepad.buttons[13]?.pressed || ((gamepad.axes[7] || 0) > 0) || false,
+                left: gamepad.buttons[14]?.pressed || ((gamepad.axes[6] || 0) < 0) ||false,
+                right: gamepad.buttons[15]?.pressed || ((gamepad.axes[6] || 0) > 0) || false,
+
                 buttonA: gamepad.buttons[0]?.pressed || false,
                 buttonB: gamepad.buttons[1]?.pressed || false,
                 buttonX: gamepad.buttons[2]?.pressed || false,
                 buttonY: gamepad.buttons[3]?.pressed || false,
-                joystickRight: [gamepad.axes[2] || 0, gamepad.axes[3] || 0],
                 LT: gamepad.buttons[6]?.pressed || false,
                 RT: gamepad.buttons[7]?.pressed || false,
                 LB: gamepad.buttons[4]?.pressed || false,
@@ -34,11 +39,9 @@ export function useGamepad() {
 
                 start: gamepad.buttons[9]?.pressed || false,
                 select: gamepad.buttons[8]?.pressed || false,
-                up: gamepad.buttons[12]?.pressed || false,
-                down: gamepad.buttons[13]?.pressed || false,
-                left: gamepad.buttons[14]?.pressed || false,
-                right: gamepad.buttons[15]?.pressed || false,
-                joystick: [gamepad.axes[0] || 0, gamepad.axes[1] || 0]
+
+                joystick: [gamepad.axes[0] || 0, gamepad.axes[1] || 0],
+                joystickRight: [gamepad.axes[2] || 0, gamepad.axes[3] || 0],
             };
 
             // Update state only if there's a change
