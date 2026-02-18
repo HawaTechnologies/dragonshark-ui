@@ -164,8 +164,8 @@ app.whenReady().then(() => {
   ipcMain.handle("system.restartInDebugMode", (_) => system.restartInDebugMode());
   ipcMain.handle("bluetooth.listPairedDevices", (_) => bluetooth.listPairedDevices());
   ipcMain.handle("bluetooth.listUnpairedDevices", (_, time) => bluetooth.listUnpairedDevices(time));
-  ipcMain.handle("bluetooth.pairDevice", (_, device) => bluetooth.pairDevice(device));
-  ipcMain.handle("bluetooth.unpairDevice", (_, device) => bluetooth.unpairDevice(device));
+  ipcMain.handle("bluetooth.pairDevice", (_, device, time) => bluetooth.pairDevice(device, time));
+  ipcMain.handle("bluetooth.unpairDevice", (_, device, time) => bluetooth.unpairDevice(device, time));
   // TODO The broadcast server (127.0.0.1:2358) should always
   // TODO be considered as active. So this app should connect
   // TODO to it and listen for all their messages and then
