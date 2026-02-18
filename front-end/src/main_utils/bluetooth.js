@@ -51,13 +51,17 @@ async function listUnpairedDevices(time) {
  * Pairs a device. The chosen device can be a device name
  * or a mac. In the case of a mac, it must be valid. In the
  * case of a device name, exactly an unpaired device entry
- * must exist for that device name.
+ * must exist for that device name. Resolving the name of
+ * the device is time-consuming, if using a name.
  * @param device The mac / name of the device to pair.
+ * @param time The time, in seconds. An integer value.
  * @returns {Promise<{code: number, stdout: string, stderr: string}>} The {code, stdout, stderr} with the result of the operation (async function).
  */
-async function pairDevice(device) {
+async function pairDevice(device, time) {
+    time = Math.max(3, Math.floor(parseFloat(time) || 0));
+
     // Run the process.
-    const {stdout, result, stderr} = await exec(`dragonshark-bluetooth-pair-device ${escapeShellArg(device)}`);
+    const {stdout, result, stderr} = await exec(`dragonshark-bluetooth-pair-device ${escapeShellArg(device)} ${time}`);
 
     // Get the code.
     const code = result?.code || 0;
@@ -70,13 +74,17 @@ async function pairDevice(device) {
  * Unpairs a device. The chosen device can be a device name
  * or a mac. In the case of a mac, it must be valid. In the
  * case of a device name, exactly a paired device entry
- * must exist for that device name.
+ * must exist for that device name. Resolving the name of
+ * the device is time-consuming, if using a name.
  * @param device The mac / name of the device to unpair.
+ * @param time The time, in seconds. An integer value.
  * @returns {Promise<{code: number, stdout: string, stderr: string}>} The {code, stdout, stderr} with the result of the operation (async function).
  */
-async function unpairDevice(device) {
+async function unpairDevice(device, time) {
+    time = Math.max(3, Math.floor(parseFloat(time) || 0));
+
     // Run the process.
-    const {stdout, result, stderr} = await exec(`dragonshark-bluetooth-unpair-device ${escapeShellArg(device)}`);
+    const {stdout, result, stderr} = await exec(`dragonshark-bluetooth-unpair-device ${escapeShellArg(device)} ${time}`);
 
     // Get the code.
     const code = result?.code || 0;
