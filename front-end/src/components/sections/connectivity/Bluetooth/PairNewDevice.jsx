@@ -26,8 +26,7 @@ export default function PairNewDevice() {
 
     // The joypad status.
     const {
-        buttonA: buttonAPressed, buttonB: buttonBPressed,
-        buttonX: buttonXPressed, buttonY: buttonYPressed
+        buttonA: buttonAPressed, buttonY: buttonYPressed
     } = useGamepad();
 
     usePressEffect(buttonAPressed, 500, async (first) => {
@@ -35,7 +34,7 @@ export default function PairNewDevice() {
         if (!first || !selectedUnpairedDevice) return;
         const name = unpairedDevices.find(({mac, name}) => mac === selectedUnpairedDevice)?.name;
         setStatus({
-            status: "pairing",
+            code: "pairing",
             device: {
                 mac: selectedUnpairedDevice,
                 name
@@ -52,7 +51,7 @@ export default function PairNewDevice() {
         setProcessError(null);
         if (!first) return;
         setStatus({
-            status: "refreshing"
+            code: "refreshing"
         });
         const {code, data: devices} = await bluetooth.listUnpairedDevices(6); // 6 seconds.
         if (code === 0) {

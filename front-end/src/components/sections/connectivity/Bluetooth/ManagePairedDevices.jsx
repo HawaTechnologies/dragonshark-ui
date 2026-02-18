@@ -39,7 +39,7 @@ export default function ManagePairedDevices() {
         if (!first || !selectedPairedDevice) return;
         const name = pairedDevices.find(({mac, name}) => mac === selectedPairedDevice)?.name;
         setStatus({
-            status: "unpairing",
+            code: "unpairing",
             device: {
                 mac: selectedPairedDevice,
                 name
@@ -56,7 +56,7 @@ export default function ManagePairedDevices() {
         setProcessError(null);
         if (!first) return;
         setStatus({
-            status: "refreshing"
+            code: "refreshing"
         });
         const {code, data: devices} = await bluetooth.listPairedDevices();
         if (code === 0) {
