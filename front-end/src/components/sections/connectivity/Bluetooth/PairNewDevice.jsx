@@ -40,14 +40,17 @@ export default function PairNewDevice() {
                 name
             }
         });
-        const {code} = await bluetooth.unpairDevice(selectedUnpairedDevice);
+        const {code} = await bluetooth.pairDevice(selectedUnpairedDevice);
         if (code !== 0) {
             setProcessError("Error pairing a device");
             setTimeout(() => setProcessError(null), 3000);
+        } else {
+            navigate("/connectivity/bluetooth");
         }
         setStatus(null);
     }, null, 1000);
-    usePressEffect(buttonYPressed, 500, async (first) => {
+
+    async function refreshUnpairedDevices(first) {
         setProcessError(null);
         if (!first) return;
         setStatus({
@@ -63,7 +66,12 @@ export default function PairNewDevice() {
             setTimeout(() => setProcessError(null), 3000);
         }
         setStatus(null);
-    }, null, 1000);
+    }
+
+    usePressEffect(buttonYPressed, 500, refreshUnpairedDevices, null, 1000);
+    useEffect(() => {
+        const _ = refreshUnpairedDevices(true);
+    }, []);
 
     // The content to show as per the status.
     let content;
@@ -90,7 +98,7 @@ export default function PairNewDevice() {
             </>;
     }
 
-    return <BaseActivitySection caption="Pair Bluetooth Device" backPath="/connectivity">
+    return <BaseActivitySection caption="Pair Bluetooth Device" backPath="/connectivity/bluetooth">
         <div className="text-bigger"
              style={{
                  position: "absolute",

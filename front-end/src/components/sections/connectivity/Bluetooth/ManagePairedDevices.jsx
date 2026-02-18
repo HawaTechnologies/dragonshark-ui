@@ -1,5 +1,5 @@
 import {useNavigate} from "react-router-dom";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {useGamepad, usePressEffect} from "../../../hooks/gamepad";
 import * as React from "react";
 import {BDown, BLeft, BRight, BUp} from "../../../common/icons/RightPanelButton.jsx";
@@ -52,7 +52,8 @@ export default function ManagePairedDevices() {
         }
         setStatus(null);
     }, null, 1000, [selectedPairedDevice, pairedDevices]);
-    usePressEffect(buttonYPressed, 500, async (first) => {
+
+    async function refreshPairedDevices(first) {
         setProcessError(null);
         if (!first) return;
         setStatus({
@@ -68,7 +69,12 @@ export default function ManagePairedDevices() {
             setTimeout(() => setProcessError(null), 3000);
         }
         setStatus(null);
-    }, null, 1000);
+    }
+
+    usePressEffect(buttonYPressed, 500, refreshPairedDevices, null, 1000);
+    useEffect(() => {
+        const _ = refreshPairedDevices(true);
+    }, []);
 
     // The content to show as per the status.
     let content;
