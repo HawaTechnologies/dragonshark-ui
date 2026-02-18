@@ -116,18 +116,21 @@ const TAIL_SIZE = 10;
 function GamesList({
     value, onChange, options
 }) {
-    const {joystick: [_, upDownAxis]} = useGamepad();
-    const {down: upPressed, up: downPressed} = getDiscreteAxisStates(upDownAxis);
+    const {
+        joystick: [_, upDownAxis],
+        up: upButton, down: downButton
+    } = useGamepad();
+    const {down: upDiscreteAxis, up: downDiscreteAxis} = getDiscreteAxisStates(upDownAxis);
     const [ref, {height, width}] = useResizeObserver();
     const rowHeight = height / TAIL_SIZE;
     const padding = rowHeight * 0.2;
     const fontSize = rowHeight * 0.6;
-    usePressEffect(upPressed, 500, async function () {
+    usePressEffect(upDiscreteAxis || upButton, 500, async function () {
         if (options?.length) {
             onChange(value === 0 ? options.length - 1 : value - 1);
         }
     }, null, 1000);
-    usePressEffect(downPressed, 500, async function () {
+    usePressEffect(downDiscreteAxis || downButton, 500, async function () {
         if (options?.length) {
             onChange(value === options.length - 1 ? 0 : value + 1);
         }
