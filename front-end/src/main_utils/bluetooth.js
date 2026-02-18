@@ -5,7 +5,7 @@ const {exec, escapeShellArg, getLines} = require("./processes");
  * devices that are currently paired. These devices are
  * typically trusted as well (if untrusted, they can be
  * made trusted again by unpairing and re-pairing).
- * @returns {Promise<{code: number, data: null | {mac: string, name: string}[]}>} The list of paired devices (async function).
+ * @returns {Promise<{code: number, data: null | {mac: string, name: string, connected: boolean}[]}>} The list of paired devices (async function).
  */
 async function listPairedDevices() {
     // Run the process.
@@ -17,8 +17,8 @@ async function listPairedDevices() {
     // Parse the results.
     return {code, data: code ? null : (() => {
         return getLines(stdout).map(line => {
-            const [mac, name] = line.split(/\s+/);
-            return {mac, name};
+            const [mac, name, connected] = line.split(/\s+/);
+            return {mac, name, connected: connected.trim().toLowerCase() === "yes"};
         });
     })()};
 }
