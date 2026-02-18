@@ -201,13 +201,16 @@ function VirtualKeyboardLayout({append, backspace, confirm}) {
         () => clamp(position, layoutIndex),
         [position, layoutIndex]
     );
-    const {joystick: [leftRightAxis, upDownAxis], buttonA: keyPressed} = useGamepad();
-    const {down: leftPressed, up: rightPressed} = getDiscreteAxisStates(leftRightAxis);
-    const {down: upPressed, up: downPressed} = getDiscreteAxisStates(upDownAxis);
-    usePressEffect(leftPressed, 500, () => setPosition(left(clampedPosition, layoutIndex)));
-    usePressEffect(rightPressed, 500, () => setPosition(right(clampedPosition, layoutIndex)));
-    usePressEffect(upPressed, 500, () => setPosition(up(clampedPosition, layoutIndex)));
-    usePressEffect(downPressed, 500, () => setPosition(down(clampedPosition, layoutIndex)));
+    const {
+        joystick: [leftRightAxis, upDownAxis], buttonA: keyPressed,
+        left: leftButton, right: rightButton, up: upButton, down: downButton
+    } = useGamepad();
+    const {down: leftDiscreteAxis, up: rightDiscreteAxis} = getDiscreteAxisStates(leftRightAxis);
+    const {down: upDiscreteAxis, up: downDiscreteAxis} = getDiscreteAxisStates(upDownAxis);
+    usePressEffect(leftDiscreteAxis || leftButton, 500, () => setPosition(left(clampedPosition, layoutIndex)));
+    usePressEffect(rightDiscreteAxis || rightButton, 500, () => setPosition(right(clampedPosition, layoutIndex)));
+    usePressEffect(upDiscreteAxis || upButton, 500, () => setPosition(up(clampedPosition, layoutIndex)));
+    usePressEffect(downDiscreteAxis || downButton, 500, () => setPosition(down(clampedPosition, layoutIndex)));
     usePressEffect(keyPressed, 500, () => {
         switch(clampedPosition) {
             case "SPACE":
