@@ -1,4 +1,4 @@
-const {exec, escapeShellArg} = require("./processes");
+const {exec, escapeShellArg, getLines} = require("./processes");
 
 /**
  * Lists the known timezones.
@@ -12,7 +12,7 @@ async function listTimezones() {
     const code = result?.code || 0;
 
     // Parse the results.
-    return {code, timezones: code ? [] : stdout.trim().split("\n")};
+    return {code, timezones: code ? [] : getLines(stdout)};
 }
 
 /**
@@ -66,7 +66,7 @@ async function getTimeData() {
 
     // Parse the results.
     return {code, data: code ? null : (() => {
-        const lines = stdout.trim().split("\n");
+        const lines = getLines(stdout);
         const obj_ = {};
         lines.forEach((l) => {
             const [key, value] = l.trim().split("=");

@@ -1,4 +1,4 @@
-const { exec, spawn, escapeShellArg } = require("./processes");
+const { exec, spawn, escapeShellArg, getLines } = require("./processes");
 const { readGameManifest } = require("./manifest");
 const path = require("node:path");
 const fs = require("node:fs");
@@ -15,7 +15,7 @@ async function listExternalDeviceDirs() {
     const code = result?.code || 0;
 
     // Parse the results.
-    return {code, dirs: code ? [] : stdout.trim().split("\n")};
+    return {code, dirs: code ? [] : getLines(stdout)};
 }
 
 /**

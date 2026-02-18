@@ -1,4 +1,4 @@
-const {exec, escapeShellArg} = require("./processes");
+const {exec, escapeShellArg, getLines} = require("./processes");
 
 /**
  * Lists the paired devices. Returns a list of {mac, name}
@@ -16,7 +16,7 @@ async function listPairedDevices() {
 
     // Parse the results.
     return {code, data: code ? null : (() => {
-        return stdout.trim().split("\n").map(line => {
+        return getLines(stdout).map(line => {
             const [mac, name] = line.split(/\s+/);
             return {mac, name};
         });
@@ -40,7 +40,7 @@ async function listUnpairedDevices(time) {
 
     // Parse the results.
     return {code, data: code ? null : (() => {
-        return stdout.trim().split("\n").map(line => {
+        return getLines(stdout).map(line => {
             const [mac, name] = line.split(/\s+/);
             return {mac, name};
         });

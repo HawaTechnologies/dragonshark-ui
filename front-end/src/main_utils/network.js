@@ -1,4 +1,4 @@
-const { exec, escapeShellArg } = require("./processes");
+const { exec, escapeShellArg, getLines } = require("./processes");
 
 /**
  * Lists the available IPv4 interfaces.
@@ -12,7 +12,7 @@ async function listIPv4Interfaces() {
     const code = result?.code || 0;
 
     // Parse the results.
-    return {code, interfaces: code ? [] : stdout.trim().split("\n").map(e => {
+    return {code, interfaces: code ? [] : getLines(stdout).map(e => {
         const [address, type, wireless] = e.trim().split(",");
         return [address, type, wireless === "yes"];
     }).filter(e => e[1] !== "unknown"), stderr};
@@ -30,7 +30,7 @@ async function listWLANInterfaces() {
     const code = result?.code || 0;
 
     // Parse the results.
-    return {code, interfaces: code ? [] : stdout.trim().split("\n"), stderr};
+    return {code, interfaces: code ? [] : getLines(stdout), stderr};
 }
 
 /**
@@ -45,7 +45,7 @@ async function listWirelessNetworks() {
     const code = result?.code || 0;
 
     // Parse the results.
-    return {code, networks: code ? [] : stdout.trim().split("\n").map(e => {
+    return {code, networks: code ? [] : getLines(stdout).map(e => {
         const [active, ssid, signal, device, security] = e.split(":");
         return [
             active === "*" || active === "yes", ssid, parseInt(signal), device,

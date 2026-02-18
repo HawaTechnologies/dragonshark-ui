@@ -22,6 +22,16 @@ function exec(command) {
     })
 }
 
+/**
+ * Converts a dump to lines.
+ * @param dump The dump.
+ * @returns {string[]} The lines.
+ */
+function getLines(dump) {
+    dump = dump.trim();
+    return dump ? dump.split("\n") : [];
+}
+
 module.exports = {
-    exec, spawn, escapeShellArg
+    exec, spawn, escapeShellArg, getLines
 }
