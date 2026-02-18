@@ -29,8 +29,11 @@ export default function DateTime() {
     // - A/BDown to update all.
     // - B/BRight to refresh time data.
     // - X/BLeft to manage NTP setting.
-    const {joystick: [leftRightAxis, _], buttonA, buttonX, buttonB} = useGamepad();
-    const {down: leftPressed, up: rightPressed} = getDiscreteAxisStates(leftRightAxis);
+    const {
+        joystick: [leftRightAxis, _], buttonA, buttonX, buttonB,
+        left: leftButton, right: rightButton
+    } = useGamepad();
+    const {down: leftDiscreteAxis, up: rightDiscreteAxis} = getDiscreteAxisStates(leftRightAxis);
     // This data is fetched every 0 seconds.
     const [timezones, setTimezones] = useState([]);
     const [timeData, setTimeData] = useState(null);
@@ -77,7 +80,7 @@ export default function DateTime() {
     }, [timezone]);
 
     // On each frame, update the functions for the controllers.
-    usePressEffect(timezones.length !== 0 && timeData && leftPressed, 500, function () {
+    usePressEffect(timezones.length !== 0 && timeData && (leftDiscreteAxis || leftButton), 500, function () {
         const index = timezones.indexOf(timezone);
         if (index < 0) {
             setTimezone(timezones[0]);
@@ -87,7 +90,7 @@ export default function DateTime() {
             setTimezone(timezones[index - 1]);
         }
     });
-    usePressEffect(timezones.length !== 0 && timeData && rightPressed, 500, function () {
+    usePressEffect(timezones.length !== 0 && timeData && (rightDiscreteAxis || rightButton), 500, function () {
         const index = timezones.indexOf(timezone);
         if (index < 0) {
             setTimezone(timezones[0]);
