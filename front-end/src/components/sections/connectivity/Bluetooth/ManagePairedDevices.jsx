@@ -69,6 +69,7 @@ export default function ManagePairedDevices() {
             setTimeout(() => setProcessError(null), 3000);
         }
         setStatus(null);
+        await refreshPairedDevices(true);
     }, null, 1000, [selectedPairedDevice, pairedDevices]);
 
     async function refreshPairedDevices(first) {
