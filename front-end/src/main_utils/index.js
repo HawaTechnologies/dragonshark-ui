@@ -6,6 +6,7 @@ const virtualpad = require("./virtualpad");
 const sound = require("./sound");
 const manifest = require("./manifest");
 const system = require("./system");
+const joystick = require("./joysticks");
 
 
 module.exports = {
@@ -14,6 +15,7 @@ module.exports = {
     games,
     datetime,
     virtualpad,
+    joystick,
     sound,
     manifest,
     system

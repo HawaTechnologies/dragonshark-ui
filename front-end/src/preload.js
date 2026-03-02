@@ -26,6 +26,10 @@ contextBridge.exposeInMainWorld('dragonSharkAPI', {
         unpairDevice: (device, time) => ipcRenderer.invoke("bluetooth.unpairDevice", device, time),
         connectDevice: (device, time) => ipcRenderer.invoke("bluetooth.connectDevice", device, time)
     },
+    joystick: {
+        listAvailableJoysticks: () => ipcRenderer.invoke("joystick.listAvailableJoysticks"),
+        getJoystickButton: (device, timeout) => ipcRenderer.invoke("joystick.getJoystickButton", device, timeout)
+    },
     games: {
         listExternalDeviceDirs: () => ipcRenderer.invoke("games.listExternalDeviceDirs"),
         setRomsDir: (dir) => ipcRenderer.invoke("games.setRomsDir", dir),
