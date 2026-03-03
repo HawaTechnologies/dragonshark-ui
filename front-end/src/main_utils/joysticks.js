@@ -30,7 +30,7 @@ async function getJoystickButton(joystick, timeout) {
     timeout = Math.max(1, timeout);
 
     // Run the process.
-    const {stdout, result} = await exec(`dragonshark-input-get-joystick-button ${escapeShellArg(joystick)} ${escapeShellArg(timeout)}`);
+    const {stdout, result} = await exec(`dragonshark-input-get-joystick-button ${escapeShellArg(joystick)} ${escapeShellArg(String(timeout))}`);
 
     // Get the code.
     const code = result?.code || 0;
@@ -53,8 +53,8 @@ async function hotkeysGet() {
     let code = result?.code || 0;
 
     // Parse the values from "$a $b $c $d $e $f".
-    const values = (stdout || "").trim().split(/\s+/).filter(Boolean).map((value) => parseInt(value, 10));
-    const data = values.length === 6 && values.every(Number.isInteger) ? values : null;
+    const values = (stdout || "").trim().split(/\s+/).filter(Boolean).map((value) => Number.isInteger(value) ? parseInt(value, 10) : null);
+    const data = values.length === 6 && values.every((e) => Number.isInteger(e) || Number.isNaN(e)) ? values : null;
     if (!data && code === 0) code = 1;
 
     return {code, data};
