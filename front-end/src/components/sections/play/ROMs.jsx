@@ -11,7 +11,7 @@ const games = window.dragonSharkAPI.games;
  * The Play > Configuration section.
  * @constructor
  */
-export default function Configuration() {
+export default function ROMs() {
     const [externalDevices, setExternalDevices] = useState([]);
     const [romsDirectory, setRomsDirectory] = useState(null);
     const [currentTimeout, setCurrentTimeout] = useState(0);
@@ -93,7 +93,7 @@ export default function Configuration() {
         refreshCurrentRomsDir();
     }, []);
 
-    return <BaseActivitySection caption="Installed Games" backPath="/play">
+    return <BaseActivitySection caption="Installed ROMs" backPath="/play">
         <div className="text-bigger" style={{
             position: "absolute",
             left: "50%", top: "50%", width: "80%",

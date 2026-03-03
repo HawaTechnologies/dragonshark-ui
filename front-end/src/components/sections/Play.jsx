@@ -6,7 +6,7 @@ import Option from "../common/Menu/Option.jsx";
 // Images
 import installedgames from "../../images/options/play/installedgames.png";
 import emulationstation from "../../images/options/play/emulationstation.png";
-import configuration from "../../images/options/play/configuration.png";
+import roms from "../../images/options/play/roms.png";
 import savefiles from "../../images/options/play/savefiles.png";
 import {useGamepad, usePressEffect} from "../hooks/gamepad";
 
@@ -36,8 +36,8 @@ export default function Play() {
             {/* This is the "Save Files" section. Intended to back-up and restore saves. */}
             <Option caption="Save Files" image={savefiles} callback={() => navigate("/play/save-files")} />
 
-            {/* This is the "Configuration". Intended to game-related configurations. */}
-            <Option caption="Configuration" image={configuration} callback={() => navigate("/play/configuration")} />
+            {/* This is the "ROMs". Intended to game-related configurations. */}
+            <Option caption="ROMs" image={roms} callback={() => navigate("/play/roms")} />
         </Section>
     </Menu>;
 }

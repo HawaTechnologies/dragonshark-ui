@@ -13,7 +13,7 @@ import UserExperience from "./sections/UserExperience.jsx";
 import Advanced from "./sections/Advanced.jsx";
 import InstalledGames from "./sections/play/InstalledGames.jsx";
 import SaveFiles from "./sections/play/SaveFiles.jsx";
-import PlayConfiguration from "./sections/play/Configuration.jsx";
+import ROMs from "./sections/play/ROMs.jsx";
 import VirtualPad from "./sections/connectivity/VirtualPad.jsx";
 import Marketplace from "./sections/marketplace/Marketplace.jsx";
 import Sound from "./sections/userexperience/Sound.jsx";
@@ -56,7 +56,7 @@ export default function App() {
                     <Route path="/play" Component={Play} />
                     <Route path="/play/installed-games" Component={InstalledGames} />
                     <Route path="/play/save-files" Component={SaveFiles} />
-                    <Route path="/play/configuration" Component={PlayConfiguration} />
+                    <Route path="/play/roms" Component={ROMs} />
                     <Route path="/marketplace" Component={Marketplace} />
                     <Route path="/connectivity" Component={Connectivity} />
                     <Route path="/connectivity/network" Component={ChooseInterface} />
