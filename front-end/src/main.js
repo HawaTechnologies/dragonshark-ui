@@ -169,6 +169,8 @@ app.whenReady().then(() => {
   ipcMain.handle("bluetooth.connectDevice", (_, device, time) => bluetooth.connectDevice(device, time));
   ipcMain.handle("joystick.listAvailableJoysticks", (_) => joystick.listAvailableJoysticks());
   ipcMain.handle("joystick.getJoystickButton", (_, device, timeout) => joystick.getJoystickButton(device, timeout));
+  ipcMain.handle("joystick.hotkeysGet", (_) => joystick.hotkeysGet());
+  ipcMain.handle("joystick.hotkeysSet", (_, hb, lb, sb, ssib, ssdb, eb) => joystick.hotkeysSet(hb, lb, sb, ssib, ssdb, eb));
   // TODO The broadcast server (127.0.0.1:2358) should always
   // TODO be considered as active. So this app should connect
   // TODO to it and listen for all their messages and then

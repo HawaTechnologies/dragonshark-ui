@@ -39,7 +39,54 @@ async function getJoystickButton(joystick, timeout) {
     return {code, data: code ? null : parseInt(stdout.trim())};
 }
 
+/**
+ * Gets joystick hotkey button mappings.
+ * The output order is:
+ * [hotkeyButton, loadStateButton, saveStateButton, saveSlotIncreaseButton, saveSlotDecreaseButton, exitEmulatorButton]
+ * @returns {Promise<{code: number, data: null | number[]}>} The six mapped button values.
+ */
+async function hotkeysGet() {
+    // Run the process.
+    const {stdout, result} = await exec("dragonshark-input-hotkeys-get");
+
+    // Get the code.
+    let code = result?.code || 0;
+
+    // Parse the values from "$a $b $c $d $e $f".
+    const values = (stdout || "").trim().split(/\s+/).filter(Boolean).map((value) => parseInt(value, 10));
+    const data = values.length === 6 && values.every(Number.isInteger) ? values : null;
+    if (!data && code === 0) code = 1;
+
+    return {code, data};
+}
+
+/**
+ * Sets joystick hotkey button mappings.
+ * Arguments are in this order:
+ * (hotkeyButton, loadStateButton, saveStateButton, saveSlotIncreaseButton, saveSlotDecreaseButton, exitEmulatorButton)
+ * @param hotkeyButton The hotkey button.
+ * @param loadStateButton The button to load a state.
+ * @param saveStateButton The button to save a state.
+ * @param saveSlotIncreaseButton The button to increase the current save slot.
+ * @param saveSlotDecreaseButton The button to decrease the current save slot.
+ * @param exitEmulatorButton The button to close the emulator.
+ * @returns {Promise<{code: number, data: null | number[]}>}
+ */
+async function hotkeysSet(hotkeyButton, loadStateButton, saveStateButton, saveSlotIncreaseButton, saveSlotDecreaseButton, exitEmulatorButton) {
+    // Run the process.
+    const {result} = await exec(
+        `dragonshark-input-hotkeys-set ${escapeShellArg(String(hotkeyButton))} ${escapeShellArg(String(loadStateButton))} ` +
+        `${escapeShellArg(String(saveStateButton))} ${escapeShellArg(String(saveSlotIncreaseButton))} ` +
+        `${escapeShellArg(String(saveSlotDecreaseButton))} ${escapeShellArg(String(exitEmulatorButton))}`
+    );
+
+    // Get the code.
+    const code = result?.code || 0;
+
+    // Return the normalized values as the operation payload.
+    return {code, data: code ? null : [hotkeyButton, loadStateButton, saveStateButton, saveSlotIncreaseButton, saveSlotDecreaseButton, exitEmulatorButton]};
+}
 
 module.exports = {
-    getJoystickButton, listAvailableJoysticks
+    getJoystickButton, listAvailableJoysticks, hotkeysGet, hotkeysSet
 }
