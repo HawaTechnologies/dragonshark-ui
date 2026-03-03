@@ -24,7 +24,7 @@ export default function JoystickHotkeys() {
     const [hotkeys, setHotkeys] = useState([null, null, null, null, null, null]);
     const [selectedKey, setSelectedKey] = useState(0);
     const [flowRunning, setFlowRunning] = useState(false);
-    const [flowButtonLabel, setFlowButtonLabel] = useState("");
+    const [flowMessage, setFlowMessage] = useState("");
     const [message, setMessage] = useState("");
 
     async function refreshHotkeys() {
@@ -44,7 +44,6 @@ export default function JoystickHotkeys() {
 
         const option = keyOptions.find(({value}) => value === index);
         setFlowRunning(true);
-        setFlowButtonLabel(option?.label || "");
         setMessage("");
 
         let captured = -1;
@@ -53,10 +52,15 @@ export default function JoystickHotkeys() {
             if (code !== 0 || !devices?.length) {
                 throw new Error("No joystick devices available");
             }
+            setFlowMessage("You'll be prompted to press a button...");
             await new Promise((r) => setTimeout(r, 2000));
+            setFlowMessage(`Hold any key from the 1st joystick to set: ${option.label}`);
             const {code: captureCode, data} = await joystick.getJoystickButton(devices[0], 6);
             if (captureCode === 0 && Number.isInteger(data)) {
                 captured = data;
+                setFlowMessage(`Successfully captured button: ${captured}.`);
+            } else {
+                setFlowMessage("No button was set.");
             }
         } catch (e) {
             console.error("Error capturing joystick button:", e);
@@ -106,12 +110,12 @@ export default function JoystickHotkeys() {
             width: "80%", maxHeight: "75%",
             transform: "translate(-50%, -50%)"
         }}>
-            <div>
+            <div style={{marginBottom: "1em"}}>
                 This section's purpose is to change the gaming-related joystick
                 hotkey buttons.
             </div>
             {flowRunning ? (
-                <div>Hold any joystick key to set: {flowButtonLabel}</div>
+                <div>{flowMessage}</div>
             ) : (
                 <>
                     <div>1. Hotkey Button: {hotkeys[0] === null ? "none" : hotkeys[0]}</div>
