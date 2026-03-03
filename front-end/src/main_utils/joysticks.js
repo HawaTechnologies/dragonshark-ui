@@ -53,8 +53,11 @@ async function hotkeysGet() {
     let code = result?.code || 0;
 
     // Parse the values from "$a $b $c $d $e $f".
-    const values = (stdout || "").trim().split(/\s+/).filter(Boolean).map((value) => Number.isInteger(value) ? parseInt(value, 10) : null);
-    const data = values.length === 6 && values.every((e) => Number.isInteger(e) || Number.isNaN(e)) ? values : null;
+    const values = (stdout || "").trim().split(/\s+/).filter(Boolean).map((value) => {
+        const parsed = parseInt(value, 10);
+        return Number.isInteger(parsed) ? parsed : null;
+    });
+    const data = values.length === 6 && values.every((e) => Number.isInteger(e) || Number.isNaN(e) || e === null) ? values : null;
     if (!data && code === 0) code = 1;
 
     return {code, data};

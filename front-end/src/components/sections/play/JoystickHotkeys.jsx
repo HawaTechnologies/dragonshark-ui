@@ -117,7 +117,7 @@ export default function JoystickHotkeys() {
                     <div>1. Hotkey Button: {hotkeys[0] === null ? "none" : hotkeys[0]}</div>
                     <div>2. Load / Save State Buttons: {hotkeys[1] === null ? "none" : hotkeys[1]} / {hotkeys[2] === null ? "none" : hotkeys[2]}</div>
                     <div>3. Save Slot Increase / Decrease Buttons: {hotkeys[3] === null ? "none" : hotkeys[3]} / {hotkeys[4] === null ? "none" : hotkeys[4]}</div>
-                    <div>4. Exit Game Button: {hotkeys[5] === null ? "nul" : hotkeys[5]}</div>
+                    <div>4. Exit Game Button: {hotkeys[5] === null ? "none" : hotkeys[5]}</div>
                     <div>
                         Change a button: <Select value={selectedKey} onChange={setSelectedKey} options={keyOptions}/>
                     </div>
