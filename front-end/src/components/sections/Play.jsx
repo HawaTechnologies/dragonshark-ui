@@ -7,6 +7,7 @@ import Option from "../common/Menu/Option.jsx";
 import installedgames from "../../images/options/play/installedgames.png";
 import emulationstation from "../../images/options/play/emulationstation.png";
 import roms from "../../images/options/play/roms.png";
+import hotkeys from "../../images/options/play/hotkeys.png";
 import savefiles from "../../images/options/play/savefiles.png";
 import {useGamepad, usePressEffect} from "../hooks/gamepad";
 
@@ -33,6 +34,9 @@ export default function Play() {
             <Option caption="Emulation Station" image={emulationstation} callback={() => games.launchEmulationStation()} />
         </Section>
         <Section>
+            {/* This is the "Joystick Hotkeys" section. Intended to manage joystick hotkeys. */}
+            <Option caption="Joystick Hotkeys" image={hotkeys} callback={() => navigate("/play/joystick-hotkeys")} />
+
             {/* This is the "Save Files" section. Intended to back-up and restore saves. */}
             <Option caption="Save Files" image={savefiles} callback={() => navigate("/play/save-files")} />
 
