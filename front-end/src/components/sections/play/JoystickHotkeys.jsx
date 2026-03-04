@@ -62,6 +62,7 @@ export default function JoystickHotkeys() {
             } else {
                 setFlowMessage("No button was set.");
             }
+            await new Promise((r) => setTimeout(r, 2000));
         } catch (e) {
             console.error("Error capturing joystick button:", e);
             setMessage("Error capturing joystick button.");
