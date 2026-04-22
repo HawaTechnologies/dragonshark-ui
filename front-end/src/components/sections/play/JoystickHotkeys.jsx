@@ -14,6 +14,7 @@ const keyOptions = [
     {label: "Save Slot Increase Button", value: 3},
     {label: "Save Slot Decrease Button", value: 4},
     {label: "Exit Game Button", value: 5},
+    {label: "Reset Button", value: 6},
 ];
 
 /**
@@ -21,7 +22,7 @@ const keyOptions = [
  * @constructor
  */
 export default function JoystickHotkeys() {
-    const [hotkeys, setHotkeys] = useState([null, null, null, null, null, null]);
+    const [hotkeys, setHotkeys] = useState([null, null, null, null, null, null, null]);
     const [selectedKey, setSelectedKey] = useState(0);
     const [flowRunning, setFlowRunning] = useState(false);
     const [flowMessage, setFlowMessage] = useState("");
@@ -31,7 +32,7 @@ export default function JoystickHotkeys() {
         setMessage("Refreshing joystick hotkeys...");
         const {code, data} = await joystick.hotkeysGet();
         console.log(code, data);
-        if (code !== 0 || !data || data.length !== 6) {
+        if (code !== 0 || !data || data.length !== 7) {
             setMessage("Error refreshing joystick hotkeys.");
             return;
         }
@@ -76,8 +77,8 @@ export default function JoystickHotkeys() {
         setHotkeys(newHotkeys);
 
         try {
-            const [a, b, c, d, e, f] = newHotkeys.map((value) => value === null ? -1 : value);
-            const {code: saveCode} = await joystick.hotkeysSet(a, b, c, d, e, f);
+            const [a, b, c, d, e, f, g] = newHotkeys.map((value) => value === null ? -1 : value);
+            const {code: saveCode} = await joystick.hotkeysSet(a, b, c, d, e, f, g);
             if (saveCode !== 0) {
                 setMessage("Error saving joystick hotkeys.");
             } else {
@@ -123,6 +124,7 @@ export default function JoystickHotkeys() {
                     <div>2. Load / Save State Buttons: {hotkeys[1] === null ? "none" : hotkeys[1]} / {hotkeys[2] === null ? "none" : hotkeys[2]}</div>
                     <div>3. Save Slot Increase / Decrease Buttons: {hotkeys[3] === null ? "none" : hotkeys[3]} / {hotkeys[4] === null ? "none" : hotkeys[4]}</div>
                     <div>4. Exit Game Button: {hotkeys[5] === null ? "none" : hotkeys[5]}</div>
+                    <div>5. Reset Button: {hotkeys[6] === null ? "none" : hotkeys[6]}</div>
                     <div>
                         Change a button: <Select value={selectedKey} onChange={setSelectedKey} options={keyOptions}/>
                     </div>

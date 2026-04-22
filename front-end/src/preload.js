@@ -30,7 +30,7 @@ contextBridge.exposeInMainWorld('dragonSharkAPI', {
         listAvailableJoysticks: () => ipcRenderer.invoke("joystick.listAvailableJoysticks"),
         getJoystickButton: (device, timeout) => ipcRenderer.invoke("joystick.getJoystickButton", device, timeout),
         hotkeysGet: () => ipcRenderer.invoke("joystick.hotkeysGet"),
-        hotkeysSet: (hb, lb, sb, ssib, ssdb, eb) => ipcRenderer.invoke("joystick.hotkeysSet", hb, lb, sb, ssib, ssdb, eb)
+        hotkeysSet: (hb, lb, sb, ssib, ssdb, eb, rb) => ipcRenderer.invoke("joystick.hotkeysSet", hb, lb, sb, ssib, ssdb, eb, rb)
     },
     games: {
         listExternalDeviceDirs: () => ipcRenderer.invoke("games.listExternalDeviceDirs"),
