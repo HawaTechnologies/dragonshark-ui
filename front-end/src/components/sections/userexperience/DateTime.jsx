@@ -4,6 +4,7 @@ import {useCallback, useEffect, useRef, useState} from "react";
 import {getDiscreteAxisStates, useGamepad, usePressEffect} from "../../hooks/gamepad.js";
 import {BDown, BLeft} from "../../common/icons/RightPanelButton.jsx";
 import ProgressText from "../../common/ProgressText.jsx";
+import ValueSelector from "../../common/ValueSelector.jsx";
 
 const datetime = window.dragonSharkAPI.datetime;
 
@@ -114,12 +115,7 @@ export default function DateTime() {
     return <BaseActivitySection caption="Date & Time" backPath="/user-experience">
         <div style={{position: "absolute", left: "50%", top: "50%", transform: "translate(-50%, -50%)"}}>
             {(!timezones && <ProgressText>Retrieving timezones</ProgressText>)}
-            {(timezones && <div>
-                Select timezone:
-                <span className="text-red" style={{flex: 0, textWrap: "nowrap"}}>⮜</span>
-                <span style={{textWrap: "nowrap"}}>{timezone}</span>
-                <span className="text-blue" style={{flex: 0, textWrap: "nowrap"}}>⮞</span>
-            </div>)}
+            {(timezones && <ValueSelector label="Select timezone:" value={timezone} />)}
             {(!timeData && <ProgressText>Retrieving time data</ProgressText>)}
             {(time && timezone && <div style={{marginBottom: "40px"}}>
                 Current time is: {time}.
