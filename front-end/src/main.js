@@ -11,6 +11,8 @@ if (require('electron-squirrel-startup')) {
   app.quit();
 }
 
+const WINDOW_SIZE_SYNC_INTERVAL_MS = 500;
+
 /**
  * Declares a privileged protocol.
  */
@@ -88,14 +90,67 @@ function registerGameImageProtocol() {
 }
 
 /**
+ * Returns the complete bounds of the primary display.
+ * @returns {{x: number, y: number, width: number, height: number}} The primary display bounds.
+ */
+function getPrimaryDisplayBounds() {
+  const { x, y, width, height } = screen.getPrimaryDisplay().bounds;
+  return { x, y, width, height };
+}
+
+/**
+ * Determines whether two sets of window bounds match.
+ * @param a The first bounds.
+ * @param b The second bounds.
+ * @returns {boolean} Whether the bounds match.
+ */
+function sameBounds(a, b) {
+  return a.x === b.x && a.y === b.y && a.width === b.width && a.height === b.height;
+}
+
+/**
+ * Keeps the main window occupying the full primary display.
+ * @param mainWindow The main window.
+ * @returns {NodeJS.Timeout} The interval timer.
+ */
+function keepMainWindowMaximized(mainWindow) {
+  function syncWindowSize() {
+    if (mainWindow.isDestroyed()) return;
+
+    const bounds = getPrimaryDisplayBounds();
+    if (mainWindow.isMinimized()) mainWindow.restore();
+    if (!sameBounds(mainWindow.getBounds(), bounds)) mainWindow.setBounds(bounds);
+    if (!mainWindow.isFullScreen()) {
+      mainWindow.setFullScreen(true);
+      if (!mainWindow.isMaximized()) mainWindow.maximize();
+    }
+  }
+
+  screen.on("display-added", syncWindowSize);
+  screen.on("display-removed", syncWindowSize);
+  screen.on("display-metrics-changed", syncWindowSize);
+
+  const interval = setInterval(syncWindowSize, WINDOW_SIZE_SYNC_INTERVAL_MS);
+  mainWindow.on("closed", () => {
+    clearInterval(interval);
+    screen.off("display-added", syncWindowSize);
+    screen.off("display-removed", syncWindowSize);
+    screen.off("display-metrics-changed", syncWindowSize);
+  });
+
+  syncWindowSize();
+  return interval;
+}
+
+/**
  * Creates the main window.
  */
 function createWindow() {
-  const { width, height } = screen.getPrimaryDisplay().workAreaSize;
+  const { x, y, width, height } = getPrimaryDisplayBounds();
 
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width, height,
+    x, y, width, height,
     fullscreen: true,
     resizable: false,
     frame: false, // No titlebar or border
@@ -108,12 +163,7 @@ function createWindow() {
   // and load the index.html of the app.
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
 
-  mainWindow.on('resize', () => {
-    mainWindow.setBounds({
-      width: screen.getPrimaryDisplay().workAreaSize.width,
-      height: screen.getPrimaryDisplay().workAreaSize.height
-    });
-  });
+  keepMainWindowMaximized(mainWindow);
 
   mainWindow.on("focus", () => {
     mainWindow.webContents.send('app-focus');
