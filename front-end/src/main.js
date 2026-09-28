@@ -3,7 +3,7 @@ const fs = require("node:fs");
 const path = require('node:path');
 const {
   virtualpad, games, network, datetime, sound, manifest,
-  system, bluetooth, joystick
+  video, system, bluetooth, joystick
 } = require("./main_utils");
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -211,6 +211,8 @@ app.whenReady().then(() => {
   ipcMain.handle("datetime.setTimezone", (_, tz) => datetime.setTimezone(tz));
   ipcMain.handle("sound.setVolume", (_, volume) => sound.setVolume(volume));
   ipcMain.handle("sound.getVolume", (_) => sound.getVolume());
+  ipcMain.handle("video.listResolutions", (_) => video.listResolutions());
+  ipcMain.handle("video.selectResolution", (_, width, height) => video.selectResolution(width, height));
   ipcMain.handle("system.restartInDebugMode", (_) => system.restartInDebugMode());
   ipcMain.handle("bluetooth.listPairedDevices", (_) => bluetooth.listPairedDevices());
   ipcMain.handle("bluetooth.listUnpairedDevices", (_, time) => bluetooth.listUnpairedDevices(time));

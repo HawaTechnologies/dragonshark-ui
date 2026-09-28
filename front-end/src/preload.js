@@ -62,6 +62,17 @@ contextBridge.exposeInMainWorld('dragonSharkAPI', {
         setVolume: (volume) => ipcRenderer.invoke("sound.setVolume", volume),
         getVolume: () => ipcRenderer.invoke("sound.getVolume")
     },
+    video: {
+        listResolutions: async () => {
+            const {code, list, selected, stderr} = await ipcRenderer.invoke("video.listResolutions");
+            if (code) throw new Error(stderr || "Could not list video resolutions.");
+            return {list, selected};
+        },
+        selectResolution: async (width, height) => {
+            const {code, stderr} = await ipcRenderer.invoke("video.selectResolution", width, height);
+            if (code) throw new Error(stderr || "Could not select video resolution.");
+        }
+    },
     system: {
         restartInDebugMode: () => ipcRenderer.invoke("system.restartInDebugMode")
     }
