@@ -18,6 +18,7 @@ import JoystickHotkeys from "./sections/play/JoystickHotkeys.jsx";
 import VirtualPad from "./sections/connectivity/VirtualPad.jsx";
 import Marketplace from "./sections/marketplace/Marketplace.jsx";
 import Sound from "./sections/userexperience/Sound.jsx";
+import Video from "./sections/userexperience/Video.jsx";
 import DateTime from "./sections/userexperience/DateTime.jsx";
 import RestartInDebugMode from "./sections/advanced/RestartInDebugMode.jsx";
 import ChooseInterface from "./sections/connectivity/Network/ChooseInterface.jsx";
@@ -80,6 +81,7 @@ export default function App() {
                     <Route path="/connectivity/virtualpad" Component={VirtualPad} />
                     <Route path="/user-experience" Component={UserExperience} />
                     <Route path="/user-experience/sound" Component={Sound} />
+                    <Route path="/user-experience/video" Component={Video} />
                     <Route path="/user-experience/datetime" Component={DateTime} />
                     <Route path="/advanced" Component={Advanced} />
                     <Route path="/advanced/debug" Component={RestartInDebugMode} />
