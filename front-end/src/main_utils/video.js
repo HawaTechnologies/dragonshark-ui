@@ -22,7 +22,7 @@ function parseResolutions(output) {
  * @returns {Promise<{code: number, list: string[], selected: string, stderr?: string}>} The available resolutions.
  */
 async function listResolutions() {
-    const {stdout, stderr, result} = await exec("dragonshark-video-list-resolutions eDP-1");
+    const {stdout, stderr, result} = await exec("dragonshark-video-list-resolutions");
     const code = result?.code || 0;
 
     if (code) {
